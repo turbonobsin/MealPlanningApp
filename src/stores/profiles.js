@@ -211,3 +211,10 @@ export const useProfilesStore = defineStore("profiles", () => {
         $reset
     };
 });
+
+// DEBUG
+window.PROFILES = {
+    currentProfile:()=>{
+        return useProfilesStore().currentProfile;
+    }
+};
