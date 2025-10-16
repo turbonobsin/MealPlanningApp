@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 
 export class CalendarRecurrance {
     /**
@@ -101,12 +101,18 @@ export const useProfilesStore = defineStore("profiles", () => {
     /**@type {import("vue").Reactive<Profile[]>} */
     const profiles = reactive([]);
 
+    const currentProfileId = ref("");
+    const currentProfile = computed(() => {
+        return profiles.find(v => v.name == currentProfileId.value);
+    });
+
     /**
      * This function get's called when the page loads and will load all profiles from LocalStorage into this store
      */
     function initProfiles() {
         console.log(":: loading profiles");
 
+        /**@type {any[]} */
         let allProfiles = [];
         try {
             allProfiles = JSON.parse(localStorage.getItem("profiles"));
@@ -126,6 +132,13 @@ export const useProfilesStore = defineStore("profiles", () => {
         // if no profiles, create default profile
         if (allProfiles.length == 0) {
             createDefaultProfile();
+        }
+
+        // load current profile selected
+        currentProfileId.value = localStorage.getItem("currentProfileId");
+        if (!profiles.some(v => v.name == currentProfileId.value)) {
+            // if the current profile selected doesn't exist, then load the first one
+            currentProfileId.value = profiles[0].name;
         }
     }
 
@@ -192,6 +205,7 @@ export const useProfilesStore = defineStore("profiles", () => {
         // general use
         addProfile,
         saveProfile,
+        currentProfile,
 
         // 
         $reset
