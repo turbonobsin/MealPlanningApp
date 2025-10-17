@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, toRaw } from "vue";
 
 export class CalendarRecurrance {
     /**
@@ -215,6 +215,6 @@ export const useProfilesStore = defineStore("profiles", () => {
 // DEBUG
 window.PROFILES = {
     currentProfile:()=>{
-        return useProfilesStore().currentProfile;
+        return toRaw(useProfilesStore().currentProfile);
     }
 };
