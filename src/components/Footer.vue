@@ -3,8 +3,10 @@
 </script>
 
 <template>
-    
+    <div id="menu_bar">
+
+    </div>
 </template>
 
-<styl
-<style
+<style scoped>
+</style>
