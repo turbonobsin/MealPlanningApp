@@ -1,10 +1,11 @@
-<script setup>
+<script>
 </script>
 
 <template>
-	<RouterView />
+    <div>
+        
+    </div>
 </template>
 
 <style scoped>
 </style>
- 
