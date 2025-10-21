@@ -1,5 +1,8 @@
 <script setup>
+import { useProfilesStore } from '@/stores/profiles'
 import { ref } from 'vue'
+
+const profileStore = useProfilesStore
 
 const favoriteFolders = ref([
   { id: 1, name: 'Folder #1' },
