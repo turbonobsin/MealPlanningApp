@@ -1,6 +1,27 @@
 import { defineStore } from "pinia";
 import { computed, reactive, ref, toRaw } from "vue";
 
+export class Recipe {
+    id = 0;
+    title = "";
+    image = ""; // url
+    imageType = ""; // jpg
+    servings = 0;
+    readyInMinutes = 0;
+    cookingMinutes = 0;
+    preparationMinutes = 0;
+
+    license = "";
+    sourceName = "";
+    sourceUrl = "";
+    spoonacularSourceUrl = ""; // may not be needed
+
+    healthScore = 0;
+    
+}
+
+// 
+
 export class CalendarRecurrance {
     /**
      * Optional
@@ -33,9 +54,22 @@ export class FavoriteItem { }
 
 export class Favorite extends FavoriteItem {
     name = "";
+    recipeId = 0;
 }
 
 export class FavoriteFolder extends FavoriteItem {
+    /**
+     * The name of the new folder.
+     * 
+     * You can optionally add a parentFolder if you want this folder to be inside another custom folder, otherwise it's added into the root folder.
+     * @param {String} name 
+     * @param {FavoriteFolder} [parentFolder]
+     */
+    constructor(name, parentFolder) {
+        this.name = name;
+        if (parentFolder) parentFolder.items.push(this);
+    }
+
     name = "";
 
     /**@type {FavoriteItem[]} */
@@ -185,13 +219,105 @@ export const useProfilesStore = defineStore("profiles", () => {
 
     /**
      * Save a profile to LocalStorage
-     * @param {Profile} profile 
+     * 
+     * If no profile is specified, the current one is saved
+     * @param {Profile} [profile] 
      */
     function saveProfile(profile) {
+        if (!profile) profile = currentProfile.value;
+        if (!profile) {
+            console.warn("can't save profile, none selected");
+            return;
+        }
+
         console.log(":: saved profile: " + profile.name);
 
         localStorage.setItem("profile_" + profile.name, JSON.stringify(profile));
     }
+
+    // favorites
+    /**
+     * Add a Recipe to your favorites, optionally with a custom folder or else it will be put in the root folder
+     * @param {Favorite} item 
+     * @param {FavoriteFolder} [parentFolder]
+     * @example
+     * ```javascript
+     * // simply add an item to favorites
+     * let item = new Favorite();
+     * profileStore.addItemToFavorites(item);
+     * 
+     * // add an item to a specific favorites folder
+     * let subFolder = new FavoriteFolder("nice desserts"); // assume we've already added this folder...
+     * profileStore.addItemToFavorites(item, subFolder);
+     * ```
+     */
+    function addItemToFavorites(item, parentFolder) {
+        let profile = currentProfile.value;
+        if (!profile) {
+            console.warn("couldn't add to favorites, no current profile");
+            return;
+        }
+
+        if (!parentFolder) parentFolder = profile.favorites;
+
+        parentFolder.items.push(item);
+
+        saveProfile(profile);
+    }
+    /**
+     * Add a Folder to your favorites, optionally with a custom folder or else it will be put in the root folder
+     * @param {FavoriteFolder} folder 
+     * @param {FavoriteFolder} [parentFolder]
+     * @example
+     * ```javascript
+     * // add a new favorites folder to the root folder
+     * let subFolder = new FavoriteFolder("nice desserts");
+     * profileStore.addItemToFavorites(subFolder);
+     * ```
+     */
+    function addFolderToFavorites(folder, parentFolder) {
+        this.addItemToFavorites(folder, parentFolder);
+    }
+
+    /**
+     * Remove a Recipe from your favorites (specify a parent folder if this item is within a sub folder, otherwise it'll use the root folder)
+     * @param {Favorite} item 
+     * @param {FavoriteFolder} [parentFolder]
+     */
+    function removeItemFromFavorites(item, parentFolder) {
+        let profile = currentProfile.value;
+        if (!profile) {
+            console.warn("couldn't add to favorites, no current profile");
+            return;
+        }
+
+        if (!parentFolder) parentFolder = profile.favorites;
+
+        // for future use potentially...
+        // let ind = parentFolder.items.findIndex(v=>{
+        //     if(!(v instanceof Favorite)) return false;
+        //     return v.recipeId == item.recipeId;
+        // });
+
+        let ind = parentFolder.items.indexOf(item);
+        if (ind != -1) parentFolder.items.splice(ind, 1);
+        else {
+            console.warn("The item was not deleted because it wasn't found in the folder specified", { item, parentFolder });
+        }
+
+        saveProfile(profile);
+    }
+
+    /**
+     * Remove a Folder from your favorites (specify a parent folder if this item is within a sub folder, otherwise it'll use the root folder)
+     * @param {FavoriteFolder} folder 
+     * @param {FavoriteFolder} [parentFolder]
+     */
+    function removeFolderFromFavorites(folder, parentFolder) {
+        removeItemFromFavorites(folder, parentFolder);
+    }
+
+    // 
 
     function $reset() {
 
@@ -207,6 +333,12 @@ export const useProfilesStore = defineStore("profiles", () => {
         saveProfile,
         currentProfile,
 
+        // favorites
+        addItemToFavorites,
+        addFolderToFavorites,
+        removeItemFromFavorites,
+        removeFolderFromFavorites,
+
         // 
         $reset
     };
@@ -214,7 +346,7 @@ export const useProfilesStore = defineStore("profiles", () => {
 
 // DEBUG
 window.PROFILES = {
-    currentProfile:()=>{
+    currentProfile: () => {
         return toRaw(useProfilesStore().currentProfile);
     }
 };
