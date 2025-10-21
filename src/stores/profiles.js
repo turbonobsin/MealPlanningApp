@@ -17,7 +17,7 @@ export class Recipe {
     spoonacularSourceUrl = ""; // may not be needed
 
     healthScore = 0;
-    
+
 }
 
 // 
@@ -52,10 +52,10 @@ export class Calendar {
 
 export class FavoriteItem { }
 
-export class Favorite extends FavoriteItem {
-    name = "";
-    recipeId = 0;
-}
+// export class Favorite extends FavoriteItem {
+//     name = "";
+//     recipeId = 0;
+// }
 
 export class FavoriteFolder extends FavoriteItem {
     /**
@@ -72,8 +72,22 @@ export class FavoriteFolder extends FavoriteItem {
 
     name = "";
 
-    /**@type {FavoriteItem[]} */
-    items = [];
+    /**@type {(FavoriteFolder | number)[]} */
+    items = [
+        {
+            name:"",
+            items:[
+                {
+                    name:"sub folder",
+                    items:[]
+                },
+                75,
+                234
+            ]
+        },
+        25,
+        64
+    ];
 }
 
 export class RecipeNote {
@@ -238,20 +252,20 @@ export const useProfilesStore = defineStore("profiles", () => {
     // favorites
     /**
      * Add a Recipe to your favorites, optionally with a custom folder or else it will be put in the root folder
-     * @param {Favorite} item 
+     * @param {number} recipeId
      * @param {FavoriteFolder} [parentFolder]
      * @example
      * ```javascript
      * // simply add an item to favorites
-     * let item = new Favorite();
-     * profileStore.addItemToFavorites(item);
+     * let recipeId = 123;
+     * profileStore.addItemToFavorites(recipeId);
      * 
      * // add an item to a specific favorites folder
      * let subFolder = new FavoriteFolder("nice desserts"); // assume we've already added this folder...
      * profileStore.addItemToFavorites(item, subFolder);
      * ```
      */
-    function addItemToFavorites(item, parentFolder) {
+    function addItemToFavorites(recipeId, parentFolder) {
         let profile = currentProfile.value;
         if (!profile) {
             console.warn("couldn't add to favorites, no current profile");
@@ -260,7 +274,7 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         if (!parentFolder) parentFolder = profile.favorites;
 
-        parentFolder.items.push(item);
+        parentFolder.items.push(recipeId);
 
         saveProfile(profile);
     }
@@ -281,10 +295,10 @@ export const useProfilesStore = defineStore("profiles", () => {
 
     /**
      * Remove a Recipe from your favorites (specify a parent folder if this item is within a sub folder, otherwise it'll use the root folder)
-     * @param {Favorite} item 
+     * @param {number} recipeId 
      * @param {FavoriteFolder} [parentFolder]
      */
-    function removeItemFromFavorites(item, parentFolder) {
+    function removeItemFromFavorites(recipeId, parentFolder) {
         let profile = currentProfile.value;
         if (!profile) {
             console.warn("couldn't add to favorites, no current profile");
@@ -299,10 +313,10 @@ export const useProfilesStore = defineStore("profiles", () => {
         //     return v.recipeId == item.recipeId;
         // });
 
-        let ind = parentFolder.items.indexOf(item);
+        let ind = parentFolder.items.indexOf(recipeId);
         if (ind != -1) parentFolder.items.splice(ind, 1);
         else {
-            console.warn("The item was not deleted because it wasn't found in the folder specified", { item, parentFolder });
+            console.warn("The item was not deleted because it wasn't found in the folder specified", { item: recipeId, parentFolder });
         }
 
         saveProfile(profile);
@@ -315,6 +329,25 @@ export const useProfilesStore = defineStore("profiles", () => {
      */
     function removeFolderFromFavorites(folder, parentFolder) {
         removeItemFromFavorites(folder, parentFolder);
+    }
+
+    /**
+     * Get a Recipe's information from it's recipeId
+     * @param {number} recipeId 
+     */
+    function getRecipe(recipeId){
+        let r = new Recipe();
+        r.title = "Dummy Recipe";
+        r.cookingMinutes = 123;
+        r.healthScore = 2;
+        r.id = recipeId;
+        r.image = "https://img.spoonacular.com/recipes/716429-556x370.jpg";
+        r.imageType = "jpg";
+        r.license = "";
+        r.preparationMinutes = 60;
+        r.readyInMinutes = 50;
+        r.servings = 10;
+        return r;
     }
 
     // 
@@ -332,6 +365,7 @@ export const useProfilesStore = defineStore("profiles", () => {
         addProfile,
         saveProfile,
         currentProfile,
+        getRecipe,
 
         // favorites
         addItemToFavorites,
