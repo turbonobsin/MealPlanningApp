@@ -1,10 +1,43 @@
 import { defineStore } from "pinia";
 import { computed, reactive, ref, toRaw } from "vue";
 
+export class ExtendedIngredient {
+    id = 0; // ingredient id
+    name = ""; // butter
+
+    original = ""; // 1 tbsp butter
+    originalName = ""; // butter
+    unit = ""; // tbsp
+
+    aisle = "";
+    amount = 0;
+    consistency = ""; // solid, liquid
+    image = ""; // url?
+    measures = {
+        metric:{
+            amount:0,
+            unitLong:"",
+            unitShort:""
+        },
+        us:{
+            amount:0,
+            unitLong:"",
+            unitShort:""
+        }
+    };
+
+    /**@type {string[]} */
+    meta = []; // extra info
+}
+
 export class Recipe {
-    id = 0;
+    id = 0; // recipe id
+
     title = "";
     image = ""; // url
+    summary = ""; // description of recipe
+    
+
     imageType = ""; // jpg
     servings = 0;
     readyInMinutes = 0;
@@ -15,9 +48,33 @@ export class Recipe {
     sourceName = "";
     sourceUrl = "";
     spoonacularSourceUrl = ""; // may not be needed
+    creditsText = "";
 
     healthScore = 0;
+    pricePerServing = 0;
+    analyzedInstructions = []; // not sure what type this one is
 
+    cheap = false;
+    cuisines = [];
+
+    dairyFree = false;
+    glutenFree = false;
+    ketogenic = false;
+    lowFodmap = false;
+    sustainable = false;
+    vegan = false;
+    vegetarian = false;
+    veryHealthy = false;
+    veryPopular = false;
+    whole30 = false;
+    weighWatcherSmartPoints = 0;
+    diets = [];
+
+    /**@type {string[]} */
+    dishTypes = [];
+
+    /**@type {ExtendedIngredient[]} */
+    extendedIngredients = [];
 }
 
 // 
@@ -284,6 +341,7 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         saveProfile(profile);
     }
+    
     /**
      * Add a Folder to your favorites, optionally with a custom folder or else it will be put in the root folder
      * @param {FavoriteFolder} folder 
@@ -341,7 +399,7 @@ export const useProfilesStore = defineStore("profiles", () => {
      * Get a Recipe's information from it's recipeId
      * @param {number} recipeId 
      */
-    function getRecipe(recipeId){
+    function getRecipe(recipeId) {
         let r = new Recipe();
         r.title = "Dummy Recipe";
         r.cookingMinutes = 123;

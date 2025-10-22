@@ -3,3 +3,9 @@
 - started adding pinia stores for calendar, favorites, and profiles
 - added types for profiles
 - profiles now get loaded on page load and if there are no profiles saved then a default one is created and loaded
+
+# 10/21/25
+- changed recipes in folders to be ids instead of classes
+
+# 10/22/25
+- added the rest of the properties to the Recipe class
