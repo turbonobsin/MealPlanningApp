@@ -72,22 +72,28 @@ export class FavoriteFolder extends FavoriteItem {
 
     name = "";
 
-    /**@type {(FavoriteFolder | number)[]} */
-    items = [
-        {
-            name:"",
-            items:[
-                {
-                    name:"sub folder",
-                    items:[]
-                },
-                75,
-                234
-            ]
-        },
-        25,
-        64
-    ];
+    /** 
+     * @type {(FavoriteFolder | number)[]}
+     * @example
+     * ```javascript
+     *  items = [
+            {
+                name:"",
+                items:[
+                    {
+                        name:"sub folder",
+                        items:[]
+                    },
+                    75,
+                    234
+                ]
+            },
+            25,
+            64
+        ];
+     * ```
+    */
+    items = [];
 }
 
 export class RecipeNote {
