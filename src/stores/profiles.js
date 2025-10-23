@@ -253,13 +253,24 @@ export const useProfilesStore = defineStore("profiles", () => {
             // if the current profile selected doesn't exist, then load the first one
             currentProfileId.value = profiles[0].name;
         }
+        localStorage.setItem("currentProfileId", currentProfileId.value);
+    }
+
+    /**
+     * Set the current profile
+     * @param {Profile} profile
+     */
+    function switchProfile(profile) {
+        console.log("switched to profile: " + profile.name);
+        currentProfileId.value = profile.name;
+        localStorage.setItem("currentProfileId", currentProfileId.value);
     }
 
     /**
      * Create a new profile with default options
      * @param {String} name 
      */
-    function createDefaultProfile(name="Default Profile") {
+    function createDefaultProfile(name = "Default Profile") {
         /**@type {Profile} */
         let profile = {
             name,
@@ -456,6 +467,7 @@ export const useProfilesStore = defineStore("profiles", () => {
         addProfile,
         saveProfile,
         removeProfile,
+        switchProfile,
         currentProfile,
         profiles,
         getRecipe,
