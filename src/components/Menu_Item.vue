@@ -1,4 +1,6 @@
 <script setup>
+import { useTemplateRef, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
     label: String,
@@ -8,12 +10,24 @@ const props = defineProps({
 </script>
 
 <template>
-    <router-link :to="props.destination">{{ props.label }}</router-link>
+    <router-link ref="item" class="menu_item vertical center" :to="props.destination">{{ props.label }}</router-link>
 </template>
 
 <style scoped>
 .menu_item{
+    text-decoration: none;
     height: 50px;
     aspect-ratio: 1;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.router-link-active{
+    background-color: var(--dark);
+    color: var(--light) !important;
+}
+
+.menu_item:visited {
+    color: var(--dark);
 }
 </style>

@@ -7,9 +7,9 @@
 	font-weight: normal;
 }
 
-/* * {
+.border * {
 	border: 1px solid var(--dark);
-} */
+}
 
 img, picture, svg {
   max-width: 100%;

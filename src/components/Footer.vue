@@ -4,10 +4,10 @@ import Menu_Item from './Menu_Item.vue';
 
 <template>
     <nav id="menu_bar" class="spread">
-        <Menu_Item label="Home" to="/"></Menu_Item>
-        <Menu_Item label="Calendar" to="/calendar"></Menu_Item>
-        <Menu_Item label="Favorites" to="/favorites"></Menu_Item>
-        <Menu_Item label="Settings" to="/settings"></Menu_Item>
+        <Menu_Item label="x" to="/"></Menu_Item>
+        <Menu_Item label="x" to="/calendar"></Menu_Item>
+        <Menu_Item label="x" to="/favorites"></Menu_Item>
+        <Menu_Item label="x" to="/settings"></Menu_Item>
     </nav>
 </template>
 
@@ -16,8 +16,10 @@ import Menu_Item from './Menu_Item.vue';
 #menu_bar{
     position: fixed;
     bottom: 20px;
-    right: 20px;
-    left: 20px;
+    right: 30px;
+    left: 30px;
     padding: 10px;
+    border: 3px solid var(--medium);
+    border-radius: 15px;
 }
 </style>
