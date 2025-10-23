@@ -282,6 +282,8 @@ export const useProfilesStore = defineStore("profiles", () => {
         };
 
         addProfile(profile);
+
+        return profile;
     }
 
     /**
