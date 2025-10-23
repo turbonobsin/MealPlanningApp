@@ -46,7 +46,7 @@ async function RecipeSearch (searchTerm, maxTime) {
 
 <template>
 	<main>
-		<h1>This is the home page</h1>
+		<h1>Hello, user!</h1>
 
 		<div class="search">
               <label>Find your next recipe:   </label><br>

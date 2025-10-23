@@ -24,3 +24,17 @@ body{
     background-color: var(--light);
     font-family: var(--ff-primary);
 }
+
+body::before{
+  content: "";
+  background-image: url(/Decor.png);
+  /* background-position: center; */
+  background-size: contain;
+  position: fixed;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  scale: 1.2;
+  z-index: -1;
+  background-repeat: no-repeat;
+}

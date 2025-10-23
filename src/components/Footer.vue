@@ -16,10 +16,10 @@ import Menu_Item from './Menu_Item.vue';
 #menu_bar{
     position: fixed;
     bottom: 20px;
-    right: 30px;
-    left: 30px;
-    padding: 10px;
+    right: 40px;
+    left: 40px;
+    padding: 7px;
     border: 3px solid var(--medium);
-    border-radius: 15px;
+    border-radius: 20px;
 }
 </style>

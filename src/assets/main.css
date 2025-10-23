@@ -55,6 +55,10 @@ img, picture, svg {
   align-items: center;
 }
 
+h1{
+	text-align: center;
+}
+
 @keyframes pop{
   0% {
     scale: 1;
