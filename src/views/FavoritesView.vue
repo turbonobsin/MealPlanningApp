@@ -1,17 +1,22 @@
 <script setup>
-import { useProfilesStore } from '@/stores/profiles'
+import { FavoriteFolder, useProfilesStore } from '@/stores/profiles'
 import { ref, computed } from 'vue'
 import FavoriteRecipe from '@/components/FavoriteRecipe.vue'
 
 const profileStore = useProfilesStore()
 
-const rootFavorites = ref(profileStore.currentProfile.favorites.items || [])
+const rootFavorites = ref(profileStore.currentProfile.favorites)
 
-const currentFolder = ref({ name: 'Favorites', items: rootFavorites.value }) // Track current folder
+const myProfile = ref(profileStore.currentProfile)
+
+// myProfile.value.favorites.name = "Favorites"
+// profileStore.saveProfile()
+
+const currentFolder = ref(profileStore.currentProfile.favorites) // Track current folder
 
 const folderHistory = ref([]) // Folder history for going back
 
-const getRecipe = (id) => profileStore.getRecipeById(id)
+const getRecipe = (id) => profileStore.getRecipe(id)
 
 const openFolder = (folder) => {
   if (!folder || !folder.items) return
@@ -26,40 +31,17 @@ const goBack = () => {
 }
 
 const createNewFolder = () => {
-  const newFolder = { id: Date.now(), name: `Folder #${currentFolder.value.items.length + 1}`, items: [] }
-  currentFolder.value.items.push(newFolder)
+ // const newFolder = { id: Date.now(), name: `Folder #${currentFolder.value.items.length + 1}`, items: [] }
+  //currentFolder.value.items.push(newFolder)
+  profileStore.addFolderToFavorites(new FavoriteFolder(`Folder #${currentFolder.value.items.length + 1}`),currentFolder.value)
+}
+
+const createNewRecipe = () => {
+  profileStore.addItemToFavorites(50, currentFolder.value)
 }
 
 const deleteItem = (item) => {
-  if (!item) return
-
-  if (typeof item === 'number') {
-    // Recipe
-    const confirmDelete = confirm('Are you sure you want to delete this recipe?')
-    if (!confirmDelete) return
-    currentFolder.value.items = currentFolder.value.items.filter(i => i !== item)
-  } else if (item.items) {
-    // Folder
-    const confirmDelete = confirm(`Are you sure you want to delete "${item.name}"?`)
-    if (!confirmDelete) return
-
-    const recursiveDelete = (items) => {
-      const index = items.findIndex(f => f.id === item.id)
-      if (index !== -1) {
-        items.splice(index, 1)
-        return true
-      }
-      for (let f of items) {
-        if (f.items) {
-          const deleted = recursiveDelete(f.items)
-          if (deleted) return true
-        }
-      }
-      return false
-    }
-
-    recursiveDelete(rootFavorites.value)
-  }
+  profileStore.removeFolderFromFavorites(item, currentFolder.value)
 }
 </script>
 
@@ -92,6 +74,12 @@ const deleteItem = (item) => {
       <div class="add-folder-card" @click="createNewFolder">
         <span class="plus-icon">+</span>
         <p>Add Folder</p>
+      </div>
+
+        <!-- Add Recipe Button -->
+      <div class="add-folder-card" @click="createNewRecipe">
+        <span class="plus-icon">+</span>
+        <p>Add Recipe</p>
       </div>
     </section>
   </div>

@@ -120,11 +120,10 @@ export class FavoriteFolder extends FavoriteItem {
      * 
      * You can optionally add a parentFolder if you want this folder to be inside another custom folder, otherwise it's added into the root folder.
      * @param {String} name 
-     * @param {FavoriteFolder} [parentFolder]
      */
-    constructor(name, parentFolder) {
+    constructor(name) {
+        super();
         this.name = name;
-        if (parentFolder) parentFolder.items.push(this);
     }
 
     name = "";
