@@ -1,3 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=block');
 
+
+:root{
+
+    --ff-primary: Lexend_Deca, sans-serif;
+
+	--light-color: #B4C29D;
+	--main-color: #6A8B52;
+	--light: #FAF8F4;
+	--dark: #5C4B3B;
+	--medium: #B89C83;
+	
+}
+
+@font-face{
+    font-family: Lexend_Deca;
+    src: url(/LexendDeca.ttf);
+}
+
+body{
+    color: var(--dark);
+    background-color: var(--light);
+    font-family: var(--ff-primary);
+}

@@ -6,3 +6,63 @@
 	padding: 2rem;
 	font-weight: normal;
 }
+
+* {
+	border: 1px solid var(--dark);
+}
+
+img, picture, svg {
+  max-width: 100%;
+}
+
+.flex{
+	display: flex;
+}
+
+.vertical {
+	display: flex;
+	flex-direction: column;
+}
+
+.center{
+  margin: auto;
+  justify-content: center;
+}
+
+.spread{
+  display: flex;
+  justify-content: space-between;
+}
+
+.full-width{
+  width: 100%;
+}
+
+.space-before{
+  margin-top: 15px;
+}
+
+.space-after{
+  margin-bottom: 15px;
+}
+
+.gap-after{
+  margin-bottom: 30px;
+}
+
+.h-center{
+  display: flex;
+  align-items: center;
+}
+
+@keyframes pop{
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+  100% {
+    scale: 1;
+  }
+}
