@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { computed, reactive, ref, toRaw } from "vue";
 
+// 
+
 export class ExtendedIngredient {
     id = 0; // ingredient id
     name = ""; // butter
@@ -14,15 +16,15 @@ export class ExtendedIngredient {
     consistency = ""; // solid, liquid
     image = ""; // url?
     measures = {
-        metric:{
-            amount:0,
-            unitLong:"",
-            unitShort:""
+        metric: {
+            amount: 0,
+            unitLong: "",
+            unitShort: ""
         },
-        us:{
-            amount:0,
-            unitLong:"",
-            unitShort:""
+        us: {
+            amount: 0,
+            unitLong: "",
+            unitShort: ""
         }
     };
 
@@ -36,7 +38,7 @@ export class Recipe {
     title = "";
     image = ""; // url
     summary = ""; // description of recipe
-    
+
 
     imageType = ""; // jpg
     servings = 0;
@@ -241,6 +243,7 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         // if no profiles, create default profile
         if (allProfiles.length == 0) {
+            console.log(":: creating default profile because none exist");
             createDefaultProfile();
         }
 
@@ -252,15 +255,17 @@ export const useProfilesStore = defineStore("profiles", () => {
         }
     }
 
-    function createDefaultProfile() {
-        console.log(":: creating default profile because none exist");
-
+    /**
+     * Create a new profile with default options
+     * @param {String} name 
+     */
+    function createDefaultProfile(name="Default Profile") {
         /**@type {Profile} */
         let profile = {
-            name: "Default Profile",
+            name,
 
             favorites: {
-                name: "root",
+                name: "Favorites",
                 items: []
             },
             allergies: [],
@@ -288,6 +293,27 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         profiles.push(profile);
         saveProfile(profile);
+
+        // update list of all profiles
+        localStorage.setItem("profiles", JSON.stringify(profiles.map(v => v.name)));
+    }
+
+    /**
+     * Delete an existing profile
+     * @param {Profile} profile
+     */
+    function removeProfile(profile) {
+        console.log(":: removed profile: " + profile.name);
+
+        let ind = profiles.findIndex(v => v.name == profile.name);
+        if (ind == -1) {
+            console.warn("failed to delete this profile, it doesn't exist in the list of profiles");
+            return;
+        }
+
+        profiles.splice(ind, 1);
+
+        localStorage.removeItem("profile_" + profile.name);
 
         // update list of all profiles
         localStorage.setItem("profiles", JSON.stringify(profiles.map(v => v.name)));
@@ -340,7 +366,7 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         saveProfile(profile);
     }
-    
+
     /**
      * Add a Folder to your favorites, optionally with a custom folder or else it will be put in the root folder
      * @param {FavoriteFolder} folder 
@@ -427,7 +453,9 @@ export const useProfilesStore = defineStore("profiles", () => {
         // general use
         addProfile,
         saveProfile,
+        removeProfile,
         currentProfile,
+        profiles,
         getRecipe,
 
         // favorites
@@ -445,5 +473,8 @@ export const useProfilesStore = defineStore("profiles", () => {
 window.PROFILES = {
     currentProfile: () => {
         return toRaw(useProfilesStore().currentProfile);
+    },
+    store: () => {
+        return useProfilesStore();
     }
 };
