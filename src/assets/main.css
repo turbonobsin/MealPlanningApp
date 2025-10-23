@@ -15,7 +15,7 @@ main{
 }
 
 .border * {
-	border: 1px solid var(--dark);
+	outline: 1px solid var(--dark);
 }
 
 img, picture, svg {
