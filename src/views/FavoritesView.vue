@@ -1,25 +1,64 @@
 <script setup>
 import { useProfilesStore } from '@/stores/profiles'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import FavoriteRecipe from '@/components/FavoriteRecipe.vue'
 
-const profileStore = useProfilesStore
+const profileStore = useProfilesStore()
 
-const favoriteFolders = ref([
-  { id: 1, name: 'Folder #1' },
-  { id: 2, name: 'Folder #2' },
-  { id: 3, name: 'Folder #3' },
-])
+const rootFavorites = ref(profileStore.currentProfile.favorites.items || [])
 
-const createNewFolder = () => {
-  const newId = favoriteFolders.value.length + 1
-  favoriteFolders.value.push({ id: newId, name: `Folder #${newId}` })
+const currentFolder = ref({ name: 'Favorites', items: rootFavorites.value }) // Track current folder
+
+const folderHistory = ref([]) // Folder history for going back
+
+const getRecipe = (id) => profileStore.getRecipeById(id)
+
+const openFolder = (folder) => {
+  if (!folder || !folder.items) return
+  folderHistory.value.push(currentFolder.value)
+  currentFolder.value = folder
 }
 
-const deleteFolder = (id) => {
-  const folder = favoriteFolders.value.find(f => f.id === id)
-  const confirmDelete = confirm(`Are you sure you want to delete "${folder.name}"?`)
-  if (confirmDelete) {
-    favoriteFolders.value = favoriteFolders.value.filter(folder => folder.id !== id)
+const goBack = () => {
+  if (folderHistory.value.length > 0) {
+    currentFolder.value = folderHistory.value.pop()
+  }
+}
+
+const createNewFolder = () => {
+  const newFolder = { id: Date.now(), name: `Folder #${currentFolder.value.items.length + 1}`, items: [] }
+  currentFolder.value.items.push(newFolder)
+}
+
+const deleteItem = (item) => {
+  if (!item) return
+
+  if (typeof item === 'number') {
+    // Recipe
+    const confirmDelete = confirm('Are you sure you want to delete this recipe?')
+    if (!confirmDelete) return
+    currentFolder.value.items = currentFolder.value.items.filter(i => i !== item)
+  } else if (item.items) {
+    // Folder
+    const confirmDelete = confirm(`Are you sure you want to delete "${item.name}"?`)
+    if (!confirmDelete) return
+
+    const recursiveDelete = (items) => {
+      const index = items.findIndex(f => f.id === item.id)
+      if (index !== -1) {
+        items.splice(index, 1)
+        return true
+      }
+      for (let f of items) {
+        if (f.items) {
+          const deleted = recursiveDelete(f.items)
+          if (deleted) return true
+        }
+      }
+      return false
+    }
+
+    recursiveDelete(rootFavorites.value)
   }
 }
 </script>
@@ -27,21 +66,26 @@ const deleteFolder = (id) => {
 <template>
   <div class="favorites-page">
     <header class="header">
-      <h1>Favorites</h1>
+      <h1>{{ currentFolder.name }}</h1>
+      <button v-if="folderHistory.length" class="back-btn" @click="goBack">← Back</button>
     </header>
 
     <section class="favorites-container">
-      <!-- Folder Cards -->
-      <div
-        v-for="folder in favoriteFolders"
-        :key="folder.id"
-        class="folder-card"
-      >
-        <div class="folder-header">
-          <h3>{{ folder.name }}</h3>
-          <button class="delete-btn" @click="deleteFolder(folder.id)">✕</button>
+      <div v-for="item in currentFolder.items" :key="item.id || item">
+        <!-- Recipe -->
+        <div v-if="typeof item === 'number'" class="recipe-card">
+          <FavoriteRecipe :recipe="getRecipe(item)" />
+          <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
         </div>
-        <p class="description">Description:</p>
+
+        <!-- Folder -->
+        <div v-else class="folder-card">
+          <div class="folder-header" @click="openFolder(item)">
+            <h3>{{ item.name }}</h3>
+          </div>
+          <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
+           <div><p>Description:</p></div>
+        </div>
       </div>
 
       <!-- Add Folder Button -->
@@ -62,67 +106,63 @@ const deleteFolder = (id) => {
 .header {
   text-align: center;
   margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  left: 1rem;
+  top: 0.5rem;
+  cursor: pointer;
+  color: #0077cc;
+  font-weight: 500;
 }
 
 .favorites-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
 }
 
 .folder-card,
+.recipe-card,
 .add-folder-card {
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
   position: relative;
 }
 
 .folder-card:hover,
+.recipe-card:hover,
 .add-folder-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .folder-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.folder-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
-  margin: 0;
+  cursor: pointer;
 }
 
 .delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   background: none;
   border: none;
   color: #888;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: color 0.2s ease;
 }
 
 .delete-btn:hover {
   color: #e53935;
 }
 
-.description {
-  font-size: 0.875rem;
-  color: #666;
-  margin-top: 0.5rem;
-}
-
 .add-folder-card {
   background-color: #f3f4f6;
-  color: #555;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -11,4 +11,4 @@ const props = defineProps({
 <template>
     <div>{{ recipe.title }}</div>
     <div>{{ recipe.cookingMinutes }}</div>
-</template>
+</template> 
