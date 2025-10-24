@@ -21,6 +21,7 @@ const props = defineProps({
     text-align: center;
     border-radius: 15px;
     margin: 0px;
+    transition: all .2s;
 }
 
 * {

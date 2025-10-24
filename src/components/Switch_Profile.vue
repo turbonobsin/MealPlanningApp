@@ -27,7 +27,7 @@ onMounted(() => {
                 <span>{{ profile.name }}</span>
             </div>
         </div>
-        <button class="color-button" @click="show_switch_window=false; show_create_window=true">+ Create Profile</button>
+        <button class="color-button" @click="show_switch_window=false; show_create_window=true">+ Create New</button>
         <button class="blank-button" @click="show_switch_window=false">Cancel</button>
     </div>
 </template>
