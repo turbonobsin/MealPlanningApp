@@ -309,6 +309,9 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         // update list of all profiles
         localStorage.setItem("profiles", JSON.stringify(profiles.map(v => v.name)));
+
+        // when creating a new profile, automatically switch to it
+        switchProfile(profile);
     }
 
     /**
