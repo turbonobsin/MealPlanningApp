@@ -1,4 +1,5 @@
 @import url("base.css");
+@import url("layout.css");
 
 #app {
 	max-width: 1280px;
@@ -22,52 +23,51 @@ img, picture, svg {
   max-width: 100%;
 }
 
-.flex{
-	display: flex;
-}
-
-.vertical {
-	display: flex;
-	flex-direction: column;
-}
-
-.center{
-  margin: auto;
-  justify-content: center;
-}
-
-.text-center{
-	text-align: center;
-}
-
-.spread{
-  display: flex;
-  justify-content: space-between;
-}
-
-.full-width{
-  width: 100%;
-}
-
-.space-before{
-  margin-top: 15px;
-}
-
-.space-after{
-  margin-bottom: 15px;
-}
-
-.gap-after{
-  margin-bottom: 30px;
-}
-
-.h-center{
-  display: flex;
-  align-items: center;
-}
-
 h1{
-	text-align: center;
+  text-align: center;
+}
+
+label{
+  margin-bottom: 10px;
+}
+
+.text-input{
+  border: 2px solid var(--medium);
+  border-radius: 8px;
+  height: 2rem;
+  padding: 0px 10px;
+  color: unset;
+  font-weight: 600;
+}
+
+.text-input:focus{
+  outline: unset;
+  border-color: var(--dark);
+}
+
+button{
+  all: unset;
+  border-radius: 8px;
+  padding: 10px 0px;
+  text-align: center;
+  transition: all .1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+button:active {
+  scale: .9;
+}
+
+.green-button{
+  background-color: var(--main-color);
+  color: var(--light);
+}
+
+.blank-button{
+  border: 2px solid var(--medium);
+}
+
+.small{
+  font-size: small;
 }
 
 @keyframes pop{
@@ -75,9 +75,18 @@ h1{
     scale: 1;
   }
   50% {
-    scale: 1.2;
+    scale: 1.1;
   }
   100% {
     scale: 1;
+  }
+}
+
+@keyframes fade-in{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: .8;
   }
 }

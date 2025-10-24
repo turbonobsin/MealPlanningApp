@@ -12,15 +12,13 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-document.addEventListener("keydown", e => {
-    if (e.key === 'b'){
+document.addEventListener('keydown', e => {
+    if (e.key === 'b' && e.ctrlKey){
         document.body.classList.toggle("border");
     }
 })
 
 app.mount('#app')
-
-// 
 
 const profileStore = useProfilesStore();
 profileStore.initProfiles();

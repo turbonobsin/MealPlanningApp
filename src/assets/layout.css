@@ -1,0 +1,49 @@
+.spread{
+  display: flex;
+  justify-content: space-between;
+}
+
+.full-width{
+  width: 100%;
+}
+
+.space-before{
+  margin-top: 15px;
+}
+
+.space-after{
+  margin-bottom: 15px;
+}
+
+.gap-after{
+  margin-bottom: 30px;
+}
+
+.h-center{
+  display: flex;
+  align-items: center;
+}
+
+.flex{
+	display: flex;
+}
+
+.vertical {
+	display: flex;
+	flex-direction: column;
+}
+
+.center{
+  margin: auto;
+  justify-content: center;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.two-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
