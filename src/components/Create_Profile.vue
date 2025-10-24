@@ -12,7 +12,7 @@ const profile_store = useProfilesStore();
 function createProfile(){
     let name = name_input.value.value;
     if (name){
-        if (JSON.parse(localStorage.getItem('profiles')).find(v => v ===  name)){
+        if (profile_store.profiles.some(v => v.name === name)){
             name_input.value.style.borderColor = 'var(--red)';
             show_note.value = true;
             setTimeout(() => {
