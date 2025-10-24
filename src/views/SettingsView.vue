@@ -2,38 +2,37 @@
 import Create_Profile from '@/components/Create_Profile.vue';
 import { provide, ref } from 'vue';
 import { useProfilesStore } from '@/stores/profiles';
+import Switch_Profile from '@/components/Switch_Profile.vue';
 
-const show_create_profile = ref(false);
+const show_create_window = ref(false);
+const show_switch_window = ref(false);
 const profile_store = useProfilesStore();
 
-provide('show_window', show_create_profile);
+provide('show_create_window', show_create_window);
+provide('show_switch_window', show_switch_window);
 
-// onMounted(() => {
-//     show_create_profile.value = false;
-// });
 </script>
 
 <template>
     <h1 class="space_after">Settings</h1>
     <main>
-        <img class="profile_display" src="/Placeholder_Image.png"></img>
+        <img class="circle" src="/Placeholder_Image.png"></img>
         <h2 class="text-center">{{profile_store.currentProfile.name}}</h2>
         <div>
             <span class="setting">Configure Profile</span>
-            <span class="setting">Switch Profile</span>
-            <span class="setting" @click="show_create_profile=true">Create New Profile</span>
+            <span class="setting" @click="show_switch_window=true">Switch Profile</span>
+            <span class="setting" @click="show_create_window=true">Create New Profile</span>
             <span class="setting">Change Theme</span>
             <span id="delete_profile" class="setting">Delete Profile</span>
         </div>
     </main>
-    <Create_Profile v-if="show_create_profile"></Create_Profile>
+    <Create_Profile v-if="show_create_window"></Create_Profile>
+    <Switch_Profile v-if="show_switch_window"></Switch_Profile>
 </template>
 
 <style scoped>
-.profile_display{
+.circle{
     height: 100px;
-    aspect-ratio: 1;
-    border-radius: 50%;
     align-self: center;
 }
 

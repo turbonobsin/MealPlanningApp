@@ -57,7 +57,7 @@ button:active {
   scale: .9;
 }
 
-.green-button{
+.color-button{
   background-color: var(--main-color);
   color: var(--light);
 }
@@ -68,6 +68,55 @@ button:active {
 
 .small{
   font-size: small;
+}
+
+.red-text{
+  color: var(--red);
+}
+
+.backdrop{
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: var(--dark);
+    opacity: .8;
+    z-index: 1;
+    animation: fade-in .2s linear;
+}
+
+.pop_window{
+    position: fixed;
+    right: 40px;
+    left: 40px;
+    top: 50%;
+    bottom: 50%;
+    max-height: 70%;
+    align-self: center;
+    background-color: var(--light);
+    border: 3px solid var(--dark);
+    border-radius: 10px;
+    padding: 15px;
+    z-index: 2;
+    animation: pop .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pop_window h3{
+  text-align: center;
+  margin: 0px 0px 10px 0px;
+}
+
+.scroll{
+  border-radius: 10px;
+  overflow: scroll;
+  max-height: 50%;
+  padding: 10px;
+}
+
+.circle{
+  aspect-ratio: 1;
+  border-radius: 50%;
 }
 
 @keyframes pop{

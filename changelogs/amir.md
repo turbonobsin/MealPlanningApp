@@ -3,3 +3,5 @@
 -   Set up main.css classes for layout
 -   Developed and configured Footer.vue and Menu_Item.vue for navigation
 -   Created SettingsView.vue and set up basic layout + styling
+-   Configured Create New Profile function + styling
+-   Configured Switch Profile function + styling
