@@ -31,7 +31,7 @@ function createProfile(){
 
 <template>
     <div class="backdrop"></div>
-    <div class="pop_window vertical">
+    <div class="pop-window vertical">
         <h3>Create New Profile</h3>
         <label for="new_name" class="text-center small">Profile Name:</label>
         <input ref="name_input" class="text-input"></input>

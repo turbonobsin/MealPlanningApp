@@ -5,3 +5,7 @@
 -   Created SettingsView.vue and set up basic layout + styling
 -   Configured Create New Profile function + styling
 -   Configured Switch Profile function + styling
+
+# 10/26/2025
+-   Created Delete Profile window
+-   

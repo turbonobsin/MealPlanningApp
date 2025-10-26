@@ -19,11 +19,11 @@ onMounted(() => {
 
 <template>
     <div class="backdrop"></div>
-    <div class="pop_window vertical">
+    <div class="pop-window vertical">
         <h3>Select Profile</h3>
         <div ref="profiles_list" class="scroll vertical space-after">
             <div class="h-center" v-for="profile in profile_store.profiles" @click="profile_store.switchProfile(profile); show_switch_window = false">
-                <div class="circle"></div>
+                <div class="profile_icon"></div>
                 <span>{{ profile.name }}</span>
             </div>
         </div>
@@ -33,12 +33,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
-.circle{
-    height: 50px;
-    background-color: var(--main-color);
-    margin-right: 10px;
-}
 
 .vertical{
     gap: 10px;
