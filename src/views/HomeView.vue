@@ -6,10 +6,12 @@ const apiKey = "8091b135029642499cfa2a83e6513777";
 const items = ref([])
 let searchTerm = ref("");
 let maxTime = ref("");
+let excludedFoods = ref("");
+let intolerances = ref("");
 let recipeSearchLength = ref("");
 
 RecipeSearch("apples")
-async function RecipeSearch (searchTerm, maxTime) {
+async function RecipeSearch (searchTerm, maxTime, excludedFoods, intolerances) {
 	event.preventDefault()
 
 		let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
@@ -18,6 +20,13 @@ async function RecipeSearch (searchTerm, maxTime) {
 		if(maxTime != undefined && maxTime != ""){
 			url.searchParams.set("maxReadyTime",maxTime);
 		}
+		if(excludedFoods != undefined && excludedFoods != ""){
+			url.searchParams.set("excludeIngredients", excludedFoods);
+		}
+		if(intolerances != undefined && intolerances != ""){
+			url.searchParams.set("intolerances", intolerances);
+		}
+
 
 		const options = {
 			method: "GET",
@@ -61,8 +70,15 @@ async function RecipeSearch (searchTerm, maxTime) {
 			  <label>Maximum Cook Time:   </label><br>
               <input type="number" id="maxTime" v-model="maxTime"><br><br>
 
+			  <label>Excluded Foods:   </label><br>
+              <input type="text" id="excludedFoods" v-model="excludedFoods"><br><br>
+
+			  <label>Intolerances:   </label><br>
+              <input type="text" id="intolerances" v-model="intolerances"><br><br>
+			  <!--diary, egg, gluten, grain, peanut, seafood, sesame, shellfish, soy, sulfite, tree nut, wheat-->
+
               <div class="centeredButton">
-                  <button class="button" @click="RecipeSearch(searchTerm, maxTime)">Search</button>
+                  <button class="button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">Search</button>
               </div>
 
         </div>
@@ -72,7 +88,6 @@ async function RecipeSearch (searchTerm, maxTime) {
 				<li v-for="item in items">
 					<img :src= "item.image">
 					<p>{{ item.title }}</p>
-                	<!--<p>{{ item.title }}</p>-->
 				</li>
         </div>
 
