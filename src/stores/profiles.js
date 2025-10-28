@@ -495,3 +495,5 @@ window.PROFILES = {
         return useProfilesStore();
     }
 };
+
+// console.log(new Date().toLocaleString([],{month:"long"}));

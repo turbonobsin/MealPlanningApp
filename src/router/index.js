@@ -17,27 +17,27 @@ const router = createRouter({
 		{
 			path: "/details",
 			name: "details",
-			component: () => RecipeDetailsView,
+			component: RecipeDetailsView,
 		},
 		{
 			path: "/profile",
 			name: "profile",
-			component: () => ProfileView
+			component: ProfileView
 		},
 		{
 			path: "/favorites",
 			name: "favorites",
-			component: () => FavoritesView
+			component: FavoritesView
 		},
 		{
 			path: "/calendar",
 			name: "calendar",
-			component: () => CalendarView
+			component: CalendarView
 		},
 		{
 			path: "/settings",
 			name: "settings",
-			component: () => SettingsView
+			component: SettingsView
 		}
 	],
 });
