@@ -59,7 +59,7 @@ async function RecipeSearch (searchTerm, maxTime) {
               <input type="text" required id="searchTerm" v-model="searchTerm"><br><br>
 			  
 			  <label>Maximum Cook Time:   </label><br>
-              <input type="number" required id="maxTime" v-model="maxTime"><br><br>
+              <input type="number" id="maxTime" v-model="maxTime"><br><br>
 
               <div class="centeredButton">
                   <button class="button" @click="RecipeSearch(searchTerm, maxTime)">Search</button>
@@ -70,7 +70,8 @@ async function RecipeSearch (searchTerm, maxTime) {
 		<div class="results">
               <div v-if="recipeSearchLength === 0">No recipes found</div>
 				<li v-for="item in items">
-                	<p>{{ item.title }}</p>
+					<p>{{ item }}</p>
+                	<!--<p>{{ item.title }}</p>-->
 				</li>
         </div>
 
