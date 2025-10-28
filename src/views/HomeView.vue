@@ -8,10 +8,16 @@ let searchTerm = ref("");
 let maxTime = ref("");
 let recipeSearchLength = ref("");
 
+RecipeSearch("apples")
 async function RecipeSearch (searchTerm, maxTime) {
 	event.preventDefault()
 
-		const url = `https://api.spoonacular.com/recipes/complexSearch?query=${searchTerm}&maxReadyTime=${maxTime}&apiKey=${apiKey}`
+		let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
+		url.searchParams.set("apiKey",apiKey);
+		url.searchParams.set("query",searchTerm);
+		if(maxTime != undefined && maxTime != ""){
+			url.searchParams.set("maxReadyTime",maxTime);
+		}
 
 		const options = {
 			method: "GET",
