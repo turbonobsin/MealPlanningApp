@@ -70,7 +70,8 @@ async function RecipeSearch (searchTerm, maxTime) {
 		<div class="results">
               <div v-if="recipeSearchLength === 0">No recipes found</div>
 				<li v-for="item in items">
-					<p>{{ item }}</p>
+					<img :src= "item.image">
+					<p>{{ item.title }}</p>
                 	<!--<p>{{ item.title }}</p>-->
 				</li>
         </div>
