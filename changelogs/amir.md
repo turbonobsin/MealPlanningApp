@@ -13,3 +13,7 @@
 -   Created profile config page
 -   Developed adding/removing intolerances + styling
 -   Started developing name changing function, styling created
+
+# 10/30/2025
+-   Setting up changing profile color
+-   Implement profile colors in previews

@@ -1,13 +1,14 @@
 <script setup>
 import { useProfilesStore } from '@/stores/profiles';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, useTemplateRef } from 'vue';
 
 const profile_store = useProfilesStore();
 const { currentProfile } = storeToRefs(profile_store);
 
 const intolerances = ref(["Dairy", "Egg", "Gluten", "Grain", "Peanut", "Seafood", "Sesame", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"]);
 
+const edit_color = ref(false);
 const edit_mode = ref(false);
 
 function toggleItem(item){
@@ -25,17 +26,49 @@ function toggleItem(item){
     profile_store.saveProfile();
 }
 
+const name_input = useTemplateRef('name_input');
 
+function updateName(){
+    if (name_input.value.value !== currentProfile.name){
+
+    }
+
+    edit_color.value = false;
+}
+
+function convertHexTo6(hex){
+    if(hex.length != 7){
+        let [r,g,b] = hex.replace("#","").split("");
+        return `#${r}${r}${g}${g}${b}${b}`;
+    }
+    return hex;
+}
+
+const colorInput = useTemplateRef("color_input");
+
+function toggleColorEdit(e){
+    edit_color.value = !edit_color.value;
+    e.target.classList.toggle('enabled');
+
+    if(edit_color.value){
+        colorInput.value.click();
+    }
+}
 
 </script>
 
 <template>
     <h1>Profile Page</h1>
     <main>
-        <img class="circle" src="/Placeholder_Image.png"></img>
+        <div class="circle-container" style="position:relative">
+            <div class="profile-color center circle">
+                <input ref="color_input" :disabled="!edit_color" type="color" id="profile_color" class="circle" :value="convertHexTo6(currentProfile.color)"></input>
+            </div>
+            <div class="material-symbols-outlined color-edit circle center" @click="toggleColorEdit">{{ (edit_color) ? 'check' : 'edit'}}</div>
+        </div>
         <div class="h-center">
             <h2 id="profile_name" v-show="!edit_mode">{{currentProfile.name}}</h2>
-            <input class="text-input edit-text" v-show="edit_mode" :value="currentProfile.name"></input>
+            <input ref="name_input" class="text-input edit-text" v-show="edit_mode" :value="currentProfile.name"></input>
             <div v-show="!edit_mode" class="material-symbols-outlined" @click="edit_mode=!edit_mode">edit</div>
             <div class="h-center">
                 <button v-show="edit_mode" id="save" class="color-button h-center update-button" @click="updateName">
@@ -56,16 +89,51 @@ function toggleItem(item){
 
 <style scoped>
 
-.circle{
-    height: 100px;
+.circle-container{
+    width:7em;
+    height:7em;
+    margin-inline:auto;
+}
+
+.profile-color{
+    overflow: hidden;
+    height: 7em;
     align-self: center;
+    position:relative;
+}
+
+
+.color-edit{
+    background-color: var(--dark);
+    color: var(--light);
+    height: 2em;
+    position: relative;
+    right:-.5em;
+    bottom:-.5em;
+    position:absolute;
+}
+
+.enabled{
+    background-color: var(--main-color);
+    animation: pop .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#profile_color{
+    border: none;
+    border-radius: 50%;
+    width: 12em;
+    height: 12em;
+    position: relative;
 }
 
 .flex-wrap{
     display: flex;
     flex-wrap: wrap;
-    justify-content: stretch;
     gap: 10px;
+
+    & > *{
+        flex-grow:1;
+    }
 }
 
 .list-item{
@@ -110,5 +178,6 @@ function toggleItem(item){
 #save{
     border: 2px solid var(--main-color);
 }
+
 
 </style>

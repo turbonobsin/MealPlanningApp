@@ -19,7 +19,7 @@ provide('show_delete_window', show_delete_window);
 <template>
     <h1 class="space_after">Settings</h1>
     <main>
-        <img class="circle" src="/Placeholder_Image.png"></img>
+        <div class="circle" :style="{'background-color': profile_store.currentProfile.color}"></div>
         <h2 class="text-center">{{profile_store.currentProfile.name}}</h2>
         <div>
             <RouterLink class="setting" to="/profile">Configure Profile</RouterLink>

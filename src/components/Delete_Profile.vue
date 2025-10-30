@@ -13,7 +13,7 @@ const show_delete_window = inject('show_delete_window');
     <div class="pop-window vertical">
         <h3>Confirm Delete</h3>
         <div class="h-center">
-            <div class="profile-icon"></div>
+            <div class="profile-icon" :style="{'background-color': profile_store.currentProfile.color}"></div>
             <span>{{ profile_store.currentProfile.name }}</span>
         </div>
         <p>Are you sure you want to permanently delete this profile?</p>
