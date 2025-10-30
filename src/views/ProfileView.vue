@@ -29,11 +29,12 @@ function toggleItem(item){
 const name_input = useTemplateRef('name_input');
 
 function updateName(){
-    if (name_input.value.value !== currentProfile.name){
-
+    if (name_input.value.value !== currentProfile.value.name){
+        profile_store.renameProfile(name_input.value.value);
+        edit_mode.value = false;
     }
 
-    edit_color.value = false;
+    edit_mode.value = false;
 }
 
 function convertHexTo6(hex){
@@ -48,10 +49,16 @@ const colorInput = useTemplateRef("color_input");
 
 function toggleColorEdit(e){
     edit_color.value = !edit_color.value;
-    e.target.classList.toggle('enabled');
 
     if(edit_color.value){
-        colorInput.value.click();
+        setTimeout(()=>{
+            colorInput.value.click();
+        },20);
+    }
+
+    else{
+        currentProfile.value.color = colorInput.value.value;
+        profile_store.saveProfile();
     }
 }
 
@@ -64,7 +71,8 @@ function toggleColorEdit(e){
             <div class="profile-color center circle">
                 <input ref="color_input" :disabled="!edit_color" type="color" id="profile_color" class="circle" :value="convertHexTo6(currentProfile.color)"></input>
             </div>
-            <div class="material-symbols-outlined color-edit circle center" @click="toggleColorEdit">{{ (edit_color) ? 'check' : 'edit'}}</div>
+            <div :class="{'material-symbols-outlined': true, 'color-edit': true, 'circle': true, 'center': true, 'enabled': edit_color}" @click="toggleColorEdit">{{ (edit_color) ? 'check' : 'edit'}}</div>
+            <div v-show="edit_color" class="material-symbols-outlined color-edit cancel circle center" @click="edit_color=false">close</div>
         </div>
         <div class="h-center">
             <h2 id="profile_name" v-show="!edit_mode">{{currentProfile.name}}</h2>
@@ -106,15 +114,27 @@ function toggleColorEdit(e){
 .color-edit{
     background-color: var(--dark);
     color: var(--light);
-    height: 2em;
+    height: 1.7em;
     position: relative;
     right:-.5em;
     bottom:-.5em;
     position:absolute;
+    border: 2px solid var(--dark);
+}
+
+.cancel{
+    right: unset;
+    left: -.5em;
+    bottom: -.5em;
+    background-color: var(--light);
+    color: var(--dark);
+    border-color: var(--medium);
+    animation: pop .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .enabled{
     background-color: var(--main-color);
+    border-color: var(--main-color);
     animation: pop .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 

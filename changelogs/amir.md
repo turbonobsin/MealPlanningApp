@@ -17,3 +17,6 @@
 # 10/30/2025
 -   Setting up changing profile color
 -   Implement profile colors in previews
+-   Finalize change profile color
+-   Finalize change profile name
+-   Implement styling for all current functions
