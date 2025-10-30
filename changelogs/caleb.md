@@ -10,7 +10,13 @@
 # 10/22/25
 - added the rest of the properties to the Recipe class
 
+# 10/23/25
+- added switch profile
+- added remove profile
+- added some type information
+
 # 10/28/25
+- started the calendar page
 
 # 10/29/25
 - added saveSearchResults
@@ -18,3 +24,8 @@
 - added saveRecipeData (to localStorage cache)
 - more work on calendar
 - added icons to footer
+
+# 10/30/25 
+- added renameProfile
+- fixed deleting profile when you delete the current one
+- added addRecipeToFavorites
