@@ -335,9 +335,14 @@ export const useProfilesStore = defineStore("profiles", () => {
             return;
         }
 
+        let newProfile = profiles[ind - 1] ?? profiles[0];
+
         profiles.splice(ind, 1);
 
         localStorage.removeItem("profile_" + profile.name);
+
+        currentProfileId.value = newProfile.name;
+        localStorage.setItem("currentProfileId", currentProfileId.value);
 
         // update list of all profiles
         localStorage.setItem("profiles", JSON.stringify(profiles.map(v => v.name)));
@@ -359,6 +364,35 @@ export const useProfilesStore = defineStore("profiles", () => {
         console.log(":: saved profile: " + profile.name);
 
         localStorage.setItem("profile_" + profile.name, JSON.stringify(profile));
+    }
+
+
+    /**
+     * Change the name of a profile and save it
+     * @param {string} newName the new name of the profile
+     * @param {Profile} [profile] which profile to change
+     */
+    function renameProfile(newName, profile) {
+        if (!profile) profile = currentProfile.value;
+        if (!profile) {
+            console.warn("can't save profile, none selected");
+            return;
+        }
+
+        if (profile.name == currentProfileId.value) {
+            currentProfileId.value = newName;
+            localStorage.setItem("currentProfileId", currentProfileId.value);
+        }
+        let oldName = profile.name;
+        profile.name = newName;
+
+        localStorage.removeItem("profile_" + oldName);
+        localStorage.setItem("profile_" + newName, JSON.stringify(profile));
+
+        console.log(":: changed the name of profile: " + profile.name + " to: " + newName);
+
+        // save the new set of profile names
+        localStorage.setItem("profiles", JSON.stringify(profiles.map(v => v.name)));
     }
 
     // favorites
@@ -387,6 +421,26 @@ export const useProfilesStore = defineStore("profiles", () => {
         if (!parentFolder) parentFolder = profile.favorites;
 
         parentFolder.items.push(recipeId);
+
+        saveProfile(profile);
+    }
+
+    /**
+     * 
+     * @param {Recipe} recipe 
+     * @param {FavoriteFolder} [parentFolder] 
+     */
+    function addRecipeToFavorites(recipe,parentFolder){
+        let profile = currentProfile.value;
+        if (!profile) {
+            console.warn("couldn't add to favorites, no current profile");
+            return;
+        }
+
+        if (!parentFolder) parentFolder = profile.favorites;
+
+        saveRecipeData(recipe);
+        parentFolder.items.push(recipe.id);
 
         saveProfile(profile);
     }
@@ -468,9 +522,9 @@ export const useProfilesStore = defineStore("profiles", () => {
      * @param {SearchResult[]} results 
      */
     function saveSearchResults(results) {
-        if(!Array.isArray(results)){
+        if (!Array.isArray(results)) {
             alert("Failed to save search results, wasn't an array");
-            console.warn("Failed to save search results, wasn't an array",results);
+            console.warn("Failed to save search results, wasn't an array", results);
             return;
         }
 
@@ -521,6 +575,7 @@ export const useProfilesStore = defineStore("profiles", () => {
         saveProfile,
         removeProfile,
         switchProfile,
+        renameProfile,
         currentProfile,
         profiles,
 
@@ -529,6 +584,7 @@ export const useProfilesStore = defineStore("profiles", () => {
         addFolderToFavorites,
         removeItemFromFavorites,
         removeFolderFromFavorites,
+        addRecipeToFavorites,
 
         // recipe data
         getDummyRecipe,

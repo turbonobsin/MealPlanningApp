@@ -18,3 +18,7 @@
 - added saveRecipeData (to localStorage cache)
 - more work on calendar
 - added icons to footer
+
+# 10/30/25 
+- added renameProfile
+- added addRecipeToFavorites
