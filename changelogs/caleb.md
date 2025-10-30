@@ -9,3 +9,10 @@
 
 # 10/22/25
 - added the rest of the properties to the Recipe class
+
+# 10/28/25
+
+# 10/29/25
+- added saveSearchResults
+- added getRecipeData (from localStorage cache)
+- added saveRecipeData (to localStorage cache)
