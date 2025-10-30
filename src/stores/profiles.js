@@ -32,6 +32,13 @@ export class ExtendedIngredient {
     meta = []; // extra info
 }
 
+export class SearchResult {
+    id = 0; // recipe id
+    title = "";
+    image = ""; // url
+    imageType = ""; // jpg
+}
+
 export class Recipe {
     id = 0; // recipe id
 
@@ -204,7 +211,8 @@ export class Profile {
     calendar;
 
     /**
-     * @todo
+     * The list of the most recent search results
+     * @type {SearchResult[]}
      */
     recentSearches = [];
 }
@@ -440,7 +448,7 @@ export const useProfilesStore = defineStore("profiles", () => {
      * Get a Recipe's information from it's recipeId
      * @param {number} recipeId 
      */
-    function getRecipe(recipeId) {
+    function getDummyRecipe(recipeId) {
         let r = new Recipe();
         r.title = "Dummy Recipe";
         r.cookingMinutes = 123;
@@ -453,6 +461,42 @@ export const useProfilesStore = defineStore("profiles", () => {
         r.readyInMinutes = 50;
         r.servings = 10;
         return r;
+    }
+
+    /**
+     * Save the results of the recipe search into the recent searches list
+     * @param {SearchResult[]} results 
+     */
+    function saveSearchResults(results) {
+        let profile = currentProfile.value;
+        if (!profile) {
+            console.warn("couldn't add to recent search results because no profile was loaded");
+            return;
+        }
+
+        profile.recentSearches = results;
+        saveProfile(profile);
+    }
+
+    /**
+     * Get a cache'd recipe's data by its id
+     * @param {number} recipeId 
+     */
+    function getRecipeData(recipeId) {
+        let itemStr = localStorage.getItem("recipe_" + recipeId);
+        if (!itemStr) {
+            console.warn("couldn't find data for the recipe: " + recipeId);
+            return;
+        }
+        return JSON.parse(itemStr);
+    }
+
+    /**
+     * After getting and viewing a recipe's data, save it for later so we don't have to refetch
+     * @param {Recipe} recipe
+     */
+    function saveRecipeData(recipe) {
+        localStorage.setItem("recipe_" + recipe.id, JSON.stringify(recipe));
     }
 
     // 
@@ -473,13 +517,18 @@ export const useProfilesStore = defineStore("profiles", () => {
         switchProfile,
         currentProfile,
         profiles,
-        getRecipe,
 
         // favorites
         addItemToFavorites,
         addFolderToFavorites,
         removeItemFromFavorites,
         removeFolderFromFavorites,
+
+        // recipe data
+        getDummyRecipe,
+        saveSearchResults,
+        getRecipeData,
+        saveRecipeData,
 
         // 
         $reset

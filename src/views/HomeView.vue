@@ -10,9 +10,7 @@ let excludedFoods = ref("");
 let intolerances = ref("");
 let recipeSearchLength = ref("");
 
-RecipeSearch("apples")
 async function RecipeSearch (searchTerm, maxTime, excludedFoods, intolerances) {
-	event.preventDefault()
 
 		let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 		url.searchParams.set("apiKey",apiKey);
