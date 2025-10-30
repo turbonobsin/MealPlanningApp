@@ -4,10 +4,10 @@ import Menu_Item from './Menu_Item.vue';
 
 <template>
     <nav id="menu_bar" class="spread">
-        <Menu_Item label="x" to="/"></Menu_Item>
-        <Menu_Item label="x" to="/calendar"></Menu_Item>
-        <Menu_Item label="x" to="/favorites"></Menu_Item>
-        <Menu_Item label="x" to="/settings"></Menu_Item>
+        <Menu_Item label="search" to="/"></Menu_Item>
+        <Menu_Item label="edit_calendar" to="/calendar"></Menu_Item> <!-- calendar_month is another possible icon -->
+        <Menu_Item label="book" to="/favorites"></Menu_Item>
+        <Menu_Item label="settings" to="/settings"></Menu_Item>
     </nav>
 </template>
 

@@ -17,3 +17,4 @@
 - added getRecipeData (from localStorage cache)
 - added saveRecipeData (to localStorage cache)
 - more work on calendar
+- added icons to footer

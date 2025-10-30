@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <router-link ref="item" class="menu_item vertical center" :to="props.destination">{{ props.label }}</router-link>
+    <router-link ref="item" class="menu_item vertical center material-symbols-outlined" :to="props.destination">{{ props.label }}</router-link>
 </template>
 
 <style scoped>
@@ -22,6 +22,8 @@ const props = defineProps({
     border-radius: 15px;
     margin: 0px;
     transition: all .2s;
+
+    font-size:30px;
 }
 
 * {
