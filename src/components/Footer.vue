@@ -21,5 +21,6 @@ import Menu_Item from './Menu_Item.vue';
     padding: 7px;
     border: 3px solid var(--medium);
     border-radius: 20px;
+    background-color: var(--light);
 }
 </style>

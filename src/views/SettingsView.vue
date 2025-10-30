@@ -22,7 +22,7 @@ provide('show_delete_window', show_delete_window);
         <img class="circle" src="/Placeholder_Image.png"></img>
         <h2 class="text-center">{{profile_store.currentProfile.name}}</h2>
         <div>
-            <span class="setting">Configure Profile</span>
+            <RouterLink class="setting" to="/profile">Configure Profile</RouterLink>
             <span class="setting" @click="show_switch_window=true">Switch Profile</span>
             <span class="setting" @click="show_create_window=true">Create New Profile</span>
             <span class="setting">Change Theme</span>
@@ -47,6 +47,8 @@ h2{
 .setting{
     display: block;
     margin: 20px 0px;
+    text-decoration: none;
+    color: var(--dark);
     /* border-bottom: 1px solid var(--light-color); */
 }
 </style>

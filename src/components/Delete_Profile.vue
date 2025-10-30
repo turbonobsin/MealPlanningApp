@@ -28,6 +28,12 @@ const show_delete_window = inject('show_delete_window');
 
 .vertical{
     gap: 15px;
+    align-items: center;
+}
+
+.h-center{
+    position: relative;
+    left: -5px;
 }
 
 .vertical > * {
@@ -36,6 +42,7 @@ const show_delete_window = inject('show_delete_window');
 
 .two-grid{
     grid-template-columns: .8fr 1.2fr;
+    width: 100%;
 }
 
 </style>

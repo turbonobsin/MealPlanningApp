@@ -38,6 +38,7 @@ label{
   padding: 0px 10px;
   color: unset;
   font-weight: 600;
+  font-family: inherit;
 }
 
 .text-input:focus{
@@ -76,7 +77,7 @@ button:active {
 }
 
 .red-text{
-  color: var(--red);
+  color: var(--red) !important;
 }
 
 .profile-icon{

@@ -19,11 +19,11 @@ const router = createRouter({
 			name: "details",
 			component: RecipeDetailsView,
 		},
-		{
-			path: "/profile",
-			name: "profile",
-			component: ProfileView
-		},
+		// {
+		// 	path: "/profile",
+		// 	name: "profile",
+		// 	component: ProfileView
+		// },
 		{
 			path: "/favorites",
 			name: "favorites",
@@ -36,8 +36,18 @@ const router = createRouter({
 		},
 		{
 			path: "/settings",
-			name: "settings",
-			component: SettingsView
+			children: [
+				{
+					path: "",
+					name: "settings",
+					component: SettingsView
+				},
+				{
+					path: "/profile",
+					name: "profile",
+					component: ProfileView
+				}
+			]
 		}
 	],
 });

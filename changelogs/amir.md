@@ -8,4 +8,8 @@
 
 # 10/26/2025
 -   Created Delete Profile window
--   
+
+# 10/29/2025
+-   Created profile config page
+-   Developed adding/removing intolerances + styling
+-   Started developing name changing function, styling created

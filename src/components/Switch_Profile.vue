@@ -23,7 +23,7 @@ onMounted(() => {
         <h3>Select Profile</h3>
         <div ref="profiles_list" class="scroll vertical space-after">
             <div class="h-center" v-for="profile in profile_store.profiles" @click="profile_store.switchProfile(profile); show_switch_window = false">
-                <div class="profile_icon"></div>
+                <div class="profile-icon"></div>
                 <span>{{ profile.name }}</span>
             </div>
         </div>
