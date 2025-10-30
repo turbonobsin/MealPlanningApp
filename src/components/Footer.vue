@@ -22,5 +22,7 @@ import Menu_Item from './Menu_Item.vue';
     border: 3px solid var(--medium);
     border-radius: 20px;
     background-color: var(--light);
+    /* margin-top:auto; */
+    /* height:max-content; */
 }
 </style>

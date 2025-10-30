@@ -468,6 +468,12 @@ export const useProfilesStore = defineStore("profiles", () => {
      * @param {SearchResult[]} results 
      */
     function saveSearchResults(results) {
+        if(!Array.isArray(results)){
+            alert("Failed to save search results, wasn't an array");
+            console.warn("Failed to save search results, wasn't an array",results);
+            return;
+        }
+
         let profile = currentProfile.value;
         if (!profile) {
             console.warn("couldn't add to recent search results because no profile was loaded");

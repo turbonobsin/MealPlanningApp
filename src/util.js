@@ -57,3 +57,13 @@ export function getMonthLength(date){
     if(month == 10) return 30; // november
     return 31; // december
 }
+
+export const weekdayAbbr = [
+    "Su",
+    "M",
+    "T",
+    "W",
+    "Th",
+    "F",
+    "S"
+];

@@ -2,39 +2,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1&display=block');
 
 
-:root{
+:root {
 
     --ff-primary: Lexend_Deca, sans-serif;
 
-	--light-color: #B4C29D;
-	--main-color: #6A8B52;
-	--light: #FAF8F4;
-	--dark: #5C4B3B;
-	--medium: #B89C83;
-	--red: #C33746;
+    --light-color: #B4C29D;
+    --main-color: #6A8B52;
+    --light: #FAF8F4;
+    --dark: #5C4B3B;
+    --medium: #B89C83;
+    --red: #C33746;
 }
 
-@font-face{
+@font-face {
     font-family: Lexend_Deca;
     src: url(/LexendDeca.ttf);
 }
 
-body{
+body {
     color: var(--dark);
     background-color: var(--light);
     font-family: var(--ff-primary) !important;
+    /* margin:0px; */
+    padding-bottom:100px;
 }
 
-body::before{
-  content: "";
-  background-image: url(/Decor.png);
-  /* background-position: center; */
-  background-size: contain;
-  position: fixed;
-  top: -55px;
-  left: -30px;
-  height: 120%;
-  width: 120%;
-  z-index: -1;
-  background-repeat: no-repeat;
+body::before {
+    content: "";
+    background-image: url(/Decor.png);
+    /* background-position: center; */
+    background-size: contain;
+    position: fixed;
+    top: -55px;
+    left: -30px;
+    height: 120%;
+    width: 120%;
+    z-index: -1;
+    background-repeat: no-repeat;
 }
