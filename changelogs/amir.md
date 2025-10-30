@@ -20,3 +20,4 @@
 -   Finalize change profile color
 -   Finalize change profile name
 -   Implement styling for all current functions
+-   Add color input at create profile

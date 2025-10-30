@@ -1,7 +1,8 @@
 <script setup>
 import { useProfilesStore } from '@/stores/profiles';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref, useTemplateRef } from 'vue';
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
 
 const profile_store = useProfilesStore();
 const { currentProfile } = storeToRefs(profile_store);
@@ -10,6 +11,8 @@ const intolerances = ref(["Dairy", "Egg", "Gluten", "Grain", "Peanut", "Seafood"
 
 const edit_color = ref(false);
 const edit_mode = ref(false);
+
+const router = useRouter();
 
 function toggleItem(item){
     let removed = false;
@@ -65,7 +68,10 @@ function toggleColorEdit(e){
 </script>
 
 <template>
-    <h1>Profile Page</h1>
+    <div class="h-center">
+        <div class="material-symbols-outlined xxxlarge back" @click="router.back()">chevron_left</div>
+        <h1 class="title">Profile Page</h1>
+    </div>
     <main>
         <div class="circle-container" style="position:relative">
             <div class="profile-color center circle">
@@ -74,22 +80,25 @@ function toggleColorEdit(e){
             <div :class="{'material-symbols-outlined': true, 'color-edit': true, 'circle': true, 'center': true, 'enabled': edit_color}" @click="toggleColorEdit">{{ (edit_color) ? 'check' : 'edit'}}</div>
             <div v-show="edit_color" class="material-symbols-outlined color-edit cancel circle center" @click="edit_color=false">close</div>
         </div>
+
         <div class="h-center">
             <h2 id="profile_name" v-show="!edit_mode">{{currentProfile.name}}</h2>
             <input ref="name_input" class="text-input edit-text" v-show="edit_mode" :value="currentProfile.name"></input>
             <div v-show="!edit_mode" class="material-symbols-outlined" @click="edit_mode=!edit_mode">edit</div>
-            <div class="h-center">
-                <button v-show="edit_mode" id="save" class="color-button h-center update-button" @click="updateName">
-                    <div class="material-symbols-outlined">check</div>
-                </button>
-                <button v-show="edit_mode" class="blank-button h-center update-button" @click="edit_mode = !edit_mode">
-                    <div class="material-symbols-outlined">close</div>
-                </button>
-            </div>
+            <button v-show="edit_mode" id="save" class="color-button h-center update-button" @click="updateName">
+                <div class="material-symbols-outlined">check</div>
+            </button>
+            <button v-show="edit_mode" class="blank-button h-center update-button" @click="edit_mode = !edit_mode">
+                <div class="material-symbols-outlined">close</div>
+            </button>
         </div>
+
         <h3>Intolerances</h3>
         <div class="flex-wrap">
-            <div v-for="item in intolerances" @click="toggleItem(item)" :class="{'list-item': true, 'small': true, 'selected': currentProfile.allergies.find(v => v === item)}">{{ item }}</div>
+            <div v-for="item in intolerances" @click="toggleItem(item)" 
+            :class="{'list-item': true, 'small': true, 'selected': currentProfile.allergies.find(v => v === item)}">
+                {{ item }}
+            </div>
         </div>
         <h3>Exclude Ingredients</h3>
     </main>
@@ -98,24 +107,28 @@ function toggleColorEdit(e){
 <style scoped>
 
 .circle-container{
-    width:7em;
-    height:7em;
-    margin-inline:auto;
+    width:5em;
+    height:5em;
+    margin-inline: auto;
 }
 
 .profile-color{
     overflow: hidden;
-    height: 7em;
+    height: 5em;
     align-self: center;
     position:relative;
 }
 
+.back{
+    position: absolute;
+    left: .6em;
+}
 
 .color-edit{
     background-color: var(--dark);
     color: var(--light);
-    height: 1.7em;
-    position: relative;
+    font-size: 1.2em;
+    padding: .3em;
     right:-.5em;
     bottom:-.5em;
     position:absolute;
@@ -146,26 +159,17 @@ function toggleColorEdit(e){
     position: relative;
 }
 
-.flex-wrap{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-
-    & > *{
-        flex-grow:1;
-    }
-}
-
 .list-item{
     display: inline-block;
     padding: 5px 10px;
     border-radius: 5px;
     border: 2px solid var(--medium);
+    flex-grow:1;
 }
 
 .selected{
     background-color: var(--main-color);
-    border-color: var(--main-color);
+    border-color: var(--main-color) !important;
     color: var(--light);
     animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
