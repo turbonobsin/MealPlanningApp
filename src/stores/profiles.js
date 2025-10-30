@@ -277,8 +277,9 @@ export const useProfilesStore = defineStore("profiles", () => {
     /**
      * Create a new profile with default options
      * @param {String} name 
+     * @param {String} [color]
      */
-    function createDefaultProfile(name = "Default Profile") {
+    function createDefaultProfile(name = "Default Profile", color) {
         /**@type {Profile} */
         let profile = {
             name,
@@ -296,7 +297,7 @@ export const useProfilesStore = defineStore("profiles", () => {
                 dates: {}
             },
 
-            color: "#70f",
+            color: color ?? "#70f",
             recentSearches: []
         };
 

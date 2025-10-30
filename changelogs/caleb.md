@@ -6,7 +6,7 @@
 
 # 10/21/25
 - changed recipes in folders to be ids instead of classes
-
+j
 # 10/22/25
 - added the rest of the properties to the Recipe class
 
@@ -29,3 +29,4 @@
 - added renameProfile
 - fixed deleting profile when you delete the current one
 - added addRecipeToFavorites
+- added color property when creating a new profile
