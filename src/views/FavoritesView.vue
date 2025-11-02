@@ -16,7 +16,7 @@ const currentFolder = ref(profileStore.currentProfile.favorites) // Track curren
 
 const folderHistory = ref([]) // Folder history for going back
 
-const getRecipe = (id) => profileStore.getDummyRecipe(id);
+const getRecipe = (id) => profileStore.getRecipeData(id);
 
 const openFolder = (folder) => {
   if (!folder || !folder.items) return
