@@ -135,10 +135,16 @@ async function RecipeSearch (searchTerm, maxTime, excludedFoods, intolerances) {
 
 		<div class="results">
               <div v-if="recipeSearchLength === 0">No recipes found</div>
-				<li v-for="item in items">
+				<RouterLink v-for="item in items" :to="`/details/${item.id}`">
 					<img :src= "item.image">
 					<p>{{ item.title }}</p>
-				</li>
+				</RouterLink>
+
+				
+				<!--<li v-for="item in items">
+					<img :src= "item.image">
+					<p>{{ item.title }}</p>
+				</li>-->
         </div>
 
 
