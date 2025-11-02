@@ -9,4 +9,5 @@ const props = defineProps({ recipeId: String })
 
 <template>
     <h1>Recipe Details Page</h1>
+    <div>RecipeId: {{ recipeId }}</div>
 </template>

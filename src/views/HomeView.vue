@@ -1,7 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import { ref , reactive } from 'vue'
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { useProfilesStore } from '@/stores/profiles';
 
 const apiKey = "8091b135029642499cfa2a83e6513777";
@@ -13,7 +12,6 @@ let intolerances = ref([""]);
 let recipeSearchLength = ref("");
 const profilesStore = useProfilesStore();
 
-<<<<<<< Updated upstream
 //checkbox variables
 const intolerance1 = document.getElementById('intolerance1');
 const intolerance2 = document.getElementById('intolerance2');
@@ -43,58 +41,21 @@ function addIntolerances (checkbox) {
 
 //intolerance1.addEventListener(change, addIntolerances)
 
-
-async function RecipeSearch (searchTerm, maxTime, excludedFoods, intolerances) {
-=======
 async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
->>>>>>> Stashed changes
 
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
-	url.searchParams.set("apiKey", apiKey);
-	url.searchParams.set("query", searchTerm);
-	if (maxTime != undefined && maxTime != "") {
-		url.searchParams.set("maxReadyTime", maxTime);
+	url.searchParams.set("apiKey",apiKey);
+	url.searchParams.set("query",searchTerm);
+	if(maxTime != undefined && maxTime != ""){
+		url.searchParams.set("maxReadyTime",maxTime);
 	}
-	if (excludedFoods != undefined && excludedFoods != "") {
+	if(excludedFoods != undefined && excludedFoods != ""){
 		url.searchParams.set("excludeIngredients", excludedFoods);
 	}
-	if (intolerances != undefined && intolerances != "") {
+	if(intolerances != undefined && intolerances != ""){
 		url.searchParams.set("intolerances", intolerances);
 	}
 
-		let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
-		url.searchParams.set("apiKey",apiKey);
-		url.searchParams.set("query",searchTerm);
-		if(maxTime != undefined && maxTime != ""){
-			url.searchParams.set("maxReadyTime",maxTime);
-		}
-		if(excludedFoods != undefined && excludedFoods != ""){
-			url.searchParams.set("excludeIngredients", excludedFoods);
-		}
-		if(intolerances != undefined && intolerances != ""){
-			url.searchParams.set("intolerances", intolerances);
-		}
-
-
-		const options = {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		}
-
-		let response = await fetch(url, options)	
-		
-		if (response.status === 200) {
-			
-			let data = await response.json()
-			console.log(data)
-			items.value = data.results;			
-			recipeSearchLength = data.results.length;
-			console.log(recipeSearchLength)
-		}else {
-			console.log("request failed")
-		}
 
 	const options = {
 		method: "GET",
@@ -103,18 +64,16 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		},
 	}
 
-	let response = await fetch(url, options)
-
-<<<<<<< Updated upstream
-=======
+	let response = await fetch(url, options)	
+	
 	if (response.status === 200) {
-
+		
 		let data = await response.json()
 		console.log(data)
-		items.value = data.results;
+		items.value = data.results;			
 		recipeSearchLength = data.results.length;
 		console.log(recipeSearchLength)
-	} else {
+	}else {
 		console.log("request failed")
 	}
 
@@ -133,7 +92,6 @@ function addToFavorites(recipe){
 function addToCalendar(){
 	console.log("Added to Calendar")
 	console.log(items.value)
->>>>>>> Stashed changes
 }
 
 
@@ -148,7 +106,6 @@ function addToCalendar(){
 		<h1>Hello, user!</h1>
 
 		<div class="search">
-<<<<<<< Updated upstream
 			<label>Find your next recipe:   </label><br>
 			<input type="text" required id="searchTerm" v-model="searchTerm"><br><br>
 			
@@ -189,20 +146,6 @@ function addToCalendar(){
 			<div class="centeredButton">
 				<button class="button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">Search</button>
 			</div>
-=======
-			<label>Find your next recipe: </label><br>
-			<input type="text" required id="searchTerm" v-model="searchTerm"><br><br>
-
-			<label>Maximum Cook Time: </label><br>
-			<input type="number" id="maxTime" v-model="maxTime"><br><br>
-
-			<label>Excluded Foods: </label><br>
-			<input type="text" id="excludedFoods" v-model="excludedFoods"><br><br>
-
-			<label>Intolerances: </label><br>
-			<input type="text" id="intolerances" v-model="intolerances"><br><br>
-			<!--diary, egg, gluten, grain, peanut, seafood, sesame, shellfish, soy, sulfite, tree nut, wheat-->
->>>>>>> Stashed changes
 
 			<div class="centeredButton">
 				<button class="button"
@@ -210,23 +153,23 @@ function addToCalendar(){
 			</div>
 
         </div>
-		</div>
 
-		<div class="results">
-<<<<<<< Updated upstream
-              <div v-if="recipeSearchLength === 0">No recipes found</div>
-				<RouterLink v-for="item in items" :to="`/details/${item.id}`">
-					<img :src= "item.image">
-					<p>{{ item.title }}</p>
-				</RouterLink>
+		<!-- <div>Jessica's List</div> -->
+		<!-- <div class="results"> -->
+              <!-- <div v-if="recipeSearchLength === 0">No recipes found</div> -->
+				<!-- <RouterLink v-for="item in items" :to="`/details/${item.id}`"> -->
+					<!-- <img :src= "item.image"> -->
+					<!-- <p>{{ item.title }}</p> -->
+				<!-- </RouterLink> -->
 
 				
 				<!--<li v-for="item in items">
 					<img :src= "item.image">
 					<p>{{ item.title }}</p>
 				</li>-->
-        </div>
-=======
+        <!-- </div> -->
+		<!-- <div>Mighty's List</div> -->
+		<div>
 			<div v-if="recipeSearchLength === 0">No recipes found</div>
 			<div v-for="item in items">
 				<div class="searchResults">
@@ -234,7 +177,7 @@ function addToCalendar(){
 						<img :src="item.image" class="result-image">
 					</div>
 					<div class="result-card">
-						<p>{{ item.title }}</p>
+						<p><RouterLink :to="`/details/${item.id}`">{{ item.title }}</RouterLink></p>
 						<div class="addDiv">
 							<button @click="addToFavorites(item)" class="material-symbols-outlined">Bookmark</button>
 							<button @click="addToCalendar" class="material-symbols-outlined">Calendar_Add_On</button>
@@ -243,7 +186,6 @@ function addToCalendar(){
 				</div>
 			</div>
 		</div>
->>>>>>> Stashed changes
 
 
 		<ul>
@@ -251,25 +193,11 @@ function addToCalendar(){
 			<li><RouterLink to="/profile">Profile</RouterLink></li>
 			<li><RouterLink to="/favorites">Favorites</RouterLink></li>
 			<li><RouterLink to="/calendar">Calendar</RouterLink></li>
-			<li>
-				<RouterLink to="/details">Details</RouterLink>
-			</li>
-			<li>
-				<RouterLink to="/profile">Profile</RouterLink>
-			</li>
-			<li>
-				<RouterLink to="/favorites">Favorites</RouterLink>
-			</li>
-			<li>
-				<RouterLink to="/calendar">Calendar</RouterLink>
-			</li>
 		</ul>
 	</main>
 </template>
 
 
-<<<<<<< Updated upstream
-=======
 <style scoped>
 .searchResults{
 	display: flex;
@@ -288,4 +216,3 @@ function addToCalendar(){
 
 </style>
  
->>>>>>> Stashed changes
