@@ -257,7 +257,7 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         // clean up profiles
         for (const profile of profiles) {
-            function loop(/**@type {FavoriteFolder}*/f){
+            function loop(/**@type {FavoriteFolder}*/f) {
                 f.items = f.items.filter(v => v != undefined);
             }
             loop(profile.favorites);
@@ -407,7 +407,7 @@ export const useProfilesStore = defineStore("profiles", () => {
     // favorites
     /**
      * Add a Recipe to your favorites, optionally with a custom folder or else it will be put in the root folder
-     * @param {number} recipeId
+     * @param {number | FavoriteFolder} recipeId
      * @param {FavoriteFolder} [parentFolder]
      * @example
      * ```javascript
@@ -483,7 +483,7 @@ export const useProfilesStore = defineStore("profiles", () => {
 
     /**
      * Remove a Recipe from your favorites (specify a parent folder if this item is within a sub folder, otherwise it'll use the root folder)
-     * @param {number} recipeId 
+     * @param {number | FavoriteFolder} recipeId 
      * @param {FavoriteFolder} [parentFolder]
      */
     function removeItemFromFavorites(recipeId, parentFolder) {
@@ -517,6 +517,17 @@ export const useProfilesStore = defineStore("profiles", () => {
      */
     function removeFolderFromFavorites(folder, parentFolder) {
         removeItemFromFavorites(folder, parentFolder);
+    }
+
+    /**
+     * Move recipeID or favorite folder to another favorite folder
+     * @param {FavoriteFolder | number} item 
+     * @param {FavoriteFolder} fromFolder
+     * @param {FavoriteFolder} toFolder
+     */
+    function moveItemToFavoriteFolder(item, fromFolder, toFolder) {
+        removeItemFromFavorites(item,fromFolder);
+        addItemToFavorites(item,toFolder);
     }
 
     /**
@@ -606,6 +617,7 @@ export const useProfilesStore = defineStore("profiles", () => {
         removeItemFromFavorites,
         removeFolderFromFavorites,
         addRecipeToFavorites,
+        moveItemToFavoriteFolder,
 
         // recipe data
         getDummyRecipe,
