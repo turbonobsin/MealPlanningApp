@@ -214,13 +214,6 @@ function addToCalendar() {
 				See full recipe &gt;
 			</RouterLink>
 		</div>
-
-		<ul>
-			<li><RouterLink to="/details">Details</RouterLink></li>
-			<li><RouterLink to="/profile">Profile</RouterLink></li>
-			<li><RouterLink to="/favorites">Favorites</RouterLink></li>
-			<li><RouterLink to="/calendar">Calendar</RouterLink></li>
-		</ul>
 	</main>
 </template>
 

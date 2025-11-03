@@ -9,6 +9,11 @@ const props = defineProps({
 </script>
 
 <template>
-    <div>{{ recipe.title }}</div>
-    <div>{{ recipe.cookingMinutes }}</div>
+    <div v-if="recipe">
+        <div>{{ recipe.title }}</div>
+        <div>{{ recipe.cookingMinutes }}</div>
+    </div>
+    <div v-else>
+        Couldn't find recipe data
+    </div>
 </template> 

@@ -59,11 +59,22 @@ export function getMonthLength(date){
 }
 
 export const weekdayAbbr = [
-    "Su",
+    // "Su",
+    "S",
     "M",
     "T",
     "W",
-    "Th",
+    // "Th",
+    "T",
     "F",
     "S"
+];
+export const weekday = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
 ];

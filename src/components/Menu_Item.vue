@@ -24,6 +24,8 @@ const props = defineProps({
     transition: all .2s;
 
     font-size:30px;
+    color: var(--dark);
+    font-variation-settings: 'FILL' 0;
 }
 
 * {

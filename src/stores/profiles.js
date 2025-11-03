@@ -232,7 +232,7 @@ export const useProfilesStore = defineStore("profiles", () => {
     function initProfiles() {
         console.log(":: loading profiles");
 
-        /**@type {any[]} */
+        /**@type {Profile[]} */
         let allProfiles = [];
         try {
             allProfiles = JSON.parse(localStorage.getItem("profiles"));
@@ -253,6 +253,14 @@ export const useProfilesStore = defineStore("profiles", () => {
         if (allProfiles.length == 0) {
             console.log(":: creating default profile because none exist");
             createDefaultProfile();
+        }
+
+        // clean up profiles
+        for (const profile of profiles) {
+            function loop(/**@type {FavoriteFolder}*/f){
+                f.items = f.items.filter(v => v != undefined);
+            }
+            loop(profile.favorites);
         }
 
         // load current profile selected
@@ -413,6 +421,12 @@ export const useProfilesStore = defineStore("profiles", () => {
      * ```
      */
     function addItemToFavorites(recipeId, parentFolder) {
+        if (recipeId == undefined) {
+            alert("Failed to add recipe");
+            console.warn("failed to add recipe: ", recipeId);
+            return;
+        }
+
         let profile = currentProfile.value;
         if (!profile) {
             console.warn("couldn't add to favorites, no current profile");
@@ -431,7 +445,13 @@ export const useProfilesStore = defineStore("profiles", () => {
      * @param {Recipe} recipe 
      * @param {FavoriteFolder} [parentFolder] 
      */
-    function addRecipeToFavorites(recipe,parentFolder){
+    function addRecipeToFavorites(recipe, parentFolder) {
+        if (!recipe) {
+            alert("Failed to add recipe");
+            console.warn("failed to add recipe: ", recipe);
+            return;
+        }
+
         let profile = currentProfile.value;
         if (!profile) {
             console.warn("couldn't add to favorites, no current profile");
