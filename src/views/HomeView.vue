@@ -29,7 +29,7 @@ const intolerance12 = document.getElementById('intolerance12');
 let checkboxState;
 let checkboxValue;
 
-function addIntolerances (checkbox) {
+function addIntolerances(checkbox) {
 	if (checkbox.checked) {
 		checkboxState = true;
 		checkboxValue = checkbox.value;
@@ -44,15 +44,15 @@ function addIntolerances (checkbox) {
 async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
-	url.searchParams.set("apiKey",apiKey);
-	url.searchParams.set("query",searchTerm);
-	if(maxTime != undefined && maxTime != ""){
-		url.searchParams.set("maxReadyTime",maxTime);
+	url.searchParams.set("apiKey", apiKey);
+	url.searchParams.set("query", searchTerm);
+	if (maxTime != undefined && maxTime != "") {
+		url.searchParams.set("maxReadyTime", maxTime);
 	}
-	if(excludedFoods != undefined && excludedFoods != ""){
+	if (excludedFoods != undefined && excludedFoods != "") {
 		url.searchParams.set("excludeIngredients", excludedFoods);
 	}
-	if(intolerances != undefined && intolerances != ""){
+	if (intolerances != undefined && intolerances != "") {
 		url.searchParams.set("intolerances", intolerances);
 	}
 
@@ -64,16 +64,16 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		},
 	}
 
-	let response = await fetch(url, options)	
-	
+	let response = await fetch(url, options)
+
 	if (response.status === 200) {
-		
+
 		let data = await response.json()
 		console.log(data)
-		items.value = data.results;			
+		items.value = data.results;
 		recipeSearchLength = data.results.length;
 		console.log(recipeSearchLength)
-	}else {
+	} else {
 		console.log("request failed")
 	}
 
@@ -84,12 +84,12 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 	//console.log(data.length)
 
 }
-function addToFavorites(recipe){
+function addToFavorites(recipe) {
 	profilesStore.addRecipeToFavorites(recipe);
 	console.log("Added to Favorites Successfully!")
 }
 
-function addToCalendar(){
+function addToCalendar() {
 	console.log("Added to Calendar")
 	console.log(items.value)
 }
@@ -101,7 +101,7 @@ function addToCalendar(){
 
 </script>
 
-<template>
+<!-- <template>
 	<main>
 		<h1>Hello, user!</h1>
 
@@ -140,7 +140,7 @@ function addToCalendar(){
 			<label for="intolerance11">Tree Nut</label><br>
 			<input type="checkbox" name="intolerance" id="intolerance12" value="Wheat">
 			<label for="intolerance12">Wheat</label><br>
-			<!--diary, egg, gluten, grain, peanut, seafood, sesame, shellfish, soy, sulfite, tree nut, wheat-->
+			<!--diary, egg, gluten, grain, peanut, seafood, sesame, shellfish, soy, sulfite, tree nut, wheat--
 			
 
 			<div class="centeredButton">
@@ -155,38 +155,65 @@ function addToCalendar(){
         </div>
 
 		<!-- <div>Jessica's List</div> -->
-		<!-- <div class="results"> -->
-              <!-- <div v-if="recipeSearchLength === 0">No recipes found</div> -->
-				<!-- <RouterLink v-for="item in items" :to="`/details/${item.id}`"> -->
-					<!-- <img :src= "item.image"> -->
-					<!-- <p>{{ item.title }}</p> -->
-				<!-- </RouterLink> -->
+<!-- <div class="results"> -->
+<!-- <div v-if="recipeSearchLength === 0">No recipes found</div> -->
+<!-- <RouterLink v-for="item in items" :to="`/details/${item.id}`"> -->
+<!-- <img :src= "item.image"> -->
+<!-- <p>{{ item.title }}</p> -->
+<!-- </RouterLink> -->
 
-				
-				<!--<li v-for="item in items">
+
+<!--<li v-for="item in items">
 					<img :src= "item.image">
 					<p>{{ item.title }}</p>
 				</li>-->
-        <!-- </div> -->
-		<!-- <div>Mighty's List</div> -->
-		<div>
-			<div v-if="recipeSearchLength === 0">No recipes found</div>
-			<div v-for="item in items">
-				<div class="searchResults">
-					<div>
-						<img :src="item.image" class="result-image">
-					</div>
-					<div class="result-card">
-						<p><RouterLink :to="`/details/${item.id}`">{{ item.title }}</RouterLink></p>
-						<div class="addDiv">
-							<button @click="addToFavorites(item)" class="material-symbols-outlined">Bookmark</button>
-							<button @click="addToCalendar" class="material-symbols-outlined">Calendar_Add_On</button>
-						</div>
-					</div>
-				</div>
-			</div>
+<!-- </div> --
+	</main>
+</template>
+-->
+<template>
+	<main class="search-results-page">
+		<h1 class="page-title">Hello, User!</h1>
+
+		<div class="search-bar">
+			<input type="text" placeholder="Find your next recipe..." v-model="searchTerm" />
+
+			<button class="filter-btn" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">
+				Search 
+			</button>
+		</div>
+		<br>
+			
+		<h2 class="results-heading">Found results:</h2>
+
+		<div v-if="items.length === 0" class="no-results">
+			No recipes found.
 		</div>
 
+		<div v-for="item in items" :key="item.id" class="recipe-result-card">
+			<div class="recipe-image">
+				<img :src="item.image" alt="Recipe Image" />
+			</div>
+
+			<div class="recipe-info">
+				<div class="recipe-header">
+					<h3 class="recipe-name">{{ item.title }}</h3>
+				</div>
+
+				<div class="recipe-actions">
+					<button @click="addToFavorites(item)" class="icon-btn">
+						<span class="material-symbols-outlined">bookmark</span>
+					</button>
+					<button @click="addToCalendar(item)" class="icon-btn">
+						<span class="material-symbols-outlined">add</span>
+					</button>
+				</div>
+			</div>
+
+			<RouterLink :to="`/details/${item.id}`" class="see-full">
+				See full recipe &gt;
+			</RouterLink>
+		</div>
 
 		<ul>
 			<li><RouterLink to="/details">Details</RouterLink></li>
@@ -197,22 +224,151 @@ function addToCalendar(){
 	</main>
 </template>
 
-
 <style scoped>
-.searchResults{
-	display: flex;
-	flex-direction: row;
-	border-radius: 1rem;
-	border: solid 2px var(--dark);
+
+.search-results-page {
+	font-family: 'Inter', sans-serif;
+	background-color: var(--light);
+	padding: 1.2rem;
+	min-height: 100vh;
 }
-.result-card{
-	display: flex;
-	flex: column;
+
+.page-title {
+	text-align: center;
+	font-size: 1.6rem;
+	font-weight: 700;
+	color:var(--dark);
+	margin-bottom: 1rem;
 }
-.addDiv{
+
+.search-bar {
 	display: flex;
-	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	background: var(--light);
+	border-radius: 12px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	padding: 0.4rem 0.8rem;
+}
+
+.search-bar input {
+	flex: 1;
+	border: none;
+	outline: none;
+	font-size: 0.9rem;
+	background: none;
+}
+
+.filter-btn {
+	border: none;
+	background: var(--dark);
+	color: var(--light);
+	border-radius: 8px;
+	padding: 0.4rem 0.6rem;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.filter-btn:hover {
+	background: var(--dark);
+}
+
+.results-heading {
+	font-size: 1rem;
+	font-weight: 600;
+	margin: 1.5rem 0 0.8rem 0;
+	color: var(--dark);
+}
+
+.recipe-result-card {
+	background-color: var(--light);
+	border-radius: 16px;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+	padding: 1rem;
+	margin-bottom: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+}
+
+.recipe-image {
+	background: repeating-linear-gradient(45deg,
+			var(--medium),
+			var(--light) 10px,
+			var(--medium) 10px,
+			var(--light) 20px);
+	border-radius: 12px;
+	height: 90px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.recipe-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 12px;
+}
+
+.recipe-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+.recipe-header {
+	flex: 1;
+	color: var(--dark);
+}
+
+.recipe-name {
+	font-weight: 600;
+	font-size: 1.05rem;
+	color: var(--dark);
+	margin-bottom: 0.3rem;
+}
+
+.recipe-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	margin-left: 0.5rem;
+}
+
+.icon-btn {
+	background: var(--light);
+	border: none;
+	border-radius: 8px;
+	padding: 0.3rem;
+	cursor: pointer;
+	transition: background 0.2s ease;
+}
+
+.icon-btn:hover {
+	background: var(--medium);
+}
+
+/* Link */
+.see-full {
+	text-align: right;
+	font-size: 0.9rem;
+	color: var(--dark);
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.see-full:hover {
+	text-decoration: underline;
+}
+
+/* No results */
+.no-results {
+	text-align: center;
+	color: var(--dark);
+	font-style: italic;
+	margin-top: 2rem;
 }
 
 </style>
- 

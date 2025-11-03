@@ -54,7 +54,7 @@ const deleteItem = (item) => {
 
     <section class="favorites-container">
       <div v-for="item in currentFolder.items" :key="item.id || item">
-        <!-- Recipe -->
+        <!-- Recipe --> 
         <div v-if="typeof item === 'number'" class="recipe-card">
           <FavoriteRecipe :recipe="getRecipe(item)" />
           <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
