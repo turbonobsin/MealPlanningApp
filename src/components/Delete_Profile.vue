@@ -1,9 +1,20 @@
 <script setup>
 import { useProfilesStore } from '@/stores/profiles';
 import { inject } from 'vue';
+/*import { removeProfile } from '@/backend/removeProfile';*/
 
 const profile_store = useProfilesStore();
 const show_delete_window = inject('show_delete_window');
+
+function confirmDelete() {
+    const current = profile_store.currentProfile;
+    if (!current) {
+        return;
+    }
+    /*removeProfile(current);*/
+    profile_store.deleteProfile(current.name);
+    show_delete_window.value = false;
+}
 
 
 </script>
@@ -46,3 +57,4 @@ const show_delete_window = inject('show_delete_window');
 }
 
 </style>
+

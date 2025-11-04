@@ -1,4 +1,11 @@
 <script setup>
+import { useProfilesStore } from '@/stores/profiles';
+
+
+const profileStore = useProfilesStore();
+profileStore.currentProfile.allergies = []
+await profileStore.saveProfile()
+
 document.getElementById('profileForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 
