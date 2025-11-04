@@ -5,11 +5,14 @@ import { ref , reactive, onMounted } from 'vue'
 const props = defineProps({ recipeId: String })
 
 const apiKey = "8091b135029642499cfa2a83e6513777";
-const items = ref([])
+const title = ref("")
+const image = ref("")
+const cookTime = ref("")
+let calories = ref([])
 
 async function getRecipeDetails() {
 
-	let url = new URL(`https://api.spoonacular.com/recipes/${props.recipeId}/information`);
+	let url = new URL(`https://api.spoonacular.com/recipes/${props.recipeId}/information?includeNutrition=true`);
     url.searchParams.set("apiKey", apiKey);
 	
 	const options = {
@@ -25,9 +28,10 @@ async function getRecipeDetails() {
 
 		let data = await response.json()
 		console.log(data)
-		//items.value = data.results;
-		//recipeSearchLength = data.results.length;
-		//console.log(recipeSearchLength)
+		title.value = data.title;
+		image.value = data.image;
+		cookTime.value = data.readyInMinutes;
+		calories = data.nutrition.nutrients[0].amount;
 	} else {
 		console.log("request failed")
 	}
@@ -41,19 +45,30 @@ onMounted(() => {
 
 <template>
     <h1>Recipe Details Page</h1>
-    <div>RecipeId: {{ recipeId }}</div>
+    <!--<div>RecipeId: {{ recipeId }}</div>-->
     <!--Recipe name-->
-    <!--<img :src= "data.image">-->
+	<p>{{ title }}</p>
 
-
-
+    
     <!--Image-->
-
+	<img :src="image" alt="Recipe Image" />
+	
 
     <!--Cook Time, Level, Calories-->
+	<div>
+		<p>Cook Time: {{ cookTime }}</p>
+		<!--Level does not exists-->
+		<p>Calories: {{ calories }}</p>
+	</div>
 
+    <!--Ingredients-->
 
-    <!--Ingriends-->
+	<!--<div>
+		Ingredients:
+		<li v-for="item in items">
+			<p>{{ item.title }}</p>
+		</li>
+	</div>-->
 
 
     <!--Instructions-->
