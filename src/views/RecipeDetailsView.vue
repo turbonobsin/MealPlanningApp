@@ -43,7 +43,7 @@ onMounted(() => {
     <h1>Recipe Details Page</h1>
     <div>RecipeId: {{ recipeId }}</div>
     <!--Recipe name-->
-    <img :src= "data.image">
+    <!--<img :src= "data.image">-->
 
 
 
