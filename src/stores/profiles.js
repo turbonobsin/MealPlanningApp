@@ -99,17 +99,44 @@ export class CalendarRecurrance {
     enabled = false;
 }
 
+/**
+ * @typedef {"breakfast"|"lunch"|"dinner"} MealType
+ */
+
+export class DateMeal {
+    /**
+     * If undefined then use default time for this meal type
+     * 
+     * ISO Date string
+     * @type {string | undefined}
+     */
+    time = undefined;
+
+    /**@type {MealType} */
+    mealType = "breakfast";
+
+    /**@type {number|undefined} */
+    recipeId = 0;
+}
+
 export class CalendarDate {
     /**
      * @type {CalendarRecurrance}
      */
     recurring = {};
+
+    /**@type {DateMeal} */
+    breakfast = {};
+    /**@type {DateMeal} */
+    lunch = {};
+    /**@type {DateMeal} */
+    dinner = {};
 }
 
 export class Calendar {
     /**
      * Map from date (8/15/25) to CalendarDate
-     * @type {Map<string,CalendarDate>}
+     * @type {Record<string,CalendarDate>}
      */
     dates = {};
 }
@@ -573,6 +600,7 @@ export const useProfilesStore = defineStore("profiles", () => {
     /**
      * Get a cache'd recipe's data by its id
      * @param {number} recipeId 
+     * @returns {Recipe}
      */
     function getRecipeData(recipeId) {
         let itemStr = localStorage.getItem("recipe_" + recipeId);

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import CalDate from '@/components/calendar/CalDate.vue';
+import CalendarSlideUpData from '@/components/calendar/CalendarSlideUpData.vue';
 import CalMonthItem from '@/components/calendar/CalMonthItem.vue';
 import { getMonthLength, weekday, weekdayAbbr } from '@/util';
-import { computed, ref } from 'vue';
+import { computed, provide, ref, Transition } from 'vue';
 
 const today = ref(new Date());
 
@@ -64,6 +66,16 @@ const thisMonthDate = computed(()=>{
     return new Date(td.getFullYear(),td.getMonth()+monthOffset.value,1,0,0,0,0);
 });
 
+function clickDate(date:Date){
+    console.log("clicked date: ",date.toLocaleString([],{dateStyle:"short"}));
+    if(selectedDate.value?.toISOString() == date.toISOString()) selectedDate.value = undefined; // deselect
+    else selectedDate.value = date; // select
+}
+
+provide("clickDate",clickDate);
+
+const selectedDate = ref<Date>();
+
 </script>
 
 <template>
@@ -81,18 +93,21 @@ const thisMonthDate = computed(()=>{
                 {{ day }}
             </div>
             <div v-for="i in previousDays" class="cal2-previous-date">
-                {{ previousMonthLength - previousDays + i }}
+                <!-- {{ previousMonthLength - previousDays + i }} -->
+                <CalDate :date="new Date(today.getFullYear(),today.getMonth()+monthOffset-1,previousMonthLength - previousDays + i)" :selected-date="selectedDate"></CalDate>
             </div>
             <div v-for="i in getMonthLength(thisMonthDate)" :class="['cal2-date',{today:i == today.getDate() && monthOffset == 0}]">
-                <div class="date">{{ i }}</div>
-                <div class="meals">
+                <!-- <div class="date">{{ i }}</div> -->
+                <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth()+monthOffset,i)" :selected-date="selectedDate"></CalDate>
+                <!-- <div class="meals"> -->
                     <!-- <div class="meal0 valid"></div> -->
                     <!-- <div class="meal1 valid"></div> -->
                     <!-- <div class="meal2 valid"></div> -->
-                </div>
+                <!-- </div> -->
             </div>
             <div v-for="i in afterDays" class="cal2-after-date">
-                {{ i }}
+                <!-- {{ i }} -->
+                <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth()+monthOffset+1,i)" :selected-date="selectedDate"></CalDate>
             </div>
         </div>
 
@@ -106,10 +121,40 @@ const thisMonthDate = computed(()=>{
                 </div>
             </div>
         </div> -->
+        <Transition name="slide-up">
+            <div class="slide-up-window" v-if="selectedDate != undefined">
+                <h3>The slide up menu</h3>
+                <div>{{ selectedDate.toLocaleString([],{dateStyle:'short'}) }}</div>
+                <div>some</div>
+                <div>more</div>
+                <div>data</div>
+                <CalendarSlideUpData :date="selectedDate">
+                    <template v-slot="{data}">
+                        {{ data }}
+                    </template>
+                </CalendarSlideUpData>
+            </div>
+        </Transition>
     </main>
 </template>
 
 <style scoped>
+
+.slide-up-window{
+    margin:-20px;
+    --pad-bottom:130px;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition: translate 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+    translate:0px calc(100% + var(--pad-bottom));
+}
+
 
 .meals{
     display:flex;
