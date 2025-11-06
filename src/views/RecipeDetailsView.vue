@@ -84,7 +84,7 @@ onMounted(() => {
 
 	<div>
 		<p>Notes:</p>
-		<textarea rows="10", cols="45">
+		<textarea>
 
 		</textarea>
 	</div>
