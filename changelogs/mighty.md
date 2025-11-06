@@ -36,7 +36,6 @@
 - completed drag and drop function in FavoritesView
 - 
 
-
 # Issues
 - Folders are not able to see the  added recipes
 - Reloading the inner folders sends you back to rootfolder... why??

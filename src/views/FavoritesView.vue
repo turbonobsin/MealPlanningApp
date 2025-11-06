@@ -25,8 +25,6 @@ const dropRecipeIntoFolder = (folder) => {
   draggedRecipeId.value = null
 }
 
-
-
 // myProfile.value.favorites.name = "Favorites"
 // profileStore.saveProfile()
 
