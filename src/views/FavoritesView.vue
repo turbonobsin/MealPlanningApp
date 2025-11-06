@@ -87,7 +87,7 @@ const deleteItem = (item) => {
 
         <div v-else class="folder-card" @dragover.prevent @drop="dropRecipeIntoFolder">
           <div class="folder-header" @click="openFolder(item)">
-            <h3>{{ item.name }}</h3>
+            <p>{{ item.name }}</p>
           </div>
           <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
         </div>
@@ -102,7 +102,7 @@ const deleteItem = (item) => {
           </div>
         </template>
 
-        <template v-else>
+        <template v-else class="input-container">
           <input v-model="newFolderName" type="text" placeholder="Folder name" class="folder-input" />
           <div class="btn-container">
             <button class="confirm-btn" @click="confirmCreateFolder">Create</button>
@@ -123,6 +123,10 @@ const deleteItem = (item) => {
   width: 100%;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
+}
+
+.input-container{
+  background-color: var(--light-color);
 }
 
 .btn-container {
@@ -169,7 +173,7 @@ const deleteItem = (item) => {
 .folder-card,
 .recipe-card,
 .add-folder-card {
-  background-color: #ffffff;
+  background-color: var(--light-color);
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 1rem;

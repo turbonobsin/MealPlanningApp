@@ -34,7 +34,7 @@
 
 # 11/06/2025
 - completed drag and drop function in FavoritesView
-- 
+- added css to favorites page for each folder/recipe card
 
 # Issues
 - Folders are not able to see the  added recipes
