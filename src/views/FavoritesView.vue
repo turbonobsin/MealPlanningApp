@@ -2,6 +2,7 @@
 import { FavoriteFolder, useProfilesStore } from '@/stores/profiles'
 import { ref, computed } from 'vue'
 import FavoriteRecipe from '@/components/FavoriteRecipe.vue'
+import router from '@/router'
 
 const profileStore = useProfilesStore()
 const rootFavorites = ref(profileStore.currentProfile.favorites)
@@ -23,6 +24,12 @@ const dropRecipeIntoFolder = (folder) => {
   profileStore.removeFolderFromFavorites(draggedRecipeId.value, currentFolder.value)
   profileStore.addItemToFavorites(draggedRecipeId.value, folder)
   draggedRecipeId.value = null
+}
+
+function gotoRecipeDetails(item){
+  router.push({
+    path:`/details/${item}`
+  });
 }
 
 // myProfile.value.favorites.name = "Favorites"
@@ -81,13 +88,14 @@ const deleteItem = (item) => {
       <div v-for="item in currentFolder.items" :key="item.id || item">
         <div v-if="typeof item === 'number'" class="recipe-card" draggable="true"
           @dragstart="(e) => dragStartEvent(e, item)">
-          <FavoriteRecipe :recipe="getRecipe(item)" draggable="true" />
+          <FavoriteRecipe :recipe="getRecipe(item)" draggable="true" @click="gotoRecipeDetails(item)"/>
           <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
         </div>
 
-        <div v-else class="folder-card" @dragover.prevent @drop="dropRecipeIntoFolder">
-          <div class="folder-header" @click="openFolder(item)">
-            <p>{{ item.name }}</p>
+        <div v-else class="folder-card" @click="openFolder(item)" draggable="true" @dragstart="(e) => dragStartEvent(e, item)" @dragover.prevent @drop="dropRecipeIntoFolder(item)">
+          <div class="folder-header center h-center">
+            <span style="font-weight: bold; line-height: 1; margin-bottom: 0.25rem;">{{ item.name }}</span>
+            <p class="material-symbols-outlined">folder_open</p>
           </div>
           <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
         </div>
@@ -103,7 +111,7 @@ const deleteItem = (item) => {
         </template>
 
         <template v-else class="input-container">
-          <input v-model="newFolderName" type="text" placeholder="Folder name" class="folder-input" />
+          <input v-model="newFolderName" type="text" placeholder="Folder name" class="folder-input text-input" />
           <div class="btn-container">
             <button class="confirm-btn" @click="confirmCreateFolder">Create</button>
             <button class="cancel-btn" @click="cancelCreate">Cancel</button>
@@ -190,6 +198,7 @@ const deleteItem = (item) => {
 
 .folder-header {
   cursor: pointer;
+  gap: 10px;
 }
 
 .delete-btn {
@@ -208,7 +217,7 @@ const deleteItem = (item) => {
 }
 
 .add-folder-card {
-  background-color: #f3f4f6;
+  background-color: var(--light-color);
   display: flex;
   flex-direction: column;
   align-items: center;
