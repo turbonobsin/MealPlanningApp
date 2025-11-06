@@ -66,7 +66,7 @@ onMounted(() => {
 
     <!--Ingredients-->
 	<div>
-	<p>Ingredients:</p>
+	<p class="bold">Ingredients:</p>
 	<p v-for="ingredient in ingredients">
 		{{ ingredient.original }}
 	</p>
@@ -74,7 +74,7 @@ onMounted(() => {
 
     <!--Instructions-->
 	<div>
-		<p>Instructions:</p>
+		<p class="bold">Instructions:</p>
 		<div v-for="instruction in instructions" :key="instruction.name">
 			<p v-for="step in instruction.steps" :key="step.number">
 				{{ step.number }}. {{ step.step }}
@@ -96,6 +96,10 @@ onMounted(() => {
 	gap: 2rem;
 	border-radius: 10px;
 	outline: 2px solid black;
+}
+
+.bold {
+	font-weight: bold;
 }
 
 </style>

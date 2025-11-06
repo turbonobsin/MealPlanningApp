@@ -11,6 +11,7 @@ let excludedFoods = ref("");
 let intolerances = ref([""]);
 let recipeSearchLength = ref("");
 const profilesStore = useProfilesStore();
+//let meal_type = ref("")
 
 //checkbox variables
 const intolerance1 = document.getElementById('intolerance1');
@@ -55,6 +56,9 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 	if (intolerances != undefined && intolerances != "") {
 		url.searchParams.set("intolerances", intolerances);
 	}
+	//if (meal_type != undefined && meal_type != "") {
+		//url.searchParams.set("type", meal_type);
+	//}
 
 
 	const options = {
@@ -176,11 +180,30 @@ function addToCalendar() {
 		<h1 class="page-title">Hello, User!</h1>
 
 		<div class="search-bar">
-			<input type="text" placeholder="Find your next recipe..." v-model="searchTerm" />
-
+			<input type="text" placeholder="Find your next recipe..." v-model="searchTerm" /><br>
+			
 			<button class="filter-btn" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">
 				Search 
 			</button>
+		</div>
+
+		<!--Add all filters and make it a popup-->
+
+		<div>
+			<!--Meal Type-->
+			<p>Meal Type:</p>
+			<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
+			<label for="main_course">Main Course</label><br>
+			<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
+			<label for="side_dish">Side Dish</label><br>
+			<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
+			<label for="dessert">Dessert</label><br>
+			<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
+			<label for="appetizer">Appetizer</label><br>
+			<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
+			<label for="breakfast">Breakfast</label><br>
+			<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
+			<label for="beverage">Beverage</label><br>
 		</div>
 		<br>
 			
