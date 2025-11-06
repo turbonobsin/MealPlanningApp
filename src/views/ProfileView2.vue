@@ -66,11 +66,11 @@ document.getElementById('profileForm').addEventListener('submit', async (event) 
 </template>
 
 <style scoped>
-body { 
-    font-family: sans-serif;
-    padding: 20px;
-}
-        form { margin-bottom: 20px; }
-        label, input {display: block; margin-bottom: 10px; }
-        #results { border: 1px solid #ccc; padding: 15px; }
+    body { 
+        font-family: sans-serif;
+        padding: 20px;
+    }
+    form { margin-bottom: 20px; }
+    label, input {display: block; margin-bottom: 10px; }
+    #results { border: 1px solid #ccc; padding: 15px; }
 </style>

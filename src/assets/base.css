@@ -30,7 +30,7 @@ body {
     background-color: var(--light);
     font-family: var(--ff-primary) !important;
     /* margin:0px; */
-    /* padding-bottom:100px; */
+    padding-bottom:100px;
 }
 
 body::before {

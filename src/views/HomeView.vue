@@ -175,14 +175,10 @@ function addToCalendar() {
 	<main class="search-results-page">
 		<h1 class="page-title">Hello, User!</h1>
 
-		<div class="search-bar">
-			<input type="text" placeholder="Find your next recipe..." v-model="searchTerm" />
-
-			<button class="filter-btn" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">
-				Search 
-			</button>
+		<div class="search-bar h-center full-width space-after spread">
+			<input class="text-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" />
+			<button class="material-symbols-outlined medium-button search-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
 		</div>
-		<br>
 			
 		<h2 class="results-heading">Found results:</h2>
 
@@ -220,9 +216,8 @@ function addToCalendar() {
 <style scoped>
 
 .search-results-page {
-	font-family: 'Inter', sans-serif;
 	background-color: var(--light);
-	padding: 1.2rem;
+	/* padding: 1.2rem; */
 	min-height: 100vh;
 }
 
@@ -235,36 +230,39 @@ function addToCalendar() {
 }
 
 .search-bar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	background: var(--light);
+	/* display: flex; */
+	/* justify-content: space-between; */
+	/* align-items: center; */
+	/* background: var(--light); */
+	gap: 10px;
 	border-radius: 12px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	padding: 0.4rem 0.8rem;
+	/* padding: 0.4rem 0.8rem; */
 }
 
-.search-bar input {
-	flex: 1;
-	border: none;
-	outline: none;
-	font-size: 0.9rem;
-	background: none;
+.text-input{
+	height: 100%;
 }
 
-.filter-btn {
-	border: none;
-	background: var(--dark);
-	color: var(--light);
-	border-radius: 8px;
-	padding: 0.4rem 0.6rem;
+.search-button{
+	padding: 10px;
+	/* aspect-ratio: 1; */
+}
+
+.filter-button {
+	/* border: none; */
+	/* background: var(--dark); */
+	/* color: var(--light); */
+	/* border-radius: 8px; */
+	/* padding: 0.4rem 0.6rem; */
+	aspect-ratio: 1;
 	cursor: pointer;
 	transition: background 0.2s ease;
 }
-
+/* 
 .filter-btn:hover {
 	background: var(--dark);
-}
+} */
 
 .results-heading {
 	font-size: 1rem;

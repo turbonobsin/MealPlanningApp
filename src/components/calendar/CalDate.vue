@@ -68,7 +68,7 @@ const clickDate = inject("clickDate");
 }
 .selected{
     --bg: var(--main-color);
-    --color: var(--light);
+    --color: var(--light-perma);
 }
 
 .cal2-day {

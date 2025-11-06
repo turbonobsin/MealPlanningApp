@@ -57,7 +57,7 @@ function switchTheme(){
 
 .menu-list{
     display: grid;
-    grid-template-columns: 10% 80%;
+    grid-template-columns: auto 1fr;
     column-gap: 10px;
     align-items: center;
 }

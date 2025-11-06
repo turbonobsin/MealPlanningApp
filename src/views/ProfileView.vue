@@ -32,12 +32,31 @@ function toggleItem(item){
 const name_input = useTemplateRef('name_input');
 
 function updateName(){
+    
     if (name_input.value.value !== currentProfile.value.name){
-        profile_store.renameProfile(name_input.value.value);
+        let allowed = true;
+        for (let item of profile_store.profiles){
+            if (item.name === name_input.value.value){
+                allowed = false;
+                break;
+            }
+
+        }
+        if (allowed){
+            profile_store.renameProfile(name_input.value.value);
+            edit_mode.value = false;
+        }
+        else {
+            name_input.value.style.borderColor = 'var(--red)';
+            setTimeout(() => {
+                name_input.value.style.borderColor = 'revert';
+            }, 2000);
+        }
+    }
+    else {
         edit_mode.value = false;
     }
 
-    edit_mode.value = false;
 }
 
 function convertHexTo6(hex){
@@ -63,6 +82,10 @@ function toggleColorEdit(e){
         currentProfile.value.color = colorInput.value.value;
         profile_store.saveProfile();
     }
+}
+
+function addExcluded(){
+
 }
 
 </script>
@@ -101,6 +124,18 @@ function toggleColorEdit(e){
             </div>
         </div>
         <h3>Exclude Ingredients</h3>
+        <form id="profileForm">
+
+            <label for="allergies">Allergies/Intolerances (comma-separated):</label>
+            <input type="text" id="allergies">
+
+            <button type="submit">Save Profile</button>
+        </form>
+
+        <h2>Your Profile</h2>
+        <div id="results">
+            <p>No profile data has been saved yet.</p>
+        </div>
     </main>
 </template>
 
