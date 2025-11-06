@@ -184,26 +184,6 @@ function addToCalendar() {
 			<button class="material-symbols-outlined medium-button search-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
 		</div>
 
-
-		<!--Add all filters and make it a popup-->
-
-		<div>
-			<!--Meal Type-->
-			<p>Meal Type:</p>
-			<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
-			<label for="main_course">Main Course</label><br>
-			<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
-			<label for="side_dish">Side Dish</label><br>
-			<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
-			<label for="dessert">Dessert</label><br>
-			<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
-			<label for="appetizer">Appetizer</label><br>
-			<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
-			<label for="breakfast">Breakfast</label><br>
-			<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
-			<label for="beverage">Beverage</label><br>
-		</div>
-
 		<!--Add all filters and make it a popup-->
 
 		<div>
