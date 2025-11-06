@@ -9,6 +9,9 @@ const title = ref("")
 const image = ref("")
 const cookTime = ref("")
 let calories = ref([])
+let servings = ref("")
+let ingredients = ref([])
+let instructions = ref([])
 
 async function getRecipeDetails() {
 
@@ -32,6 +35,9 @@ async function getRecipeDetails() {
 		image.value = data.image;
 		cookTime.value = data.readyInMinutes;
 		calories = data.nutrition.nutrients[0].amount;
+		servings = data.servings;
+		ingredients = data.extendedIngredients;
+		instructions = data.analyzedInstructions;
 	} else {
 		console.log("request failed")
 	}
@@ -44,32 +50,52 @@ onMounted(() => {
 
 
 <template>
-    <h1>Recipe Details Page</h1>
-    <!--<div>RecipeId: {{ recipeId }}</div>-->
-    <!--Recipe name-->
-	<p>{{ title }}</p>
-
+    <h1>{{title}}</h1>
+    
     
     <!--Image-->
 	<img :src="image" alt="Recipe Image" />
 	
 
-    <!--Cook Time, Level, Calories-->
-	<div>
-		<p>Cook Time: {{ cookTime }}</p>
-		<!--Level does not exists-->
-		<p>Calories: {{ calories }}</p>
+    <!--Cook Time, servings, Calories-->
+	<div class="across">
+		<p>Cook Time<br>{{ cookTime }} min</p>
+		<p>Servings<br>{{ servings }}</p>
+		<p>Calories<br>{{ calories }} cal</p>
 	</div>
 
     <!--Ingredients-->
-
-	<!--<div>
-		Ingredients:
-		<li v-for="item in items">
-			<p>{{ item.title }}</p>
-		</li>
-	</div>-->
-
+	<div>
+	<p>Ingredients:</p>
+	<p v-for="ingredient in ingredients">
+		{{ ingredient.original }}
+	</p>
+	</div>
 
     <!--Instructions-->
+	<div>
+		<p>Instructions:</p>
+		<div v-for="instruction in instructions" :key="instruction.name">
+			<p v-for="step in instruction.steps" :key="step.number">
+				{{ step.number }}. {{ step.step }}
+			</p>
+  		</div>
+	</div>
+
+	<div>
+		<p>Notes:</p>
+		<textarea rows="10", cols="45">
+
+		</textarea>
+	</div>
 </template>
+
+<style>
+.across {
+	display: flex;
+	gap: 2rem;
+	border-radius: 10px;
+	outline: 2px solid black;
+}
+
+</style>
