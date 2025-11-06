@@ -35,9 +35,14 @@
 # 11/06/2025
 - completed drag and drop function in FavoritesView
 - added css to favorites page for each folder/recipe card
+- functionality to see added recipes in folders
+- clicking a recipe in FavoritesView sends you to recipe details page
+
 
 # Issues
-- Folders are not able to see the  added recipes
+- add more information to (image) favorites view
 - Reloading the inner folders sends you back to rootfolder... why??
-- Amir - dark ther=me for favorites -> ist is difficult to see the text
-- Caleb - slider on goes off when same date is clicked, why not anywhere else that is not a date?
+
+
+# New things learned
+- font-variation-settings: 'FILL' 1;
