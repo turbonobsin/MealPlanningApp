@@ -3,7 +3,6 @@
 
 
 :root {
-
     --ff-primary: Lexend_Deca, sans-serif;
 
     --light-color: #B4C29D;
@@ -12,6 +11,13 @@
     --dark: #5C4B3B;
     --medium: #B89C83;
     --red: #C33746;
+    --light-perma: #FAF8F4;
+    --dark-perma: #5C4B3B;
+}
+
+.dark_mode {
+    --light: #34312f;
+    --dark: #FAF8F4;
 }
 
 @font-face {
@@ -24,19 +30,25 @@ body {
     background-color: var(--light);
     font-family: var(--ff-primary) !important;
     /* margin:0px; */
-    padding-bottom:100px;
+    /* padding-bottom:100px; */
 }
 
 body::before {
     content: "";
-    background-image: url(/Decor.png);
-    /* background-position: center; */
+    mask: url(/Decor.png);
+    mask-size: 110%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    background-color: var(--medium);
+    opacity: .3;
     background-size: contain;
     position: fixed;
-    top: -4em;
-    left: -2em;
-    height: 120%;
-    width: 120%;
+    top: -5em;
+    right: 0;
+    left: 0;
+    margin: auto;
+    height: 30vh;
+    width: 100%;
     background-repeat: repeat-x;
     z-index: -1;
     background-repeat: no-repeat;

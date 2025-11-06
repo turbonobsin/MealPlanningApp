@@ -72,7 +72,7 @@ function toggleColorEdit(e){
         <div class="material-symbols-outlined xxxlarge back" @click="router.back()">chevron_left</div>
         <h1 class="title">Profile Page</h1>
     </div>
-    <main>
+    <main class="scroll">
         <div class="circle-container" style="position:relative">
             <div class="profile-color center circle">
                 <input ref="color_input" :disabled="!edit_color" type="color" id="profile_color" class="circle" :value="convertHexTo6(currentProfile.color)"></input>
@@ -117,6 +117,7 @@ function toggleColorEdit(e){
     height: 5em;
     align-self: center;
     position:relative;
+    outline: 4px solid var(--dark);
 }
 
 .back{
@@ -130,7 +131,7 @@ function toggleColorEdit(e){
     font-size: 1.2em;
     padding: .3em;
     right:-.5em;
-    bottom:-.5em;
+    bottom:-.3em;
     position:absolute;
     border: 2px solid var(--dark);
 }
@@ -138,7 +139,7 @@ function toggleColorEdit(e){
 .cancel{
     right: unset;
     left: -.5em;
-    bottom: -.5em;
+    bottom: -.3em;
     background-color: var(--light);
     color: var(--dark);
     border-color: var(--medium);
@@ -170,7 +171,7 @@ function toggleColorEdit(e){
 .selected{
     background-color: var(--main-color);
     border-color: var(--main-color) !important;
-    color: var(--light);
+    color: var(--light-perma);
     animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 

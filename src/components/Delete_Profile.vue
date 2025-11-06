@@ -12,7 +12,7 @@ function confirmDelete() {
         return;
     }
     /*removeProfile(current);*/
-    profile_store.deleteProfile(current.name);
+    profile_store.removeProfile(current);
     show_delete_window.value = false;
 }
 
@@ -30,7 +30,7 @@ function confirmDelete() {
         <p>Are you sure you want to permanently delete this profile?</p>
         <div class="two-grid">
             <button class="blank-button" @click="show_delete_window=false">Cancel</button>
-            <button class="red-button">Delete Profile</button>
+            <button class="red-button" @click="confirmDelete">Delete Profile</button>
         </div>
     </div>
 </template>

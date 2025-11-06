@@ -21,3 +21,10 @@
 -   Finalize change profile name
 -   Implement styling for all current functions
 -   Add color input at create profile
+
+# 11/5/2025
+-   Create dark mode class
+-   Set up themes and switch option in SettingsView.vue
+-   Add icons to settings options
+-   Fix delete profile function in settings
+-   Add current profile indicator in switch profiles window

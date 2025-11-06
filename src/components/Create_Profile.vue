@@ -37,7 +37,7 @@ function createProfile(){
         <h3>Create New Profile</h3>
         <div class="h-center">
             <div class="circle color-container center">
-                <input ref="color_input" type="color" class="color-input"></input>
+                <input ref="color_input" type="color" class="color-input" value="#6A8B52"></input>
                 <div class="material-symbols-outlined edit-icon">edit</div>
             </div>
 
@@ -69,7 +69,7 @@ function createProfile(){
 
     .edit-icon{
         position: absolute;
-        color: var(--light);
+        color: var(--light-perma);
         pointer-events: none;
     }
 

@@ -10,7 +10,7 @@ const profiles_list = useTemplateRef('profiles_list');
 
 onMounted(() => {
     if (profiles_list.value.scrollHeight > profiles_list.value.clientHeight){
-        profiles_list.value.style.background = "linear-gradient(var(--light) 0%, var(--light) 85%, var(--medium) 150%)"
+        profiles_list.value.style.background = "linear-gradient(var(--light) 0%, var(--light) 85%, var(--dark-perma) 150%)"
     }
 })
 
@@ -21,10 +21,13 @@ onMounted(() => {
     <div class="backdrop"></div>
     <div class="pop-window vertical">
         <h3>Select Profile</h3>
-        <div ref="profiles_list" class="scroll vertical space-after">
-            <div class="h-center" v-for="profile in profile_store.profiles" @click="profile_store.switchProfile(profile); show_switch_window = false">
-                <div class="profile-icon" :style="{'background-color': profile.color}"></div>
-                <span>{{ profile.name }}</span>
+        <div ref="profiles_list" class="scroll vertical space-after profiles-list">
+            <div class="spread h-center" v-for="profile in profile_store.profiles" @click="profile_store.switchProfile(profile); show_switch_window = false">
+                <div class="h-center">
+                    <div class="profile-icon" :style="{'background-color': profile.color}"></div>
+                    <span>{{ profile.name }}</span>
+                </div>
+                <span class="note">{{ (profile === profile_store.currentProfile) ? 'Selected' : '' }}</span>
             </div>
         </div>
         <button class="color-button" @click="show_switch_window=false; show_create_window=true">+ Create New</button>
@@ -36,6 +39,18 @@ onMounted(() => {
 
 .vertical{
     gap: 10px;
+}
+
+.note{
+    font-size: small;
+    font-style: italic;
+    color: var(--main-color);
+    text-align: right;
+}
+
+.profiles-list{
+    padding: 10px;
+    padding-right: 20px;
 }
 
 </style>
