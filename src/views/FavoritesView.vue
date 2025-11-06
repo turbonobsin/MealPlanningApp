@@ -4,17 +4,31 @@ import { ref, computed } from 'vue'
 import FavoriteRecipe from '@/components/FavoriteRecipe.vue'
 
 const profileStore = useProfilesStore()
-
 const rootFavorites = ref(profileStore.currentProfile.favorites)
-
 const myProfile = ref(profileStore.currentProfile)
+const currentFolder = ref(profileStore.currentProfile.favorites)
+const folderHistory = ref([])
+const draggedRecipeId = ref(null)
+const showFolderInput = ref(false)
+const newFolderName = ref('')
+
+const dragStartEvent = (e, recipeId) => {
+  draggedRecipeId.value = recipeId
+  e.dataTransfer.effectAllowed = 'move'
+}
+
+const dropRecipeIntoFolder = (folder) => {
+  if (!draggedRecipeId.value) return
+
+  profileStore.removeFolderFromFavorites(draggedRecipeId.value, currentFolder.value)
+  profileStore.addItemToFavorites(draggedRecipeId.value, folder)
+  draggedRecipeId.value = null
+}
+
+
 
 // myProfile.value.favorites.name = "Favorites"
 // profileStore.saveProfile()
-
-const currentFolder = ref(profileStore.currentProfile.favorites) // Track current folder
-
-const folderHistory = ref([]) // Folder history for going back
 
 const getRecipe = (id) => profileStore.getRecipeData(id);
 
@@ -31,14 +45,27 @@ const goBack = () => {
 }
 
 const createNewFolder = () => {
- // const newFolder = { id: Date.now(), name: `Folder #${currentFolder.value.items.length + 1}`, items: [] }
-  //currentFolder.value.items.push(newFolder)
-  profileStore.addFolderToFavorites(new FavoriteFolder(`Folder #${currentFolder.value.items.length + 1}`),currentFolder.value)
+  showFolderInput.value = !showFolderInput.value
 }
 
-const createNewRecipe = () => {
-  profileStore.addItemToFavorites(50, currentFolder.value)
+const confirmCreateFolder = () => {
+  if (!newFolderName.value.trim()) return
+  profileStore.addFolderToFavorites(
+    new FavoriteFolder(newFolderName.value.trim()),
+    currentFolder.value
+  )
+  newFolderName.value = ''
+  showFolderInput.value = false
 }
+
+const cancelCreate = () => {
+    newFolderName.value = ''
+  showFolderInput.value = false;
+}
+
+// const createNewRecipe = () => {
+//   profileStore.addItemToFavorites(50, currentFolder.value)
+// }
 
 const deleteItem = (item) => {
   profileStore.removeFolderFromFavorites(item, currentFolder.value)
@@ -54,38 +81,68 @@ const deleteItem = (item) => {
 
     <section class="favorites-container">
       <div v-for="item in currentFolder.items" :key="item.id || item">
-        <!-- Recipe --> 
-        <div v-if="typeof item === 'number'" class="recipe-card">
-          <FavoriteRecipe :recipe="getRecipe(item)" />
+        <div v-if="typeof item === 'number'" class="recipe-card" draggable="true"
+          @dragstart="(e) => dragStartEvent(e, item)">
+          <FavoriteRecipe :recipe="getRecipe(item)" draggable="true" />
           <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
         </div>
 
-        <!-- Folder -->
-        <div v-else class="folder-card">
+        <div v-else class="folder-card" @dragover.prevent @drop="dropRecipeIntoFolder">
           <div class="folder-header" @click="openFolder(item)">
             <h3>{{ item.name }}</h3>
           </div>
           <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
-           <div><p>Description:</p></div>
         </div>
       </div>
 
-      <!-- Add Folder Button -->
-      <div class="add-folder-card" @click="createNewFolder">
-        <span class="plus-icon">+</span>
-        <p>Add Folder</p>
+
+      <div class="add-folder-card">
+        <template v-if="!showFolderInput">
+          <div @click="createNewFolder">
+            <span class="plus-icon">+</span>
+            <p>Add Folder</p>
+          </div>
+        </template>
+
+        <template v-else>
+          <input v-model="newFolderName" type="text" placeholder="Folder name" class="folder-input" />
+          <div class="btn-container">
+            <button class="confirm-btn" @click="confirmCreateFolder">Create</button>
+            <button class="cancel-btn" @click="cancelCreate">Cancel</button>
+          </div>
+        </template>
       </div>
 
-        <!-- Add Recipe Button -->
-      <div class="add-folder-card" @click="createNewRecipe">
-        <span class="plus-icon">+</span>
-        <p>Add Recipe</p>
-      </div>
     </section>
   </div>
 </template>
 
 <style scoped>
+.folder-input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.confirm-btn:hover {
+  color: var(--main-color);
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  color: red;
+  cursor: pointer;
+}
+
 .favorites-page {
   font-family: 'Inter', sans-serif;
   padding: 1.5rem;
@@ -102,7 +159,6 @@ const deleteItem = (item) => {
   left: 1rem;
   top: 0.5rem;
   cursor: pointer;
-  color: #0077cc;
   font-weight: 500;
 }
 
