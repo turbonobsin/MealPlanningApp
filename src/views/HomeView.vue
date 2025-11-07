@@ -1,7 +1,8 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue'
-import { useProfilesStore } from '@/stores/profiles';
+import { Recipe, useProfilesStore } from '@/stores/profiles';
+import { useCalendarStore } from '@/stores/calendar';
 
 const apiKey = "8091b135029642499cfa2a83e6513777";
 const items = ref([])
@@ -10,7 +11,9 @@ let maxTime = ref("");
 let excludedFoods = ref("");
 let intolerances = ref([""]);
 let recipeSearchLength = ref("");
+
 const profilesStore = useProfilesStore();
+const calendarStore = useCalendarStore();
 //let meal_type = ref("")
 
 //checkbox variables
@@ -77,6 +80,8 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		items.value = data.results;
 		recipeSearchLength = data.results.length;
 		console.log(recipeSearchLength)
+
+		profilesStore.saveSearchResults(data.results);
 	} else {
 		console.log("request failed")
 	}
@@ -93,9 +98,14 @@ function addToFavorites(recipe) {
 	console.log("Added to Favorites Successfully!")
 }
 
-function addToCalendar() {
+/**
+ * @param {Recipe} recipe
+ */
+function addToCalendar(recipe) {
 	console.log("Added to Calendar")
 	console.log(items.value)
+
+	calendarStore.addRecipe(recipe.id,prompt("Enter mealType: 'breakfast', 'lunch', 'dinner'",'lunch'),new Date());
 }
 
 

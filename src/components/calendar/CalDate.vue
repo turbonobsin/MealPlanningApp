@@ -1,6 +1,8 @@
 <script setup>
-import { inject } from 'vue';
+import { useCalendarStore } from '@/stores/calendar';
+import { computed, inject } from 'vue';
 
+const calendarStore = useCalendarStore();
 
 const props = defineProps({
     date:Date,
@@ -12,11 +14,20 @@ const props = defineProps({
 
 const clickDate = inject("clickDate");
 
+const day = computed(()=>{
+    return calendarStore.getDay(props.date);
+});
+
 </script>
 
 <template>
     <div :class="['date',{selected:selectedDate?.toISOString() == date?.toISOString()}]" @click="clickDate(date)">
-        {{ date.getDate() }}
+        <div>{{ date.getDate() }}</div>
+    </div>
+    <div class="meals" v-if="day">
+        <div class="meal0" :valid="day.breakfast.recipeId != undefined"></div>
+        <div class="meal1" :valid="day.lunch.recipeId != undefined"></div>
+        <div class="meal2" :valid="day.dinner.recipeId != undefined"></div>
     </div>
 </template>
 
@@ -29,8 +40,14 @@ const clickDate = inject("clickDate");
 .meals > *{
     width:0.4em;
     height:0.4em;
-    background-color:var(--main-color);
     border-radius:50%;
+    background-color:transparent;
+    transition:all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* outline:solid 2px var(--dark); */
+}
+.meals > *[valid="true"]{
+    background-color:var(--main-color);
+    /* outline-color:var(--main-color); */
 }
 
 .cal2-nav-buttons{
@@ -94,6 +111,7 @@ const clickDate = inject("clickDate");
     display:flex;
     align-items:center;
     justify-content:center;
+    flex-direction:column;
 }
 
 </style>

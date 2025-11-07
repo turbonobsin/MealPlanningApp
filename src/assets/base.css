@@ -53,3 +53,7 @@ body::before {
     z-index: -1;
     background-repeat: no-repeat;
 }
+
+.material-symbols-outlined {
+    max-width:2em;
+}

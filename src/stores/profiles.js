@@ -39,15 +39,9 @@ export class SearchResult {
     imageType = ""; // jpg
 }
 
-export class Recipe {
-    id = 0; // recipe id
-
-    title = "";
-    image = ""; // url
+export class Recipe extends SearchResult {
     summary = ""; // description of recipe
 
-
-    imageType = ""; // jpg
     servings = 0;
     readyInMinutes = 0;
     cookingMinutes = 0;
@@ -593,6 +587,11 @@ export const useProfilesStore = defineStore("profiles", () => {
             return;
         }
 
+        console.log("saved search results");
+        for(const result of results){
+            saveRecipeData(result);
+        }
+
         profile.recentSearches = results;
         saveProfile(profile);
     }
@@ -603,6 +602,12 @@ export const useProfilesStore = defineStore("profiles", () => {
      * @returns {Recipe}
      */
     function getRecipeData(recipeId) {
+        if(recipeId == undefined) return undefined;
+
+        let profile = currentProfile.value;
+        let recent = profile.recentSearches.find(v=>v.id == recipeId);
+        if(recent) return recent;
+        
         let itemStr = localStorage.getItem("recipe_" + recipeId);
         if (!itemStr) {
             console.warn("couldn't find data for the recipe: " + recipeId);

@@ -53,3 +53,15 @@ j
 - refined some classes/types in the profileStore
 - added styling and functionality to click on a date in the calendar page so that it opens the bottom panel with some simple debug info about it
     - clicking the same date again closes the menu
+
+# 11/6/25
+- added meal dots to dates on the calendar if a meal has been added there
+- slide up menu in calendar page now displays all 3 meals picked if possible
+- slide up menu has better animation now and has it's own close button
+- added some better styling, image, and time on slide up menu
+- added addRecipeId function to calendar store
+- added removeRecipe function to calendar store
+- fixed saveSearchResults to save even the search item data even if it isn't all the data
+- fixed getRecipeData to pull data out of your recent searches if possible to be faster
+- fixed HomeView to call saveSearchResults after successfully searching
+- added "addToCalendar" functionality to home page

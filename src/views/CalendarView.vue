@@ -2,12 +2,15 @@
 import CalDate from '@/components/calendar/CalDate.vue';
 import CalendarSlideUpData from '@/components/calendar/CalendarSlideUpData.vue';
 import CalMonthItem from '@/components/calendar/CalMonthItem.vue';
+import { useCalendarStore } from '@/stores/calendar';
 import { getMonthLength, weekday, weekdayAbbr } from '@/util';
-import { computed, provide, ref, Transition } from 'vue';
+import { computed, provide, ref, toRaw, Transition } from 'vue';
 
 const today = ref(new Date());
 
 const monthOffset = ref(0); // going forward or back by months
+
+const calendarStore = useCalendarStore();
 
 let itemCount = ref(3);
 // let itemCount = ref(10);
@@ -70,6 +73,8 @@ function clickDate(date:Date){
     console.log("clicked date: ",date.toLocaleString([],{dateStyle:"short"}));
     if(selectedDate.value?.toISOString() == date.toISOString()) selectedDate.value = undefined; // deselect
     else selectedDate.value = date; // select
+
+    console.log("date data",toRaw(calendarStore.getDay(date)));
 }
 
 provide("clickDate",clickDate);
@@ -123,14 +128,20 @@ const selectedDate = ref<Date>();
         </div> -->
         <Transition name="slide-up">
             <div class="slide-up-window" v-if="selectedDate != undefined">
-                <h3>The slide up menu</h3>
-                <div>{{ selectedDate.toLocaleString([],{dateStyle:'short'}) }}</div>
-                <div>some</div>
-                <div>more</div>
-                <div>data</div>
+                <!-- <h3>The slide up menu</h3> -->
+                <div style="display:flex;justify-content:space-between;margin-bottom:0.5em">
+                    <div>{{ selectedDate.toLocaleString([],{dateStyle:'long'}) }}</div>
+                    <div class="material-symbols-outlined" @click="selectedDate = undefined">close</div>
+                </div>
+                <!-- <div>some</div> -->
+                <!-- <div>more</div> -->
+                <!-- <div>data</div> -->
                 <CalendarSlideUpData :date="selectedDate">
                     <template v-slot="{data}">
-                        {{ data }}
+                        <!-- {{ data }} -->
+                    </template>
+                    <template #meal="{meal,recipe}">
+                        
                     </template>
                 </CalendarSlideUpData>
             </div>
@@ -147,12 +158,18 @@ const selectedDate = ref<Date>();
 
 .slide-up-enter-active,
 .slide-up-leave-active {
-    transition: translate 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* transition: translate 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); */
+    /* transition: translate 0.3s cubic-bezier(0.175, 0.885, 0.032, 0.99025); */
+    /* transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1); */
+    /* transition: all 0.1s cubic-bezier(0.165, 0.84, 0.44, 1); */
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .slide-up-enter-from,
 .slide-up-leave-to {
-    translate:0px calc(100% + var(--pad-bottom));
+    /* translate:0px calc(100% + var(--pad-bottom)); */
+    scale:0.9;
+    opacity:0;
 }
 
 
