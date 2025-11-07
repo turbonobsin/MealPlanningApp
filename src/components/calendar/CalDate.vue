@@ -25,9 +25,9 @@ const day = computed(()=>{
         <div>{{ date.getDate() }}</div>
     </div>
     <div class="meals" v-if="day">
-        <div class="meal0" :valid="day.breakfast.recipeId != undefined"></div>
-        <div class="meal1" :valid="day.lunch.recipeId != undefined"></div>
-        <div class="meal2" :valid="day.dinner.recipeId != undefined"></div>
+        <div class="meal0" :valid="day.breakfast?.recipeId != undefined"></div>
+        <div class="meal1" :valid="day.lunch?.recipeId != undefined"></div>
+        <div class="meal2" :valid="day.dinner?.recipeId != undefined"></div>
     </div>
 </template>
 

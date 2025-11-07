@@ -130,7 +130,7 @@ const selectedDate = ref<Date>();
             <div class="slide-up-window" v-if="selectedDate != undefined">
                 <!-- <h3>The slide up menu</h3> -->
                 <div style="display:flex;justify-content:space-between;margin-bottom:0.5em">
-                    <div>{{ selectedDate.toLocaleString([],{dateStyle:'long'}) }}</div>
+                    <div>{{ selectedDate?.toLocaleString([],{dateStyle:'long'}) }}</div>
                     <div class="material-symbols-outlined" @click="selectedDate = undefined">close</div>
                 </div>
                 <!-- <div>some</div> -->

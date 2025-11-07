@@ -5,13 +5,13 @@ import { computed, ref } from 'vue';
 const profileStore = useProfilesStore();
 
 const props = defineProps<{
-    data:CalendarDate;
+    data?:CalendarDate;
     meal?:DateMeal;
     heading:string;
 }>();
 
 const recipe = computed(()=>{
-    return profileStore.getRecipeData(props.meal.recipeId);
+    return profileStore.getRecipeData(props.meal?.recipeId);
 });
 
 // const headings = ref<Record<MealType,string>>({
@@ -23,24 +23,29 @@ const recipe = computed(()=>{
 </script>
 
 <template>
-    <div class="meal-item" v-if="meal">
+    <div class="meal-item">
         <div class="meal-column">
             <div class="flx-sb flx-ac">
                 <h3>{{ heading }}</h3>
-                <div class="material-symbols-outlined configure-meal">settings</div>
+                <div v-if="recipe" class="material-symbols-outlined configure-meal">settings</div>
             </div>
-            <h4>{{ new Date(meal.time).toLocaleString([],{timeStyle:'short'}) }}</h4>
+            <div v-if="recipe">
+                <h4>{{ new Date(meal.time).toLocaleString([],{timeStyle:'short'}) }}</h4>
+                <div class="flx-ac title" style="gap:5px" v-if="recipe">
+                    <div>{{ recipe.title }}</div>
+                    <!-- <div class="material-symbols-outlined remove-recipe" @click="calendarStore.removeRecipe(selectedDate,meal.mealType)">close</div> -->
+                </div>
+            </div>
+            <div v-else>
+                Nothing yet.
+            </div>
             <!-- <slot name="meal" :meal="meal" :data="data" :recipe="profileStore.getRecipeData(calData?.breakfast.recipeId)"></slot> -->
-            <div class="flx-ac title" style="gap:5px" v-if="recipe">
-                <div>{{ recipe.title }}</div>
-                <!-- <div class="material-symbols-outlined remove-recipe" @click="calendarStore.removeRecipe(selectedDate,meal.mealType)">close</div> -->
-            </div>
         </div>
         <!-- <div></div> -->
         <!-- <slot name="img" :recipe="profileStore.getRecipeData(calData?.breakfast.recipeId)"></slot> -->
         <img v-if="recipe" :src="recipe.image"></img>
     </div>
-    <div v-else>
+    <!-- <div v-else>
         <div class="meal-column">
             <div class="flx-sb flx-ac">
                 <h3>{{ heading }}</h3>
@@ -49,7 +54,7 @@ const recipe = computed(()=>{
                 Nothing yet.
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <style scoped>
@@ -94,6 +99,7 @@ const recipe = computed(()=>{
     display:grid;
     grid-template-columns:1fr 0.8fr;
     gap:0.5em;
+    min-height:100px;
 }
 
 .flx-ac{
