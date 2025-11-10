@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import CalDate from '@/components/calendar/CalDate.vue';
 import CalendarSlideUpData from '@/components/calendar/CalendarSlideUpData.vue';
 import CalMonthItem from '@/components/calendar/CalMonthItem.vue';
 import { useCalendarStore } from '@/stores/calendar';
+import { useProfilesStore } from '@/stores/profiles';
 import { getMonthLength, weekday, weekdayAbbr } from '@/util';
 import { computed, provide, ref, toRaw, Transition } from 'vue';
 
@@ -10,6 +12,7 @@ const today = ref(new Date());
 
 const monthOffset = ref(0); // going forward or back by months
 
+const profileStore = useProfilesStore();
 const calendarStore = useCalendarStore();
 
 let itemCount = ref(3);
@@ -81,6 +84,9 @@ provide("clickDate",clickDate);
 
 const selectedDate = ref<Date>();
 
+const addToCalendarMenuOpen = ref(false);
+provide("addToCalendarMenuOpen",addToCalendarMenuOpen);
+
 </script>
 
 <template>
@@ -126,6 +132,8 @@ const selectedDate = ref<Date>();
                 </div>
             </div>
         </div> -->
+        
+        <div v-if="selectedDate != undefined" class="slide-up-bg" @click="selectedDate = undefined"></div>
         <Transition name="slide-up">
             <div class="slide-up-window" v-if="selectedDate != undefined">
                 <!-- <h3>The slide up menu</h3> -->
@@ -146,10 +154,19 @@ const selectedDate = ref<Date>();
                 </CalendarSlideUpData>
             </div>
         </Transition>
+
+        <AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="profileStore.getDummyRecipe(50)" :date="new Date()"></AddRecipeToCalMenu>
+        
     </main>
 </template>
 
 <style scoped>
+
+.slide-up-bg{
+    position:fixed;
+    inset:0px;
+    background-color:rgba(0,0,0,0.1);
+}
 
 .slide-up-window{
     margin:-20px;

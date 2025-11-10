@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { CalendarDate, DateMeal, MealType, useProfilesStore } from '@/stores/profiles';
-import { computed, ref } from 'vue';
+import { computed, provide, ref } from 'vue';
+import CalRecipeOptionsMenu from './CalRecipeOptionsMenu.vue';
+import AddRecipeToCalMenu from './AddRecipeToCalMenu.vue';
 
 const profileStore = useProfilesStore();
 
@@ -8,6 +10,7 @@ const props = defineProps<{
     data?:CalendarDate;
     meal?:DateMeal;
     heading:string;
+    date:Date;
 }>();
 
 const recipe = computed(()=>{
@@ -20,14 +23,17 @@ const recipe = computed(()=>{
 //     dinner:"Dinner"
 // });
 
+const optionsOpen = ref(false);
+
 </script>
 
 <template>
     <div class="meal-item">
+        <CalRecipeOptionsMenu v-if="optionsOpen" v-model="optionsOpen" :recipe :date :time="new Date(meal.time)" :meal-type="meal.mealType"></CalRecipeOptionsMenu>
         <div class="meal-column">
             <div class="flx-sb flx-ac">
                 <h3>{{ heading }}</h3>
-                <div v-if="recipe" class="material-symbols-outlined configure-meal">settings</div>
+                <div v-if="recipe" class="material-symbols-outlined configure-meal" @click="optionsOpen = true">settings</div>
             </div>
             <div v-if="recipe">
                 <h4>{{ new Date(meal.time).toLocaleString([],{timeStyle:'short'}) }}</h4>
@@ -37,7 +43,7 @@ const recipe = computed(()=>{
                 </div>
             </div>
             <div v-else>
-                Nothing yet.
+                Nothing planned yet.
             </div>
             <!-- <slot name="meal" :meal="meal" :data="data" :recipe="profileStore.getRecipeData(calData?.breakfast.recipeId)"></slot> -->
         </div>

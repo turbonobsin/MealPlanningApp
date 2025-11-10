@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router';
 import { ref } from 'vue'
 import { Recipe, useProfilesStore } from '@/stores/profiles';
 import { useCalendarStore } from '@/stores/calendar';
+import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 
 const apiKey = "8091b135029642499cfa2a83e6513777";
 const items = ref([])
@@ -105,8 +106,13 @@ function addToCalendar(recipe) {
 	console.log("Added to Calendar")
 	console.log(items.value)
 
-	calendarStore.addRecipe(recipe.id,prompt("Enter mealType: 'breakfast', 'lunch', 'dinner'",'lunch'),new Date());
+	// calendarStore.addRecipe(recipe.id,prompt("Enter mealType: 'breakfast', 'lunch', 'dinner'",'lunch'),new Date());
+	addToCalendarMenuOpen.value = true;
+	addToCalendarRecipe.value = recipe;
 }
+
+const addToCalendarMenuOpen = ref(false);
+const addToCalendarRecipe = ref();
 
 
 /*onMounted(() => {
@@ -212,6 +218,8 @@ function addToCalendar(recipe) {
 			<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
 			<label for="beverage">Beverage</label><br>
 		</div>
+
+		<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
 			
 		<h2 class="results-heading">Found results:</h2>
 
@@ -220,6 +228,33 @@ function addToCalendar(recipe) {
 		</div>
 
 		<div v-for="item in items" :key="item.id" class="recipe-result-card">
+			<div class="recipe-image">
+				<img :src="item.image" alt="Recipe Image" />
+			</div>
+
+			<div class="recipe-info">
+				<div class="recipe-header">
+					<h3 class="recipe-name">{{ item.title }}</h3>
+				</div>
+
+				<div class="recipe-actions">
+					<button @click="addToFavorites(item)" class="icon-btn">
+						<span class="material-symbols-outlined">bookmark</span>
+					</button>
+					<button @click="addToCalendar(item)" class="icon-btn">
+						<span class="material-symbols-outlined">add</span>
+					</button>
+				</div>
+			</div>
+
+			<RouterLink :to="`/details/${item.id}`" class="see-full">
+				See full recipe &gt;
+			</RouterLink>
+		</div>
+
+		<br>
+		<h2 class="results-heading">Recent searches:</h2>
+		<div v-for="item in profilesStore.currentProfile.recentSearches" :key="item.id" class="recipe-result-card">
 			<div class="recipe-image">
 				<img :src="item.image" alt="Recipe Image" />
 			</div>

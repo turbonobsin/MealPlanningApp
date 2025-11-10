@@ -65,3 +65,8 @@ j
 - fixed getRecipeData to pull data out of your recent searches if possible to be faster
 - fixed HomeView to call saveSearchResults after successfully searching
 - added "addToCalendar" functionality to home page
+- made popup menu in calendar page closable by clicking off of it
+
+# 11/9/25
+- added menus for deleting recipe from calendar page
+- added menus for adding a recipe to calendar pagef from the home page with a specific date/time and meal time

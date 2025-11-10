@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useCalendarStore } from '@/stores/calendar';
 import { Recipe, useProfilesStore } from '@/stores/profiles';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 import CalMealItem from './CalMealItem.vue';
+import AddRecipeToCalMenu from './AddRecipeToCalMenu.vue';
 
 const profileStore = useProfilesStore();
 const calendarStore = useCalendarStore();
@@ -29,9 +30,9 @@ let data = computed(()=>{
     <div class="slide-up-details">
         <slot :data="calData"></slot>
         <div class="three-col alt-layout">
-            <CalMealItem heading="Breakfast" :data="calData" :meal="calData?.breakfast"></CalMealItem>
-            <CalMealItem heading="Lunch" :data="calData" :meal="calData?.lunch"></CalMealItem>
-            <CalMealItem heading="Dinner" :data="calData" :meal="calData?.dinner"></CalMealItem>
+            <CalMealItem :date heading="Breakfast" :data="calData" :meal="calData?.breakfast"></CalMealItem>
+            <CalMealItem :date heading="Lunch" :data="calData" :meal="calData?.lunch"></CalMealItem>
+            <CalMealItem :date heading="Dinner" :data="calData" :meal="calData?.dinner"></CalMealItem>
             <!-- <div class="meal-item">
                 <div class="meal-column">
                     <h3>Lunch</h3>

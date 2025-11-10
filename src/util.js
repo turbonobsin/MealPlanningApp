@@ -78,3 +78,10 @@ export const weekday = [
     "Friday",
     "Saturday"
 ];
+
+/**@type {Record<import("./stores/profiles").MealType,number>} */
+export const mealHours = {
+    "breakfast":8,
+    "lunch":12,
+    "dinner":18
+};
