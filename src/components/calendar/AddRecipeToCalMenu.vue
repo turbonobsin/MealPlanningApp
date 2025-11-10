@@ -58,17 +58,18 @@ onMounted(()=>{
         <h3 id="recipe-title space-after">
             {{ recipe.title }}
         </h3>
-        <label for="recipe-time">Time</label>
-        <!-- <h4>{{ date.toLocaleString([],{dateStyle:'short'}) }}, {{ time.toLocaleString([],{timeStyle:'short'}) }}</h4> -->
-        <input type="datetime-local" name="recipe-time" id="recipe-time" class="text-input space-after" ref="date-input" @change="date = new Date(($event.target as any).value)">
-        <!-- <input type="date" name="recipe-time" id="recipe-time" class="text-input space-after" ref="date"> -->
 
         <label for="recipe-meal-type">Meal</label>
-        <select name="recipe-meal-type" id="recipe-meal-type" class="text-input" @change="updateDateInput" v-model="mealType">
+        <select name="recipe-meal-type" id="recipe-meal-type" class="text-input space-after" @change="updateDateInput" v-model="mealType">
             <option value="breakfast">Breakfast</option>
             <option value="lunch">Lunch</option>
             <option value="dinner">Dinner</option>
         </select>
+        
+        <label for="recipe-time">Time</label>
+        <!-- <h4>{{ date.toLocaleString([],{dateStyle:'short'}) }}, {{ time.toLocaleString([],{timeStyle:'short'}) }}</h4> -->
+        <input type="datetime-local" name="recipe-time" id="recipe-time" class="text-input" ref="date-input" @change="date = new Date(($event.target as any).value)">
+        <!-- <input type="date" name="recipe-time" id="recipe-time" class="text-input space-after" ref="date"> -->
         <br>
         
         <button class="color-button" @click="calendarStore.addRecipe(recipe.id,mealType,date); isOpen = false">Add to Calendar</button>

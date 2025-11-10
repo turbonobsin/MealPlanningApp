@@ -57,3 +57,6 @@ body::before {
 .material-symbols-outlined {
     max-width:2em;
 }
+.fill{
+    font-variation-settings:'FILL' 1 !important;
+}

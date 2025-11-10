@@ -69,4 +69,11 @@ j
 
 # 11/9/25
 - added menus for deleting recipe from calendar page
-- added menus for adding a recipe to calendar pagef from the home page with a specific date/time and meal time
+- added menus for adding a recipe to calendar page from the home page with a specific date/time and meal time
+
+# 11/10/25
+- added add to favorites and calendar button on recipe details page
+- added filled icon to show when favoriting a recipe and click it again to unfavorite
+- added note support to profile store
+- added working note support with save and cancel to the recipe details page
+- added recent searches to home view

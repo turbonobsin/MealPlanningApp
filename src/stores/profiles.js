@@ -182,6 +182,9 @@ export class FavoriteFolder extends FavoriteItem {
     items = [];
 }
 
+/**
+ * @deprecated
+ */
 export class RecipeNote {
     /**
      * The content of the note
@@ -219,9 +222,13 @@ export class Profile {
      */
     color = "#f07";
 
+    // /**
+    //  * Maps from RecipeId to array of notes
+    //  * @type {Record<string,RecipeNote[]>}
+    //  */
     /**
-     * Maps from RecipeId to array of notes
-     * @type {Record<string,RecipeNote[]>}
+     * Maps from RecipeId to note string
+     * @type {Record<number,string>}
      */
     notes = {};
 
@@ -425,6 +432,32 @@ export const useProfilesStore = defineStore("profiles", () => {
         localStorage.setItem("profiles", JSON.stringify(profiles.map(v => v.name)));
     }
 
+    /**
+     * Check if a specified recipe is favorited or not
+     * @param {number} recipeId
+     */
+    function isFavorited(recipeId){
+        let profile = currentProfile.value;
+        if(!profile) return false;
+
+        if(typeof recipeId == "string") recipeId = parseInt(recipeId);
+
+        let root = profile.favorites;
+        /**
+         * @param {FavoriteFolder} f 
+         */
+        function search(f){
+            if(!f) return false;
+            if(f.items?.includes(recipeId)) return true;
+            if(f.items) for(const item of f.items){
+                if(typeof item == "number") continue;
+                if(search(item)) return true;
+            }
+            return false;
+        }
+        return search(root);
+    }
+
     // favorites
     /**
      * Add a Recipe to your favorites, optionally with a custom folder or else it will be put in the root folder
@@ -500,6 +533,42 @@ export const useProfilesStore = defineStore("profiles", () => {
      */
     function addFolderToFavorites(folder, parentFolder) {
         this.addItemToFavorites(folder, parentFolder);
+    }
+
+    /**
+     * @param {number} recipeId
+     * @param {boolean} skipCheck
+     */
+    function removeRecipeFromFavoritesAnywhere(recipeId,skipCheck=false){
+        let profile = currentProfile.value;
+        if(!profile) return false;
+
+        if(!skipCheck) if(!isFavorited(recipeId)){
+            console.warn("failed to remove recipe from anywhere, it wasn't favorited");
+            return;
+        }
+
+        let root = profile.favorites;
+        /**
+         * @param {FavoriteFolder} f 
+         */
+        function search(f){
+            if(!f) return undefined;
+            if(f.items?.includes(recipeId)) return f;
+            if(f.items) for(const item of f.items){
+                if(typeof item == "number") continue;
+                if(search(item)) return item;
+            }
+            return undefined;
+        }
+        root = search(root);
+
+        if(!root){
+            console.warn("failed to remove recipe from anywhere, couldn't find a folder that it was in");
+            return;
+        }
+
+        removeItemFromFavorites(recipeId,root);
     }
 
     /**
@@ -624,6 +693,30 @@ export const useProfilesStore = defineStore("profiles", () => {
         localStorage.setItem("recipe_" + recipe.id, JSON.stringify(recipe));
     }
 
+    /**
+     * Get the note from the corresponding recipe
+     * @param {number} recipeId 
+     */
+    function getNote(recipeId){
+        let profile = currentProfile.value;
+        if(!profile) return;
+
+        return profile.notes[recipeId] ?? "";
+    }
+
+    /**
+     * Set the specified recipe's note content
+     * @param {number} recipeId 
+     * @param {string} content
+     */
+    function saveNote(recipeId,content){
+        let profile = currentProfile.value;
+        if(!profile) return;
+
+        profile.notes[recipeId] = content;
+        saveProfile(profile);
+    }
+
     // 
 
     function $reset() {
@@ -651,12 +744,16 @@ export const useProfilesStore = defineStore("profiles", () => {
         removeFolderFromFavorites,
         addRecipeToFavorites,
         moveItemToFavoriteFolder,
+        removeRecipeFromFavoritesAnywhere,
+        isFavorited,
 
         // recipe data
         getDummyRecipe,
         saveSearchResults,
         getRecipeData,
         saveRecipeData,
+        getNote,
+        saveNote,
 
         // 
         $reset

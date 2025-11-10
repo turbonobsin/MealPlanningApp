@@ -95,8 +95,14 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 
 }
 function addToFavorites(recipe) {
-	profilesStore.addRecipeToFavorites(recipe);
-	console.log("Added to Favorites Successfully!")
+	if(profilesStore.isFavorited(recipe.id)){
+		profilesStore.removeRecipeFromFavoritesAnywhere(recipe.id,true);
+		console.log("Removed from favorites");
+	}
+	else{
+		profilesStore.addRecipeToFavorites(recipe);
+		console.log("Added to Favorites Successfully!")
+	}
 }
 
 /**
@@ -239,7 +245,7 @@ const addToCalendarRecipe = ref();
 
 				<div class="recipe-actions">
 					<button @click="addToFavorites(item)" class="icon-btn">
-						<span class="material-symbols-outlined">bookmark</span>
+						<span :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
 					</button>
 					<button @click="addToCalendar(item)" class="icon-btn">
 						<span class="material-symbols-outlined">add</span>
@@ -266,7 +272,7 @@ const addToCalendarRecipe = ref();
 
 				<div class="recipe-actions">
 					<button @click="addToFavorites(item)" class="icon-btn">
-						<span class="material-symbols-outlined">bookmark</span>
+						<span :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
 					</button>
 					<button @click="addToCalendar(item)" class="icon-btn">
 						<span class="material-symbols-outlined">add</span>
