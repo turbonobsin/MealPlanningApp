@@ -10,10 +10,17 @@ const props = defineProps({
 
 <template>
     <div v-if="recipe">
+        <img :src="recipe.image"></img>
         <div>{{ recipe.title }}</div>
         <div>{{ recipe.cookingMinutes }}</div>
     </div>
     <div v-else>
-        Couldn't find recipe data
+        Not Available
     </div>
 </template> 
+
+<style scoped>
+
+
+
+</style>

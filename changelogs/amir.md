@@ -28,3 +28,11 @@
 -   Add icons to settings options
 -   Fix delete profile function in settings
 -   Add current profile indicator in switch profiles window
+
+# 11/10/2025
+-   Set up excluding ingredients in profile configuration
+-   Adjust profile page scrolling
+-   Adjust menu bar
+-   Apply brand styling to favorites page
+-   Adjust layout of favorites page
+-   Redesign items in favorites list

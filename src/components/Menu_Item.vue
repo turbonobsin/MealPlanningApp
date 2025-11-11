@@ -16,20 +16,15 @@ const props = defineProps({
 <style scoped>
 .menu_item{
     text-decoration: none;
-    height: 60px;
-    aspect-ratio: 1;
     text-align: center;
     border-radius: 15px;
     margin: 0px;
     transition: all .2s;
+    padding: 15px;
 
-    font-size:30px;
+    font-size:1.5em;
     color: var(--dark);
     font-variation-settings: 'FILL' 0;
-}
-
-* {
--webkit-tap-highlight-color: transparent;
 }
 
 .router-link-active{

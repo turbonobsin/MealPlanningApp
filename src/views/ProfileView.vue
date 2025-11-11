@@ -9,8 +9,10 @@ const { currentProfile } = storeToRefs(profile_store);
 
 const intolerances = ref(["Dairy", "Egg", "Gluten", "Grain", "Peanut", "Seafood", "Sesame", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"]);
 
+
 const edit_color = ref(false);
 const edit_mode = ref(false);
+const excludeInput = useTemplateRef('exclude_input');
 
 const router = useRouter();
 
@@ -84,8 +86,26 @@ function toggleColorEdit(e){
     }
 }
 
-function addExcluded(){
+function addExclusion(){
+    let s = excludeInput.value.value;
+    if (s){
+        if (s.includes(',')){
+            s = s.replaceAll(',', '');
+        }
+        let exclusions = s.split(" ");
+        exclusions.forEach(item => {
+            if (item){
+                currentProfile.value.exclusions.push(item);
+            }
+        });
+        profile_store.saveProfile();
+        excludeInput.value.value = '';
+    }
+}
 
+function removeExclusion(i){
+    currentProfile.value.exclusions.splice(i, 1);
+    profile_store.saveProfile();
 }
 
 </script>
@@ -95,7 +115,7 @@ function addExcluded(){
         <div class="material-symbols-outlined xxxlarge back" @click="router.back()">chevron_left</div>
         <h1 class="title">Profile Page</h1>
     </div>
-    <main class="scroll">
+    <main class="scroll-main">
         <div class="circle-container" style="position:relative">
             <div class="profile-color center circle">
                 <input ref="color_input" :disabled="!edit_color" type="color" id="profile_color" class="circle" :value="convertHexTo6(currentProfile.color)"></input>
@@ -117,24 +137,23 @@ function addExcluded(){
         </div>
 
         <h3>Intolerances</h3>
-        <div class="flex-wrap">
+        <div class="flex-wrap space-after">
             <div v-for="item in intolerances" @click="toggleItem(item)" 
             :class="{'list-item': true, 'small': true, 'selected': currentProfile.allergies.find(v => v === item)}">
                 {{ item }}
             </div>
         </div>
+
         <h3>Exclude Ingredients</h3>
-        <form id="profileForm">
-
-            <label for="allergies">Allergies/Intolerances (comma-separated):</label>
-            <input type="text" id="allergies">
-
-            <button type="submit">Save Profile</button>
-        </form>
-
-        <h2>Your Profile</h2>
-        <div id="results">
-            <p>No profile data has been saved yet.</p>
+        <div class="text-input-button space-after">
+            <input ref="exclude_input" class="text-input" placeholder="Ex. Celery, Apple, Beef..." @keypress.enter="addExclusion"></input>
+            <button class="dark-button small" @click="addExclusion">Exclude</button>
+        </div>
+        <div class="flex-wrap">
+            <div class="small list-item h-center spread medium-button" v-for="(item, i) in currentProfile.exclusions">
+                <span>{{ item }}</span>
+                <span class="material-symbols-outlined small" @click="removeExclusion(i)">close</span>
+            </div>
         </div>
     </main>
 </template>
@@ -196,11 +215,12 @@ function addExcluded(){
 }
 
 .list-item{
-    display: inline-block;
+    display: inline-flex;
     padding: 5px 10px;
     border-radius: 5px;
     border: 2px solid var(--medium);
     flex-grow:1;
+    max-width: 50%;
 }
 
 .selected{
@@ -238,6 +258,5 @@ function addExcluded(){
 #save{
     border: 2px solid var(--main-color);
 }
-
 
 </style>

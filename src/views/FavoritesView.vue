@@ -78,52 +78,79 @@ const deleteItem = (item) => {
 </script>
 
 <template>
-  <div class="favorites-page">
-    <header class="header">
-      <h1>{{ currentFolder.name }}</h1>
-      <button v-if="folderHistory.length" class="back-btn" @click="goBack">← Back</button>
-    </header>
+  <div class="h-center">
+    <div v-if="folderHistory.length" class="material-symbols-outlined xxxlarge back" @click="goBack">chevron_left</div>
+    <h1 class="title">{{ currentFolder.name }}</h1>
+  </div>
 
-    <section class="favorites-container">
+  <main class="scroll-main">
+
+    <section class="vertical" style="gap: 15px">
+
+      <div class="add-folder-card card">
+
+        <div class="h-center gap10" v-if="!showFolderInput" @click="createNewFolder">
+          <span class="material-symbols-outlined large">add</span>
+          <span>New Folder</span>
+        </div>
+
+        <div v-else class="h-center gap10">
+          <input v-model="newFolderName" type="text" placeholder="Folder name" class="text-input create-input" />
+          <button class="material-symbols-outlined color-button create-button" @click="confirmCreateFolder">check</button>
+          <button class="material-symbols-outlined blank-button create-button" @click="cancelCreate">close</button>
+        </div>
+
+      </div>
+
       <div v-for="item in currentFolder.items" :key="item.id || item">
-        <div v-if="typeof item === 'number'" class="recipe-card" draggable="true"
+        
+        <div v-if="typeof item === 'number'" class="favorite-card card" draggable="true"
           @dragstart="(e) => dragStartEvent(e, item)">
           <FavoriteRecipe :recipe="getRecipe(item)" draggable="true" @click="gotoRecipeDetails(item)"/>
           <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
         </div>
 
-        <div v-else class="folder-card" @click="openFolder(item)" draggable="true" @dragstart="(e) => dragStartEvent(e, item)" @dragover.prevent @drop="dropRecipeIntoFolder(item)">
-          <div class="folder-header center h-center">
-            <span style="font-weight: bold; line-height: 1; margin-bottom: 0.25rem;">{{ item.name }}</span>
-            <p class="material-symbols-outlined">folder_open</p>
+        <div v-else class="favorite-folder card h-center spread" @click="openFolder(item)" draggable="true" @dragstart="(e) => dragStartEvent(e, item)" @dragover.prevent @drop="dropRecipeIntoFolder(item)">
+          <div class="h-center gap10">
+            <div class="delete-btn material-symbols-outlined large" @click.stop="deleteItem(item)">delete</div>
+            <span>{{ item.name }}</span>
           </div>
-          <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
+          <div class="material-symbols-outlined large">folder</div>
         </div>
-      </div>
 
-
-      <div class="add-folder-card">
-        <template v-if="!showFolderInput">
-          <div @click="createNewFolder">
-            <span class="plus-icon">+</span>
-            <p>Add Folder</p>
-          </div>
-        </template>
-
-        <template v-else class="input-container">
-          <input v-model="newFolderName" type="text" placeholder="Folder name" class="folder-input text-input" />
-          <div class="btn-container">
-            <button class="confirm-btn" @click="confirmCreateFolder">Create</button>
-            <button class="cancel-btn" @click="cancelCreate">Cancel</button>
-          </div>
-        </template>
       </div>
 
     </section>
-  </div>
+  </main>
 </template>
 
 <style scoped>
+
+.back{
+    position: absolute;
+    left: .6em;
+}
+
+.card{
+  padding: 10px;
+  border-radius: 10px;
+  outline: 3px solid;
+}
+
+.favorite-folder{
+  background-color: var(--light);
+  color: var(--dark);
+  outline-color: var(--medium);
+  box-shadow: 0px 5px 0px 0px var(--medium);
+}
+
+.add-folder-card {
+  background-color: var(--light);
+  outline-color: var(--main-color);
+  box-shadow: 0px 5px 0px 0px var(--main-color);
+}
+
+
 .folder-input {
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -133,17 +160,21 @@ const deleteItem = (item) => {
   font-size: 0.9rem;
 }
 
-.input-container{
-  background-color: var(--light-color);
+.create-input{
+  width: 85%;
 }
 
-.btn-container {
+.create-button{
+  padding: 5px;
+}
+
+/* .btn-container {
   display: flex;
   flex-direction: row;
   gap: 10px;
-}
+} */
 
-.confirm-btn:hover {
+/* .confirm-btn:hover {
   color: var(--main-color);
   cursor: pointer;
 }
@@ -151,12 +182,7 @@ const deleteItem = (item) => {
 .cancel-btn:hover {
   color: red;
   cursor: pointer;
-}
-
-.favorites-page {
-  font-family: 'Inter', sans-serif;
-  padding: 1.5rem;
-}
+} */
 
 .header {
   text-align: center;
@@ -172,13 +198,12 @@ const deleteItem = (item) => {
   font-weight: 500;
 }
 
-.favorites-container {
-  display: grid;
+/* .favorites-container {
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
-}
+} */
 
-.folder-card,
+/* .folder-card,
 .recipe-card,
 .add-folder-card {
   background-color: var(--light-color);
@@ -187,41 +212,30 @@ const deleteItem = (item) => {
   padding: 1rem;
   text-align: center;
   position: relative;
-}
+} */
 
-.folder-card:hover,
+/* .folder-card:hover,
 .recipe-card:hover,
 .add-folder-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
+} */
 
-.folder-header {
+/* .folder-header {
   cursor: pointer;
   gap: 10px;
-}
+} */
 
-.delete-btn {
+/* .delete-btn {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: none;
-  border: none;
-  color: #888;
   font-size: 1.1rem;
   cursor: pointer;
-}
+} */
 
 .delete-btn:hover {
-  color: #e53935;
-}
-
-.add-folder-card {
-  background-color: var(--light-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  color: var(--red);
 }
 
 .plus-icon {
