@@ -184,19 +184,19 @@ const deleteItem = (item) => {
   cursor: pointer;
 } */
 
-.header {
+/* .header {
   text-align: center;
   margin-bottom: 1.5rem;
   position: relative;
-}
+} */
 
-.back-btn {
+/* .back-btn {
   position: absolute;
   left: 1rem;
   top: 0.5rem;
   cursor: pointer;
   font-weight: 500;
-}
+} */
 
 /* .favorites-container {
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -238,10 +238,10 @@ const deleteItem = (item) => {
   color: var(--red);
 }
 
-.plus-icon {
+/* .plus-icon {
   font-size: 2rem;
   font-weight: bold;
   line-height: 1;
   margin-bottom: 0.25rem;
-}
+} */
 </style>
