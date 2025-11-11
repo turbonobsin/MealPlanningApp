@@ -4,35 +4,34 @@ import { ref } from 'vue'
 import { Recipe, useProfilesStore } from '@/stores/profiles';
 import { useCalendarStore } from '@/stores/calendar';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
+import Modal from '@/components/Modal.vue';
 
 const apiKey = "8091b135029642499cfa2a83e6513777";
 const items = ref([])
-let searchTerm = ref("");
-let maxTime = ref("");
-let excludedFoods = ref("");
-let intolerances = ref([""]);
+const searchTerm = ref("");
+const maxTime = ref("");
+const excludedFoods = ref("");
+const intolerances = ref([]);
 let recipeSearchLength = ref("");
 
 const profilesStore = useProfilesStore();
 const calendarStore = useCalendarStore();
 //let meal_type = ref("")
 
-//checkbox variables
-const intolerance1 = document.getElementById('intolerance1');
-const intolerance2 = document.getElementById('intolerance2');
-const intolerance3 = document.getElementById('intolerance3');
-const intolerance4 = document.getElementById('intolerance4');
-const intolerance5 = document.getElementById('intolerance5');
-const intolerance6 = document.getElementById('intolerance6');
-const intolerance7 = document.getElementById('intolerance7');
-const intolerance8 = document.getElementById('intolerance8');
-const intolerance9 = document.getElementById('intolerance9');
-const intolerance10 = document.getElementById('intolerance10');
-const intolerance11 = document.getElementById('intolerance11');
-const intolerance12 = document.getElementById('intolerance12');
-
 let checkboxState;
 let checkboxValue;
+
+//Modal
+const modal = ref(null)
+
+function cancel() {
+  modal.value.close()
+}
+
+function save(e) {
+	RecipeSearch(searchTerm.value, maxTime.value, excludedFoods.value, intolerances.value)
+	modal.value.close(e)
+}
 
 function addIntolerances(checkbox) {
 	if (checkbox.checked) {
@@ -44,7 +43,6 @@ function addIntolerances(checkbox) {
 	}
 }
 
-//intolerance1.addEventListener(change, addIntolerances)
 
 async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 
@@ -57,8 +55,8 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 	if (excludedFoods != undefined && excludedFoods != "") {
 		url.searchParams.set("excludeIngredients", excludedFoods);
 	}
-	if (intolerances != undefined && intolerances != "") {
-		url.searchParams.set("intolerances", intolerances);
+	if (intolerances != undefined && intolerances.length > 0) {
+    	url.searchParams.set("intolerances", intolerances.join(","));
 	}
 	//if (meal_type != undefined && meal_type != "") {
 		//url.searchParams.set("type", meal_type);
@@ -87,12 +85,6 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		console.log("request failed")
 	}
 
-	//items.value = data.data;
-	//playerSearchLength.value = data.data.length;
-	//pagesData.value = data.meta.next_cursor;
-	//previousPage.value = data.meta.prev_cursor;
-	//console.log(data.length)
-
 }
 function addToFavorites(recipe) {
 	if(profilesStore.isFavorited(recipe.id)){
@@ -120,83 +112,9 @@ function addToCalendar(recipe) {
 const addToCalendarMenuOpen = ref(false);
 const addToCalendarRecipe = ref();
 
-
-/*onMounted(() => {
-	addIntolerances();
-})*/
-
 </script>
 
-<!-- <template>
-	<main>
-		<h1>Hello, user!</h1>
 
-		<div class="search">
-			<label>Find your next recipe:   </label><br>
-			<input type="text" required id="searchTerm" v-model="searchTerm"><br><br>
-			
-			<label>Maximum Cook Time:   </label><br>
-			<input type="number" id="maxTime" v-model="maxTime"><br><br>
-
-			<label>Excluded Foods:   </label><br>
-			<input type="text" id="excludedFoods" v-model="excludedFoods"><br><br>
-
-			<label>Intolerances:   </label><br>
-			<input type="checkbox" name="intolerance" id="intolerance1" value="Diary">
-			<label for="intolerance1">Diary</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance2" value="Egg">
-			<label for="intolerance2">Egg</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance3" value="Gluten">
-			<label for="intolerance3">Gluten</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance4" value="Grain">
-			<label for="intolerance4">Grain</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance5" value="Peanut">
-			<label for="intolerance5">Peanut</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance6" value="Seafood">
-			<label for="intolerance6">Seafood</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance7" value="Sesame">
-			<label for="intolerance7">Sesame</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance8" value="Shellfish">
-			<label for="intolerance8">Shellfish</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance9" value="Soy">
-			<label for="intolerance9">Soy</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance10" value="Sulfite">
-			<label for="intolerance10">Sulfite</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance11" value="TreeNut">
-			<label for="intolerance11">Tree Nut</label><br>
-			<input type="checkbox" name="intolerance" id="intolerance12" value="Wheat">
-			<label for="intolerance12">Wheat</label><br>
-			<!--diary, egg, gluten, grain, peanut, seafood, sesame, shellfish, soy, sulfite, tree nut, wheat--
-			
-
-			<div class="centeredButton">
-				<button class="button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">Search</button>
-			</div>
-
-			<div class="centeredButton">
-				<button class="button"
-					@click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">Search</button>
-			</div>
-
-        </div>
-
-		<!-- <div>Jessica's List</div> -->
-<!-- <div class="results"> -->
-<!-- <div v-if="recipeSearchLength === 0">No recipes found</div> -->
-<!-- <RouterLink v-for="item in items" :to="`/details/${item.id}`"> -->
-<!-- <img :src= "item.image"> -->
-<!-- <p>{{ item.title }}</p> -->
-<!-- </RouterLink> -->
-
-
-<!--<li v-for="item in items">
-					<img :src= "item.image">
-					<p>{{ item.title }}</p>
-				</li>-->
-<!-- </div> --
-	</main>
-</template>
--->
 <template>
 	<main class="search-results-page">
 		<h1 class="page-title">Hello, User!</h1>
@@ -206,24 +124,8 @@ const addToCalendarRecipe = ref();
 			<button class="material-symbols-outlined medium-button search-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
 		</div>
 
-		<!--Add all filters and make it a popup-->
+		<button class="material-symbols-outlined" @click="modal.open()">filter_list</button>
 
-		<div>
-			<!--Meal Type-->
-			<p>Meal Type:</p>
-			<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
-			<label for="main_course">Main Course</label><br>
-			<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
-			<label for="side_dish">Side Dish</label><br>
-			<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
-			<label for="dessert">Dessert</label><br>
-			<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
-			<label for="appetizer">Appetizer</label><br>
-			<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
-			<label for="breakfast">Breakfast</label><br>
-			<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
-			<label for="beverage">Beverage</label><br>
-		</div>
 
 		<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
 			
@@ -284,6 +186,64 @@ const addToCalendarRecipe = ref();
 				See full recipe &gt;
 			</RouterLink>
 		</div>
+
+		<Modal ref="modal">
+        <template #main>
+            <div>
+			<label>Maximum Cook Time:   </label><br>
+			<input type="number" placeholder="minutes" id="maxTime" v-model="maxTime"><br><br>
+
+			<label>Excluded Foods:   </label><br>
+			<input type="text" id="excludedFoods" v-model="excludedFoods"><br><br>
+
+			<!--Meal Type-->
+			<p>Meal Type:</p>
+			<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
+			<label for="main_course">Main Course</label><br>
+			<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
+			<label for="side_dish">Side Dish</label><br>
+			<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
+			<label for="dessert">Dessert</label><br>
+			<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
+			<label for="appetizer">Appetizer</label><br>
+			<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
+			<label for="breakfast">Breakfast</label><br>
+			<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
+			<label for="beverage">Beverage</label><br><br>
+
+			<!--Intolerances-->
+			<label>Intolerances: </label><br>
+			<input type="checkbox" v-model="intolerances" value="Dairy">
+			<label for="intolerance1">Dairy</label><br>
+			<input type="checkbox" v-model="intolerances" value="Egg">
+			<label for="intolerance2">Egg</label><br>
+			<input type="checkbox" v-model="intolerances" value="Gluten">
+			<label for="intolerance3">Gluten</label><br>
+			<input type="checkbox" v-model="intolerances" value="Grain">
+			<label for="intolerance4">Grain</label><br>
+			<input type="checkbox" v-model="intolerances" value="Peanut">
+			<label for="intolerance5">Peanut</label><br>
+			<input type="checkbox" v-model="intolerances" value="Seafood">
+			<label for="intolerance6">Seafood</label><br>
+			<input type="checkbox" v-model="intolerances" value="Sesame">
+			<label for="intolerance7">Sesame</label><br>
+			<input type="checkbox" v-model="intolerances" value="Shellfish">
+			<label for="intolerance8">Shellfish</label><br>
+			<input type="checkbox" v-model="intolerances" value="Soy">
+			<label for="intolerance9">Soy</label><br>
+			<input type="checkbox" v-model="intolerances" value="Sulfite">
+			<label for="intolerance10">Sulfite</label><br>
+			<input type="checkbox" v-model="intolerances" value="TreeNut">
+			<label for="intolerance11">Tree Nut</label><br>
+			<input type="checkbox" v-model="intolerances" value="Wheat">
+			<label for="intolerance12">Wheat</label><br>
+		</div>
+        </template>
+        <template #footer>
+			<button class="medium-button" @click.stop="save">Apply</button>
+            <button class="medium-button" @click.stop="cancel">Cancel</button>
+        </template>
+	</Modal>
 	</main>
 </template>
 
