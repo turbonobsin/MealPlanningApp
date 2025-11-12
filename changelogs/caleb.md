@@ -77,3 +77,14 @@ j
 - added note support to profile store
 - added working note support with save and cancel to the recipe details page
 - added recent searches to home view
+
+# 11/11/25
+- fixed some of the scrolling bugs
+- bugs:
+    - filter modal in dark mode
+    - scrolling on home page and recipe details page
+    - fix dropdown in add to calendar menu is squished
+    - some pages go to far down and can't reach content
+
+# 11/12/25
+- fixed action buttons on cards in favorites view to be aligned to the right side

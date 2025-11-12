@@ -52,7 +52,7 @@ let displayName = (function () {
             <div class="smaller">{{ displayName }}</div>
             <div class="small">{{ recipe.cookingMinutes }}</div>
         </div>
-        <div class="spread vertical">
+        <div class="spread vertical" style="margin-left:auto">
             <div class="material-symbols-outlined" @click="addToCalendar($event, props.recipe)">add</div>
             <slot></slot>
         </div>

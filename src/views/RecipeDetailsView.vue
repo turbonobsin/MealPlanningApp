@@ -86,57 +86,95 @@ const addToCalendarRecipe = ref();
 <template>
     <h1>{{title}}</h1>
 
-	<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
+	<main class="scroll-main">
+		<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
 
-	<div class="recipe-actions">
-		<button @click="router.back" class="icon-btn" style="margin-right:auto">
-			<span class="material-symbols-outlined">arrow_back</span>
-		</button>
-		<button @click="addToFavorites()" class="icon-btn">
-			<span :class="['material-symbols-outlined',{fill:profileStore.isFavorited(recipeId)}]">bookmark</span>
-		</button>
-		<button @click="addToCalendar()" class="icon-btn">
-			<span class="material-symbols-outlined">add</span>
-		</button>
-	</div>
-    
-    <!--Image-->
-	<img :src="image" alt="Recipe Image" />
-	
+		<div class="recipe-actions">
+			<button @click="router.back" class="icon-btn" style="margin-right:auto">
+				<span class="material-symbols-outlined">arrow_back</span>
+			</button>
+			<button @click="addToFavorites()" class="icon-btn">
+				<span :class="['material-symbols-outlined',{fill:profileStore.isFavorited(recipeId)}]">bookmark</span>
+			</button>
+			<button @click="addToCalendar()" class="icon-btn">
+				<span class="material-symbols-outlined">add</span>
+			</button>
+		</div>
+		
+		<!--Image-->
+		<img :src="image" alt="Recipe Image" />
+		
 
-    <!--Cook Time, servings, Calories-->
-	<div class="across">
-		<p>Cook Time<br>{{ cookTime }} min</p>
-		<p>Servings<br>{{ servings }}</p>
-		<p>Calories<br>{{ calories }} cal</p>
-	</div>
+		<!--Cook Time, servings, Calories-->
+		<div class="across">
+			<p>Cook Time<br>{{ cookTime }} min</p>
+			<p>Servings<br>{{ servings }}</p>
+			<p>Calories<br>{{ calories }} cal</p>
+		</div>
 
-    <!--Ingredients-->
-	<div>
-	<p class="bold">Ingredients:</p>
-	<p v-for="ingredient in ingredients">
-		{{ ingredient.original }}
-	</p>
-	</div>
+		<!--Ingredients-->
+		<div>
+		<p class="bold">Ingredients:</p>
+		<p v-for="ingredient in ingredients">
+			{{ ingredient.original }}
+		</p>
+		</div>
 
-    <!--Instructions-->
-	<div>
-		<p class="bold">Instructions:</p>
-		<div v-for="instruction in instructions" :key="instruction.name">
-			<p v-for="step in instruction.steps" :key="step.number">
-				{{ step.number }}. {{ step.step }}
-			</p>
-  		</div>
-	</div>
+		<!--Instructions-->
+		<div>
+			<p class="bold">Instructions:</p>
+			<div v-for="instruction in instructions" :key="instruction.name">
+				<p v-for="step in instruction.steps" :key="step.number">
+					{{ step.number }}. {{ step.step }}
+				</p>
+			</div>
+		</div>
 
-	<div>
 		<p>Notes:</p>
 		<textarea v-model="note" class="full-width text-input" style="box-sizing:border-box;"></textarea>
 		<div v-if="note != profileStore.getNote(recipeId)" class="full-width two-grid space-before">
 			<button class="color-button" @click="profileStore.saveNote(recipeId,note)">Save</button>
 			<button class="blank-button" @click="note = profileStore.getNote(recipeId)">Cancel</button>
 		</div>
-	</div>
+		
+		<!--Image-->
+		<img :src="image" alt="Recipe Image" />
+		
+
+		<!--Cook Time, servings, Calories-->
+		<div class="across">
+			<p>Cook Time<br>{{ cookTime }} min</p>
+			<p>Servings<br>{{ servings }}</p>
+			<p>Calories<br>{{ calories }} cal</p>
+		</div>
+
+		<!--Ingredients-->
+		<div>
+		<p class="bold">Ingredients:</p>
+		<p v-for="ingredient in ingredients">
+			{{ ingredient.original }}
+		</p>
+		</div>
+
+		<!--Instructions-->
+		<div>
+			<p class="bold">Instructions:</p>
+			<div v-for="instruction in instructions" :key="instruction.name">
+				<p v-for="step in instruction.steps" :key="step.number">
+					{{ step.number }}. {{ step.step }}
+				</p>
+			</div>
+		</div>
+
+		<div>
+			<p>Notes:</p>
+			<textarea v-model="note" class="full-width text-input" style="box-sizing:border-box;min-height:4em"></textarea>
+			<div v-if="note != profileStore.getNote(recipeId)" class="full-width two-grid space-before">
+				<button class="color-button" @click="profileStore.saveNote(recipeId,note)">Save</button>
+				<button class="blank-button" @click="note = profileStore.getNote(recipeId)">Cancel</button>
+			</div>
+		</div>
+	</main>
 </template>
 
 <style>

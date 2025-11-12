@@ -249,10 +249,12 @@ const addToCalendarRecipe = ref();
 
 <style scoped>
 
-/* .search-results-page {
-	background-color: var(--light);
-	min-height: 100vh;
-} */
+/* .search-results-page { */
+	/* background-color: var(--light); */
+	/* min-height: 100vh; */
+	/* padding: 1.2rem; */
+	/* min-height: calc(100vh - 170px); */
+/* } */
 
 .page-title {
 	text-align: center;

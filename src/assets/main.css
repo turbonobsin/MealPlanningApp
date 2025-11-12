@@ -178,6 +178,9 @@ button:active {
     overflow: scroll;
     padding: 10px 5px 10vh 5px;
     max-height: 65vh;
+    /* so that the content fades away more */
+    /* min-height: calc(100vh - 240px); */
+    /* padding-bottom:360px; */
 }
 
 .circle {
