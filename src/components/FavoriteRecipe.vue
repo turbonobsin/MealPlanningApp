@@ -49,7 +49,7 @@ let displayName = (function () {
     <div v-if="recipe" class="recipe">
         <img class="recipe-image" :src="recipe.image" @click="gotoRecipeDetails(props.recipe.id)"></img>
         <div @click="gotoRecipeDetails(props.recipe.id)">
-            <div class="smaller">{{ displayName }}</div>
+            <div class="smaller" style="font-weight: 600">{{ displayName }}</div>
             <div class="small">{{ recipe.cookingMinutes }}</div>
         </div>
         <div class="spread vertical" style="margin-left:auto">
@@ -73,10 +73,11 @@ let displayName = (function () {
 }
 
 .recipe-image {
-    border-radius: 5px;
-    width: 30%;
+    /* border-radius: 5px; */
+    width: 35%;
     object-fit: cover;
-    outline: 3px solid var(--medium);
+    /* outline: 3px solid var(--medium); */
+    margin: -10px 0px -10px -10px;
 }
 
 

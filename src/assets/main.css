@@ -5,7 +5,7 @@
     max-width: 1280px;
     margin: 0 auto;
     /* margin: 0; */
-    padding: 2rem;
+    padding: 1rem;
     font-weight: normal;
 
     /* display:grid; */
@@ -125,6 +125,10 @@ button:active {
     color: var(--red) !important;
 }
 
+.color-text {
+    color: var(--main-color);
+}
+
 .profile-icon {
     height: 40px;
     aspect-ratio: 1;
@@ -170,13 +174,15 @@ button:active {
 .scroll {
     border-radius: 10px;
     overflow: scroll;
-    padding: 10px 0px;
+    padding: 10px;
+    margin: -10px;
 }
 
 .scroll-main{
     border-radius: 10px;
     overflow: scroll;
-    padding: 10px 5px 10vh 5px;
+    padding: 10px 10px 10vh 10px;
+    margin: 0px -10px;
     max-height: 65vh;
     /* so that the content fades away more */
     /* min-height: calc(100vh - 240px); */
@@ -208,7 +214,7 @@ button:active {
     }
 
     100% {
-        opacity: .8;
+        opacity: 1;
     }
 }
 

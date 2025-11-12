@@ -84,8 +84,7 @@ const deleteItem = (item) => {
   </div>
 
   <main class="scroll-main">
-
-    <section class="vertical" style="gap: 15px">
+    <section class="flex-wrap" style="gap: 15px">
 
       <div class="add-folder-card card">
 
@@ -95,14 +94,14 @@ const deleteItem = (item) => {
         </div>
 
         <div v-else class="h-center gap10">
-          <input v-model="newFolderName" type="text" placeholder="Folder name" class="text-input create-input" @keydown.enter="confirmCreateFolder"/>
+          <input v-model="newFolderName" type="text" placeholder="Folder name" class="text-input create-input" @keypress.enter="confirmCreateFolder"/>
           <button class="material-symbols-outlined color-button create-button" @click="confirmCreateFolder">check</button>
           <button class="material-symbols-outlined blank-button create-button" @click="cancelCreate">close</button>
         </div>
 
       </div>
 
-      <div v-for="item in currentFolder.items" :key="item.id || item">
+      <div class="favorite-item" v-for="item in currentFolder.items" :key="item.id || item">
         
         <div v-if="typeof item === 'number'" class="favorite-card card" draggable="true"
           @dragstart="(e) => dragStartEvent(e, item)">
@@ -120,7 +119,6 @@ const deleteItem = (item) => {
         </div>
 
       </div>
-
     </section>
   </main>
 </template>
@@ -135,25 +133,33 @@ const deleteItem = (item) => {
 .card{
   padding: 10px;
   border-radius: 10px;
-  outline: 3px solid;
+  border: 2px solid;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .favorite-folder{
   background-color: var(--light);
   color: var(--dark);
-  outline-color: var(--medium);
+  border-color: var(--medium);
   box-shadow: 0px 5px 0px 0px var(--medium);
+  gap: 10px;
 }
 
 .add-folder-card {
   background-color: var(--light);
-  outline-color: var(--main-color);
+  border-color: var(--main-color);
   box-shadow: 0px 5px 0px 0px var(--main-color);
+  width: 100%;
 }
 
 .favorite-card{
-  outline-color: var(--dark);
+  border-color: var(--dark);
   box-shadow: 0px 5px 0px 0px var(--dark);
+}
+
+.favorite-item{
+  flex-grow: 1;
 }
 
 

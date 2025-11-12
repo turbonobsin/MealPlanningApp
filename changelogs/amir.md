@@ -45,3 +45,11 @@
 
 *   Sort favorites by folders top?
 *   recipe prop in FavoriteRecipe.vue is not instance of Recipe, doesn't contain the same properties (warning + can't display cook time)
+
+# 11/12/2025
+-   Adjust search bar styling in Home Page
+-   Redesign search result items + recent search items
+-   Update layout of items in Favorites Page
+-   Update favorite recipe item style
+
+*   Search results return condensed ver. of recipe - no cooktime or calcount available.

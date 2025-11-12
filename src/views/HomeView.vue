@@ -13,6 +13,7 @@ const maxTime = ref("");
 const excludedFoods = ref("");
 const intolerances = ref([]);
 let recipeSearchLength = ref("");
+const showResults = ref(false);
 
 const profilesStore = useProfilesStore();
 const calendarStore = useCalendarStore();
@@ -23,6 +24,7 @@ let checkboxValue;
 
 //Modal
 const modal = ref(null)
+let filtersApplied = ref(false);
 
 function cancel() {
   modal.value.close()
@@ -30,6 +32,7 @@ function cancel() {
 
 function save(e) {
 	RecipeSearch(searchTerm.value, maxTime.value, excludedFoods.value, intolerances.value)
+	filtersApplied.value = true;
 	modal.value.close(e)
 }
 
@@ -77,6 +80,7 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		let data = await response.json()
 		console.log(data)
 		items.value = data.results;
+		showResults.value = true;
 		recipeSearchLength = data.results.length;
 		console.log(recipeSearchLength)
 
@@ -112,39 +116,76 @@ function addToCalendar(recipe) {
 const addToCalendarMenuOpen = ref(false);
 const addToCalendarRecipe = ref();
 
+function displayName(s) {
+    if (s.length > 40){
+        return s.slice(0, 40) + "..."
+    }
+    else return s
+}
+
 </script>
 
 
 <template>
 	<h1 class="page-title">Hello, User!</h1>
-	<main class="scroll-main">
-
-		<div class="search-bar h-center full-width space-after spread">
-			<input class="text-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" />
-			<button class="material-symbols-outlined medium-button search-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
+	<main>
+		<div class="search-bar h-center space-after spread">
+			<input class="text-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" @keypress.enter="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)"/>
+			<button :class="{'material-symbols-outlined': true, 'search-button': true, 'color-button': filtersApplied}" @click="modal.open()">filter_list</button>
+			<button class="material-symbols-outlined search-button dark-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
 		</div>
-
-		<button class="material-symbols-outlined" @click="modal.open()">filter_list</button>
-
 
 		<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
-			
-		<h2 class="results-heading">Found results:</h2>
-
-		<div v-if="items.length === 0" class="no-results">
-			No recipes found.
-		</div>
-
-		<div v-for="item in items" :key="item.id" class="recipe-result-card">
-			<div class="recipe-image">
-				<img :src="item.image" alt="Recipe Image" />
-			</div>
-
-			<div class="recipe-info">
-				<div class="recipe-header">
-					<h3 class="recipe-name">{{ item.title }}</h3>
+		
+		<div class="scroll">
+			<div v-if="showResults">
+				<div class="h-center spread" style="padding: 0px 15px; margin-top: -5px">
+					<h3>Found results:</h3>
+					<span class="material-symbols-outlined" style="font-weight: 700" @click="showResults = false">close</span>
 				</div>
-
+				<div v-if="items.length === 0" class="no-results">
+					No recipes found.
+				</div>
+				<div class="vertical result-list">
+					<div v-for="item in items" :key="item.id" class="recipe-result-card">
+						<img class="recipe-image" :src="item.image" alt="Recipe Image" />
+						<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
+							<div class="vertical spread gap5">
+								<span class="recipe-name">{{ displayName(item.title) }}</span>
+								<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span>
+								<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
+							</div>
+							<div class="vertical spread">
+								<span @click="addToFavorites(item)" role="button" :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
+								<span @click="addToCalendar(item)" role="button" class="material-symbols-outlined">add</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	
+			<h3 class="space-after">Recently searched:</h3>
+			<div class="vertical result-list">
+			<div v-for="item in profilesStore.currentProfile.recentSearches" :key="item.id" class="recipe-result-card">
+				<img class="recipe-image" :src="item.image" alt="Recipe Image" />
+				<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
+					<div class="vertical spread gap5">
+						<span class="recipe-name">{{ displayName(item.title) }}</span>
+						<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span>
+						<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
+					</div>
+					<div class="vertical spread">
+						<span @click="addToFavorites(item)" role="button" :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
+						<span @click="addToCalendar(item)" role="button" class="material-symbols-outlined">add</span>
+					</div>
+				</div>
+			</div>
+	
+				<!-- <div class="recipe-info">
+					<div class="recipe-header">
+						<h3 class="recipe-name">{{ item.title }}</h3>
+					</div>
+				</div>
 				<div class="recipe-actions">
 					<button @click="addToFavorites(item)" class="icon-btn">
 						<span :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
@@ -152,39 +193,12 @@ const addToCalendarRecipe = ref();
 					<button @click="addToCalendar(item)" class="icon-btn">
 						<span class="material-symbols-outlined">add</span>
 					</button>
-				</div>
+				</div> -->
+	
+				<!-- <RouterLink :to="`/details/${item.id}`" class="see-full">
+					See full recipe &gt;
+				</RouterLink> -->
 			</div>
-
-			<RouterLink :to="`/details/${item.id}`" class="see-full">
-				See full recipe &gt;
-			</RouterLink>
-		</div>
-
-		<br>
-		<h2 class="results-heading">Recent searches:</h2>
-		<div v-for="item in profilesStore.currentProfile.recentSearches" :key="item.id" class="recipe-result-card">
-			<div class="recipe-image">
-				<img :src="item.image" alt="Recipe Image" />
-			</div>
-
-			<div class="recipe-info">
-				<div class="recipe-header">
-					<h3 class="recipe-name">{{ item.title }}</h3>
-				</div>
-
-				<div class="recipe-actions">
-					<button @click="addToFavorites(item)" class="icon-btn">
-						<span :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
-					</button>
-					<button @click="addToCalendar(item)" class="icon-btn">
-						<span class="material-symbols-outlined">add</span>
-					</button>
-				</div>
-			</div>
-
-			<RouterLink :to="`/details/${item.id}`" class="see-full">
-				See full recipe &gt;
-			</RouterLink>
 		</div>
 
 		<Modal ref="modal">
@@ -249,13 +263,6 @@ const addToCalendarRecipe = ref();
 
 <style scoped>
 
-/* .search-results-page { */
-	/* background-color: var(--light); */
-	/* min-height: 100vh; */
-	/* padding: 1.2rem; */
-	/* min-height: calc(100vh - 170px); */
-/* } */
-
 .page-title {
 	text-align: center;
 	font-size: 1.6rem;
@@ -265,56 +272,63 @@ const addToCalendarRecipe = ref();
 }
 
 .search-bar {
-	/* display: flex; */
-	/* justify-content: space-between; */
-	/* align-items: center; */
-	/* background: var(--light); */
+	padding: 5px;
 	gap: 10px;
 	border-radius: 12px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	/* padding: 0.4rem 0.8rem; */
+	border: 2px solid var(--medium);
+	box-shadow: 0 3px 0px 0px var(--medium);
 }
 
 .text-input{
-	height: 100%;
+	display: inline-block;
+	width: 80%;
 }
 
 .search-button{
-	padding: 10px;
-	/* aspect-ratio: 1; */
+	padding: 7px;
 }
 
-.filter-button {
+.scroll{
+	overflow: scroll;
+	padding: 10px;
+	margin: -10px;
+	max-height: 70vh;
+}
+
+.result-list {
+	gap: 10px;
+	padding-bottom: 20px;
+	margin-bottom: 30px;
+	border-bottom: 2px solid var(--medium);
+	animation: fade-in 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* .filter-button {
 	/* border: none; */
 	/* background: var(--dark); */
 	/* color: var(--light); */
 	/* border-radius: 8px; */
 	/* padding: 0.4rem 0.6rem; */
-	aspect-ratio: 1;
+	/* aspect-ratio: 1;
 	cursor: pointer;
 	transition: background 0.2s ease;
-}
+} */
+
 /* 
 .filter-btn:hover {
 	background: var(--dark);
 } */
 
-.results-heading {
-	font-size: 1rem;
-	font-weight: 600;
-	margin: 1.5rem 0 0.8rem 0;
-	color: var(--dark);
-}
-
 .recipe-result-card {
-	background-color: var(--light);
-	border-radius: 16px;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-	padding: 1rem;
-	margin-bottom: 1rem;
 	display: flex;
-	flex-direction: column;
-	gap: 0.7rem;
+	gap: 10px;
+	background-color: var(--light);
+	border-radius: 10px;
+	overflow: hidden;
+	border: 3px solid var(--main-color);
+	box-shadow: 0 4px 0px var(--main-color);
+	/* padding: 10px; */
+	/* height: 100px; */
 }
 
 .recipe-image {
@@ -323,52 +337,24 @@ const addToCalendarRecipe = ref();
 			var(--light) 10px,
 			var(--medium) 10px,
 			var(--light) 20px);
-	border-radius: 12px;
-	height: 90px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
-}
-
-.recipe-image img {
-	width: 100%;
-	height: 100%;
+	width: 30%;
 	object-fit: cover;
-	border-radius: 12px;
 }
 
-.recipe-info {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-}
-
-.recipe-header {
-	flex: 1;
-	color: var(--dark);
-}
 
 .recipe-name {
 	font-weight: 600;
-	font-size: 1.05rem;
-	color: var(--dark);
-	margin-bottom: 0.3rem;
-}
-
-.recipe-actions {
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-	margin-left: 0.5rem;
+	margin-right: 10px;
+	font-size: smaller;
+	width: 100%;
 }
 
 .icon-btn {
-	background: var(--light);
-	border: none;
-	border-radius: 8px;
-	padding: 0.3rem;
-	cursor: pointer;
+	/* background: var(--light); */
+	/* border: none; */
+	/* border-radius: 8px; */
+	/* padding: 0.3rem; */
+	/* cursor: pointer; */
 	transition: background 0.2s ease;
 }
 
@@ -378,11 +364,9 @@ const addToCalendarRecipe = ref();
 
 /* Link */
 .see-full {
-	text-align: right;
-	font-size: 0.9rem;
-	color: var(--dark);
 	text-decoration: none;
-	font-weight: 500;
+	color: var(--dark);
+	font-size: small;
 }
 
 .see-full:hover {

@@ -23,6 +23,10 @@
   gap: 10px !important;
 }
 
+.gap5{
+  gap: 5px;
+}
+
 .h-center{
   display: flex;
   align-items: center;

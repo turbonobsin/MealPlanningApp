@@ -55,7 +55,7 @@ onMounted(()=>{
     <div class="pop-window vertical">
         <h3>Add Recipe to Calendar</h3>
         <!-- <label for="recipe-title">Recipe</label> -->
-        <div class="flex space-before space-after">
+        <div class="flex spread gap10 space-before space-after">
             <span class="recipe-title smaller">
                 {{ recipe.title }}
             </span>
@@ -100,6 +100,7 @@ onMounted(()=>{
 
 .recipe-title{
     margin-right: 10px;
+    margin-top: 5px;
 }
 
 label{
