@@ -89,7 +89,7 @@ const addToCalendarRecipe = ref();
 	<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
 
 	<div class="recipe-actions">
-		<button @click="router.push({path:'/'})" class="icon-btn" style="margin-right:auto">
+		<button @click="router.back" class="icon-btn" style="margin-right:auto">
 			<span class="material-symbols-outlined">arrow_back</span>
 		</button>
 		<button @click="addToFavorites()" class="icon-btn">

@@ -35,4 +35,13 @@
 -   Adjust menu bar
 -   Apply brand styling to favorites page
 -   Adjust layout of favorites page
--   Redesign items in favorites list
+-   Redesign folders in favorites list
+
+# 11/11/2025
+-   Redesign recipe items in favorites list
+-   Modified favorite recipe item component
+-   Adjust functions in favorites page
+-   Adjusted Add To Calendar window
+
+*   Sort favorites by folders top?
+*   recipe prop in FavoriteRecipe.vue is not instance of Recipe, doesn't contain the same properties (warning + can't display cook time)

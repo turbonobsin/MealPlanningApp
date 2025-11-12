@@ -95,7 +95,7 @@ const deleteItem = (item) => {
         </div>
 
         <div v-else class="h-center gap10">
-          <input v-model="newFolderName" type="text" placeholder="Folder name" class="text-input create-input" />
+          <input v-model="newFolderName" type="text" placeholder="Folder name" class="text-input create-input" @keydown.enter="confirmCreateFolder"/>
           <button class="material-symbols-outlined color-button create-button" @click="confirmCreateFolder">check</button>
           <button class="material-symbols-outlined blank-button create-button" @click="cancelCreate">close</button>
         </div>
@@ -106,8 +106,9 @@ const deleteItem = (item) => {
         
         <div v-if="typeof item === 'number'" class="favorite-card card" draggable="true"
           @dragstart="(e) => dragStartEvent(e, item)">
-          <FavoriteRecipe :recipe="getRecipe(item)" draggable="true" @click="gotoRecipeDetails(item)"/>
-          <button class="delete-btn" @click.stop="deleteItem(item)">✕</button>
+          <FavoriteRecipe :recipe="getRecipe(item)" draggable="true">
+            <div class="material-symbols-outlined" @click="deleteItem(item)">delete</div>
+          </FavoriteRecipe>
         </div>
 
         <div v-else class="favorite-folder card h-center spread" @click="openFolder(item)" draggable="true" @dragstart="(e) => dragStartEvent(e, item)" @dragover.prevent @drop="dropRecipeIntoFolder(item)">
@@ -148,6 +149,11 @@ const deleteItem = (item) => {
   background-color: var(--light);
   outline-color: var(--main-color);
   box-shadow: 0px 5px 0px 0px var(--main-color);
+}
+
+.favorite-card{
+  outline-color: var(--dark);
+  box-shadow: 0px 5px 0px 0px var(--dark);
 }
 
 

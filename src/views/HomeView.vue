@@ -116,8 +116,8 @@ const addToCalendarRecipe = ref();
 
 
 <template>
-	<main class="search-results-page">
-		<h1 class="page-title">Hello, User!</h1>
+	<h1 class="page-title">Hello, User!</h1>
+	<main class="scroll-main">
 
 		<div class="search-bar h-center full-width space-after spread">
 			<input class="text-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" />
@@ -188,72 +188,71 @@ const addToCalendarRecipe = ref();
 		</div>
 
 		<Modal ref="modal">
-        <template #main>
-            <div>
-			<label>Maximum Cook Time:   </label><br>
-			<input type="number" placeholder="minutes" id="maxTime" v-model="maxTime"><br><br>
+			<template #main>
+				<div>
+				<label>Maximum Cook Time:   </label><br>
+				<input type="number" placeholder="minutes" id="maxTime" v-model="maxTime"><br><br>
 
-			<label>Excluded Foods:   </label><br>
-			<input type="text" id="excludedFoods" v-model="excludedFoods"><br><br>
+				<label>Excluded Foods:   </label><br>
+				<input type="text" id="excludedFoods" v-model="excludedFoods"><br><br>
 
-			<!--Meal Type-->
-			<p>Meal Type:</p>
-			<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
-			<label for="main_course">Main Course</label><br>
-			<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
-			<label for="side_dish">Side Dish</label><br>
-			<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
-			<label for="dessert">Dessert</label><br>
-			<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
-			<label for="appetizer">Appetizer</label><br>
-			<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
-			<label for="breakfast">Breakfast</label><br>
-			<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
-			<label for="beverage">Beverage</label><br><br>
+				<!--Meal Type-->
+				<p>Meal Type:</p>
+				<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
+				<label for="main_course">Main Course</label><br>
+				<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
+				<label for="side_dish">Side Dish</label><br>
+				<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
+				<label for="dessert">Dessert</label><br>
+				<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
+				<label for="appetizer">Appetizer</label><br>
+				<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
+				<label for="breakfast">Breakfast</label><br>
+				<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
+				<label for="beverage">Beverage</label><br><br>
 
-			<!--Intolerances-->
-			<label>Intolerances: </label><br>
-			<input type="checkbox" v-model="intolerances" value="Dairy">
-			<label for="intolerance1">Dairy</label><br>
-			<input type="checkbox" v-model="intolerances" value="Egg">
-			<label for="intolerance2">Egg</label><br>
-			<input type="checkbox" v-model="intolerances" value="Gluten">
-			<label for="intolerance3">Gluten</label><br>
-			<input type="checkbox" v-model="intolerances" value="Grain">
-			<label for="intolerance4">Grain</label><br>
-			<input type="checkbox" v-model="intolerances" value="Peanut">
-			<label for="intolerance5">Peanut</label><br>
-			<input type="checkbox" v-model="intolerances" value="Seafood">
-			<label for="intolerance6">Seafood</label><br>
-			<input type="checkbox" v-model="intolerances" value="Sesame">
-			<label for="intolerance7">Sesame</label><br>
-			<input type="checkbox" v-model="intolerances" value="Shellfish">
-			<label for="intolerance8">Shellfish</label><br>
-			<input type="checkbox" v-model="intolerances" value="Soy">
-			<label for="intolerance9">Soy</label><br>
-			<input type="checkbox" v-model="intolerances" value="Sulfite">
-			<label for="intolerance10">Sulfite</label><br>
-			<input type="checkbox" v-model="intolerances" value="TreeNut">
-			<label for="intolerance11">Tree Nut</label><br>
-			<input type="checkbox" v-model="intolerances" value="Wheat">
-			<label for="intolerance12">Wheat</label><br>
-		</div>
-        </template>
-        <template #footer>
-			<button class="medium-button" @click.stop="save">Apply</button>
-            <button class="medium-button" @click.stop="cancel">Cancel</button>
-        </template>
-	</Modal>
+				<!--Intolerances-->
+				<label>Intolerances: </label><br>
+				<input type="checkbox" v-model="intolerances" value="Dairy">
+				<label for="intolerance1">Dairy</label><br>
+				<input type="checkbox" v-model="intolerances" value="Egg">
+				<label for="intolerance2">Egg</label><br>
+				<input type="checkbox" v-model="intolerances" value="Gluten">
+				<label for="intolerance3">Gluten</label><br>
+				<input type="checkbox" v-model="intolerances" value="Grain">
+				<label for="intolerance4">Grain</label><br>
+				<input type="checkbox" v-model="intolerances" value="Peanut">
+				<label for="intolerance5">Peanut</label><br>
+				<input type="checkbox" v-model="intolerances" value="Seafood">
+				<label for="intolerance6">Seafood</label><br>
+				<input type="checkbox" v-model="intolerances" value="Sesame">
+				<label for="intolerance7">Sesame</label><br>
+				<input type="checkbox" v-model="intolerances" value="Shellfish">
+				<label for="intolerance8">Shellfish</label><br>
+				<input type="checkbox" v-model="intolerances" value="Soy">
+				<label for="intolerance9">Soy</label><br>
+				<input type="checkbox" v-model="intolerances" value="Sulfite">
+				<label for="intolerance10">Sulfite</label><br>
+				<input type="checkbox" v-model="intolerances" value="TreeNut">
+				<label for="intolerance11">Tree Nut</label><br>
+				<input type="checkbox" v-model="intolerances" value="Wheat">
+				<label for="intolerance12">Wheat</label><br>
+			</div>
+			</template>
+			<template #footer>
+				<button class="medium-button" @click.stop="save">Apply</button>
+				<button class="medium-button" @click.stop="cancel">Cancel</button>
+			</template>
+		</Modal>
 	</main>
 </template>
 
 <style scoped>
 
-.search-results-page {
+/* .search-results-page {
 	background-color: var(--light);
-	/* padding: 1.2rem; */
 	min-height: 100vh;
-}
+} */
 
 .page-title {
 	text-align: center;
