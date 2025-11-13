@@ -64,6 +64,7 @@ export class Recipe extends SearchResult {
     glutenFree = false;
     ketogenic = false;
     lowFodmap = false;
+    nutrition = {};
     sustainable = false;
     vegan = false;
     vegetarian = false;

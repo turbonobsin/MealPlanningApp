@@ -93,7 +93,7 @@ const sortedItems = computed(()=>{
   </div>
 
   <main class="scroll-main">
-    <section class="flex-wrap" style="gap: 15px">
+    <section class="flex-wrap" style="gap: 15px; padding-bottom: 100px">
 
       <div class="add-folder-card card">
 

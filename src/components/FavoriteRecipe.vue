@@ -3,6 +3,7 @@ import { Recipe, useProfilesStore } from '@/stores/profiles';
 import { ref } from 'vue';
 import AddRecipeToCalMenu from './calendar/AddRecipeToCalMenu.vue';
 import { useRouter } from 'vue-router';
+import { filterDiets } from '@/stores/states';
 
 
 const props = defineProps<{
@@ -47,9 +48,12 @@ let displayName = (function () {
 <template>
     <div v-if="recipe" class="recipe">
         <img class="recipe-image" :src="recipe.image" @click="gotoRecipeDetails(props.recipe.id)"></img>
-        <div @click="gotoRecipeDetails(props.recipe.id)">
+        <div class="vertical gap10" @click="gotoRecipeDetails(props.recipe.id)">
             <div class="smaller" style="font-weight: 600">{{ displayName }}</div>
-            <div class="small">{{ recipe.cookingMinutes }}</div>
+            <span class="small color-text h-center gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{props.recipe.readyInMinutes ?? '-'}} min  |  {{props.recipe.nutrition?.nutrients[0].amount ?? '-'}} Cal.</span>
+            <div class="h-center gap10">
+                <img v-for="icon in filterDiets(props.recipe.diets)" class="diet-icon" :src="icon.src"></img>
+            </div>
         </div>
         <div class="spread vertical" style="margin-left:auto">
             <div class="material-symbols-outlined" @click="addToCalendar($event, props.recipe)">add</div>
@@ -67,7 +71,6 @@ let displayName = (function () {
 
 .recipe{
     display: flex;
-    height: 80px;
     gap: 10px;
 }
 
@@ -79,5 +82,8 @@ let displayName = (function () {
     margin: -10px 0px -10px -10px;
 }
 
+.diet-icon {
+	height: 20px;
+}
 
 </style>

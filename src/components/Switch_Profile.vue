@@ -21,7 +21,7 @@ onMounted(() => {
     <div class="backdrop"></div>
     <div class="pop-window vertical">
         <h3>Select Profile</h3>
-        <div ref="profiles_list" class="scroll vertical space-after profiles-list">
+        <div ref="profiles_list" class="scroll vertical profiles-list">
             <div class="spread h-center" v-for="profile in profile_store.profiles" @click="profile_store.switchProfile(profile); show_switch_window = false">
                 <div class="h-center">
                     <div class="profile-icon" :style="{'background-color': profile.color}"></div>
@@ -51,6 +51,7 @@ onMounted(() => {
 .profiles-list{
     padding: 10px;
     padding-right: 20px;
+    margin-bottom: 10px;
 }
 
 </style>

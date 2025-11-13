@@ -181,12 +181,11 @@ button:active {
 .scroll-main{
     border-radius: 10px;
     overflow: scroll;
-    padding: 10px 10px 10vh 10px;
-    margin: 0px -10px;
-    max-height: 65vh;
-    /* so that the content fades away more */
-    /* min-height: calc(100vh - 240px); */
-    /* padding-bottom:360px; */
+    padding: 10px 5px 0px 5px;
+    margin: 0px -5px;
+    height: calc(100vh - 150px);
+    /* max-height: 65vh; */
+    /* bottom: 100px; */
 }
 
 .circle {

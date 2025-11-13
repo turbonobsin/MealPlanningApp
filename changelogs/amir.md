@@ -53,3 +53,10 @@
 -   Update favorite recipe item style
 
 *   Search results return condensed ver. of recipe - no cooktime or calcount available.
+
+# 11/13/2025
+-   Implement bug fixes on different platforms
+-   Adjusted excluding ingredients function
+-   Utilize updated Recent Recipes array to preview details on recipe cards in lists
+-   Design and implement icons to symbolize recipe diets
+-   

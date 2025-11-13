@@ -7,3 +7,57 @@ export const useStateStore = defineStore("state", () => {
 
     return {showSearchResults, resultsList};
 });
+
+export const diets = [
+	{
+		title: "gluten free",
+		src: "/gluten_free.svg"
+	},
+	{
+		title: "ovo vegetarian",
+		src: "/ovo_vegetarian.svg"
+	},
+	{
+		title: "lacto vegetarian",
+		src: "/lacto_vegetarian.svg"
+	},
+	{
+		title: "vegan",
+		src: "/vegan.svg"
+	},
+	{
+		title: "pescatarian",
+		src: "/pescatarian.svg"
+	},
+	{
+		title: "ketogenic",
+		src: "/ketogenic.svg"
+	},
+	{
+		title: "dairy free",
+		src: "/dairy_free.svg"
+	},
+	{
+		title: "empty_diets",
+		src: "/empty_diets.svg"
+	}
+]
+
+export function filterDiets(arr){
+    if (!arr) return [diets[7]];
+	let res = [];
+	let s = arr.find(v => { v.includes("vegetarian")});
+	if (arr.includes("vegan")){
+		res.push(diets[3]);
+	}
+	else if (s){
+		if (s.includes("ovo")) res.push(diets[1]);
+		else res.push(diets[2]);
+	}
+	if (arr.includes("pescatarian")) res.push(diets[4]);
+	if (arr.includes("gluten free")) res.push(diets[0]);
+	if (arr.includes("ketogenic")) res.push(diets[5]);
+	if (arr.includes("dairy free")) res.push(diets[6]);
+
+	return res;
+}

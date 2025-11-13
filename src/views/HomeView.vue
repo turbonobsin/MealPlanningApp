@@ -6,6 +6,7 @@ import { useCalendarStore } from '@/stores/calendar';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import Modal from '@/components/Modal.vue';
 import { useStateStore } from '@/stores/states';
+import { filterDiets } from '@/stores/states';
 import router, { apiKey } from '@/router';
 
 const profilesStore = useProfilesStore();
@@ -79,8 +80,18 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 	if (response.status === 200) {
 
 		let data = await response.json()
-		console.log(data)
-		items.value = data.results;
+		// console.log(data)
+		data.results.forEach(item => {
+			let temp = profilesStore.currentProfile.recentSearches.find(v => v.id === item.id);
+			if (temp){
+				items.value.push(temp);
+			}
+			else{
+				items.value.push(item);
+			}
+		});
+		console.log(items.value);
+		// items.value = data.results;
 		stateStore.resultsList = items.value;
 		stateStore.showSearchResults = true;
 		recipeSearchLength = data.results.length;
@@ -157,7 +168,10 @@ function displayName(s) {
 						<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
 							<div class="vertical spread gap5">
 								<span class="recipe-name">{{ displayName(item.title) }}</span>
-								<!-- <span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span> -->
+								<span class="small color-text h-center gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes ?? '-'}} min  |  {{item.nutrition?.nutrients[0].amount ?? '-'}} Cal.</span>
+								<div class="h-center gap10">
+									<img v-for="icon in filterDiets(item.diets)" class="diet-icon" :src="icon.src"></img>
+								</div>								
 								<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
 							</div>
 							<div class="vertical spread">
@@ -170,13 +184,16 @@ function displayName(s) {
 			</div>
 	
 			<div v-show="!stateStore.showSearchResults" class="vertical result-list">
-				<h3 class="space-after">Recently opened:</h3>
+				<h3 style="margin-bottom: 0">Recently viewed:</h3>
 				<div v-for="item in profilesStore.currentProfile.recentSearches" :key="item.id" class="recipe-result-card">
 					<img class="recipe-image" :src="item.image" alt="Recipe Image" />
 					<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
 						<div class="vertical spread gap5">
 							<span class="recipe-name">{{ displayName(item.title) }}</span>
-							<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes}} min  |  {{item.nutrition?.nutrients[0].amount ?? 0}} Cal.</span>
+							<span class="small color-text h-center gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes ?? '-'}} min  |  {{item.nutrition?.nutrients[0].amount ?? '-'}} Cal.</span>
+							<div class="h-center gap10">
+								<img v-for="icon in filterDiets(item.diets)" class="diet-icon" :src="icon.src"></img>
+							</div>
 							<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
 						</div>
 						<div class="vertical spread">
@@ -282,6 +299,7 @@ function displayName(s) {
 	border-radius: 12px;
 	border: 2px solid var(--medium);
 	box-shadow: 0 3px 0px 0px var(--medium);
+	background-color: var(--light);
 }
 
 .text-input{
@@ -297,15 +315,19 @@ function displayName(s) {
 	overflow: scroll;
 	padding: 10px;
 	margin: -10px;
-	max-height: 70vh;
+	max-height: 80vh;
 }
 
 .result-list {
 	gap: 10px;
 	padding-bottom: 20px;
-	margin-bottom: 30px;
+	margin-bottom: 100px;
 	border-bottom: 2px solid var(--medium);
 	animation: fade-in 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.diet-icon {
+	height: 20px;
 }
 
 /* .filter-button {
@@ -330,8 +352,8 @@ function displayName(s) {
 	background-color: var(--light);
 	border-radius: 10px;
 	overflow: hidden;
-	border: 3px solid var(--main-color);
-	box-shadow: 0 4px 0px var(--main-color);
+	border: 3px solid var(--dark);
+	box-shadow: 0 4px 0px var(--dark);
 	/* padding: 10px; */
 	/* height: 100px; */
 }

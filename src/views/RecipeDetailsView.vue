@@ -25,7 +25,7 @@ const note = ref(profileStore.getNote(recipeId.value));
 
 async function getRecipeDetails() {
 	let data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
-	// console.log(data);
+	console.log(data);
 	if (data){
 		title.value = data.title;
 		image.value = data.image;
