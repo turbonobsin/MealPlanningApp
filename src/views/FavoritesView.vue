@@ -75,6 +75,15 @@ const cancelCreate = () => {
 const deleteItem = (item) => {
   profileStore.removeFolderFromFavorites(item, currentFolder.value)
 }
+
+const sortedItems = computed(()=>{
+  return currentFolder.value.items.sort((a,b)=>{
+    let w1 = (typeof a == "number" ? 0 : 1);
+    let w2 = (typeof b == "number" ? 0 : 1);
+    return w2 - w1;
+  });
+});
+
 </script>
 
 <template>
@@ -101,7 +110,7 @@ const deleteItem = (item) => {
 
       </div>
 
-      <div class="favorite-item" v-for="item in currentFolder.items" :key="item.id || item">
+      <div class="favorite-item" v-for="item in sortedItems" :key="item.id || item">
         
         <div v-if="typeof item === 'number'" class="favorite-card card" draggable="true"
           @dragstart="(e) => dragStartEvent(e, item)">

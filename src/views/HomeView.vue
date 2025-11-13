@@ -164,22 +164,22 @@ function displayName(s) {
 				</div>
 			</div>
 	
-			<h3 class="space-after">Recently searched:</h3>
-			<div class="vertical result-list">
-			<div v-for="item in profilesStore.currentProfile.recentSearches" :key="item.id" class="recipe-result-card">
-				<img class="recipe-image" :src="item.image" alt="Recipe Image" />
-				<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
-					<div class="vertical spread gap5">
-						<span class="recipe-name">{{ displayName(item.title) }}</span>
-						<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span>
-						<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
-					</div>
-					<div class="vertical spread">
-						<span @click="addToFavorites(item)" role="button" :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
-						<span @click="addToCalendar(item)" role="button" class="material-symbols-outlined">add</span>
+			<div v-show="!showResults" class="vertical result-list">
+				<h3 class="space-after">Recently searched:</h3>
+				<div v-for="item in profilesStore.currentProfile.recentSearches" :key="item.id" class="recipe-result-card">
+					<img class="recipe-image" :src="item.image" alt="Recipe Image" />
+					<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
+						<div class="vertical spread gap5">
+							<span class="recipe-name">{{ displayName(item.title) }}</span>
+							<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span>
+							<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
+						</div>
+						<div class="vertical spread">
+							<span @click="addToFavorites(item)" role="button" :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
+							<span @click="addToCalendar(item)" role="button" class="material-symbols-outlined">add</span>
+						</div>
 					</div>
 				</div>
-			</div>
 	
 				<!-- <div class="recipe-info">
 					<div class="recipe-header">
