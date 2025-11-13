@@ -188,6 +188,8 @@ function removeExclusion(i){
     bottom:-.3em;
     position:absolute;
     border: 2px solid var(--dark);
+    flex-shrink: 0;
+    flex-grow: 0;
 }
 
 .cancel{
@@ -209,8 +211,9 @@ function removeExclusion(i){
 #profile_color{
     border: none;
     border-radius: 50%;
-    width: 12em;
-    height: 12em;
+    width: 5em;
+    height: 5em;
+    scale: 2;
     position: relative;
 }
 
