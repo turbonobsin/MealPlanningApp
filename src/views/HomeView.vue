@@ -6,12 +6,15 @@ import { useCalendarStore } from '@/stores/calendar';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import Modal from '@/components/Modal.vue';
 import { useStateStore } from '@/stores/states';
+import router from '@/router';
 
 const profilesStore = useProfilesStore();
 const stateStore = useStateStore();
 
 
-const apiKey = "8091b135029642499cfa2a83e6513777";
+// const apiKey = "8091b135029642499cfa2a83e6513777";
+let apiKey = "72909a71317946c88a692ee6c6ed461a";
+if(router.currentRoute.value.query.api == "jessica") apiKey = "8091b135029642499cfa2a83e6513777";
 const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
