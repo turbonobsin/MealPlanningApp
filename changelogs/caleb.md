@@ -97,3 +97,6 @@
 - hopefully fixed edit profile color to not tint other colors in safari
 - changed favorites page to be sorted by folders first
 - fixed deleting only profile would cause the app to be glitched
+- fixed duplicated recent search results when viewing the same one
+- added debug global function "clearRecentSearches"
+- added Amir's apiKey but if you add ?api=jessica then it uses Jessica's apiKey

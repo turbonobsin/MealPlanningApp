@@ -778,3 +778,9 @@ window.PROFILES = {
 };
 
 // console.log(new Date().toLocaleString([],{month:"long"}));
+
+window.clearRecentSearches = ()=>{
+    let s = useProfilesStore();
+    s.currentProfile.recentSearches = [];
+    s.saveProfile();
+};

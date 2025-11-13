@@ -3,11 +3,10 @@ import { RouterLink } from 'vue-router';
 import { ref , reactive, onMounted, computed } from 'vue'
 import { useProfilesStore } from '@/stores/profiles';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
-import router from '@/router';
+import router, { apiKey } from '@/router';
 
 const props = defineProps({ recipeId: String })
 
-const apiKey = "8091b135029642499cfa2a83e6513777";
 const title = ref("")
 const image = ref("")
 const cookTime = ref("")
@@ -27,7 +26,7 @@ const note = ref(profileStore.getNote(recipeId.value));
 async function getRecipeDetails() {
 
 	let url = new URL(`https://api.spoonacular.com/recipes/${recipeId.value}/information?includeNutrition=true`);
-    url.searchParams.set("apiKey", apiKey);
+    url.searchParams.set("apiKey", apiKey.value);
 	
 	const options = {
 		method: "GET",
@@ -45,13 +44,15 @@ async function getRecipeDetails() {
 		title.value = data.title;
 		image.value = data.image;
 		cookTime.value = data.readyInMinutes;
-		calories = data.nutrition.nutrients[0].amount;
+		calories = data.nutrition?.nutrients[0].amount;
 		servings = data.servings;
 		ingredients = data.extendedIngredients;
 		instructions = data.analyzedInstructions;
 
-		profileStore.currentProfile.recentSearches.unshift(data);
-		profileStore.saveProfile();
+		if(!profileStore.currentProfile.recentSearches.some(v=>v.id == data.id)){
+			profileStore.currentProfile.recentSearches.unshift(data);
+			profileStore.saveProfile();
+		}
 	} else {
 		console.log("request failed")
 	}

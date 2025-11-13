@@ -6,15 +6,11 @@ import { useCalendarStore } from '@/stores/calendar';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import Modal from '@/components/Modal.vue';
 import { useStateStore } from '@/stores/states';
-import router from '@/router';
+import router, { apiKey } from '@/router';
 
 const profilesStore = useProfilesStore();
 const stateStore = useStateStore();
 
-
-// const apiKey = "8091b135029642499cfa2a83e6513777";
-let apiKey = "72909a71317946c88a692ee6c6ed461a";
-if(router.currentRoute.value.query.api == "jessica") apiKey = "8091b135029642499cfa2a83e6513777";
 const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
@@ -55,7 +51,7 @@ function addIntolerances(checkbox) {
 async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
-	url.searchParams.set("apiKey", apiKey);
+	url.searchParams.set("apiKey", apiKey.value);
 	url.searchParams.set("query", searchTerm);
 	if (maxTime != undefined && maxTime != "") {
 		url.searchParams.set("maxReadyTime", maxTime);
@@ -180,7 +176,7 @@ function displayName(s) {
 					<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
 						<div class="vertical spread gap5">
 							<span class="recipe-name">{{ displayName(item.title) }}</span>
-							<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes}} min  |  {{item.nutrition.nutrients[0].amount}} Cal.</span>
+							<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes}} min  |  {{item.nutrition?.nutrients[0].amount ?? 0}} Cal.</span>
 							<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
 						</div>
 						<div class="vertical spread">

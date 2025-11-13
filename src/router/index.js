@@ -5,6 +5,7 @@ import ProfileView from '@/views/ProfileView.vue';
 import FavoritesView from '@/views/FavoritesView.vue';
 import CalendarView from '@/views/CalendarView.vue';
 import SettingsView from '@/views/SettingsView.vue';
+import { computed } from 'vue';
 
 const router = createRouter({
 	// history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,3 +56,16 @@ const router = createRouter({
 });
 
 export default router
+
+// const apiKey = "8091b135029642499cfa2a83e6513777";
+export let apiKey = computed(()=>{
+	let key = "72909a71317946c88a692ee6c6ed461a";
+	if(router.currentRoute.value.query.api == "jessica"){
+		key = "8091b135029642499cfa2a83e6513777";
+		console.warn("Set apiKey to Jessica's");
+	}
+	else{
+		console.warn("Set apiKey to Amir's");
+	}
+	return key;
+});
