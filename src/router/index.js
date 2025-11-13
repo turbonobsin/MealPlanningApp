@@ -59,6 +59,12 @@ export default router
 
 // const apiKey = "8091b135029642499cfa2a83e6513777";
 export let apiKey = computed(()=>{
+	let custom = localStorage.getItem("customAPIKey");
+	if(custom){
+		console.warn("using customAPIKey",custom);
+		return custom;
+	}
+	
 	let key = "72909a71317946c88a692ee6c6ed461a";
 	if(router.currentRoute.value.query.api == "jessica"){
 		key = "8091b135029642499cfa2a83e6513777";
