@@ -6,7 +6,7 @@
 
 # 10/21/25
 - changed recipes in folders to be ids instead of classes
-j
+
 # 10/22/25
 - added the rest of the properties to the Recipe class
 

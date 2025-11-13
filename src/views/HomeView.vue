@@ -84,7 +84,7 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		recipeSearchLength = data.results.length;
 		console.log(recipeSearchLength)
 
-		profilesStore.saveSearchResults(data.results);
+		// profilesStore.saveSearchResults(data.results);
 	} else {
 		console.log("request failed")
 	}
