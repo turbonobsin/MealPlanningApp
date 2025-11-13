@@ -190,6 +190,7 @@ function removeExclusion(i){
     border: 2px solid var(--dark);
     flex-shrink: 0;
     flex-grow: 0;
+    aspect-ratio: 1;
 }
 
 .cancel{
