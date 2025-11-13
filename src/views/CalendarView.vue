@@ -231,7 +231,7 @@ provide("addToCalendarMenuOpen",addToCalendarMenuOpen);
     --bg: transparent;
 }
 .calendar2 > div.today {
-    --accent: var(--red);
+    --accent: var(--medium);
     /* --color: var(--light); */
 }
 

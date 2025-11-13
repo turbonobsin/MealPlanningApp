@@ -61,30 +61,9 @@ const day = computed(()=>{
     justify-content:space-between;
 }
 
-.calendar2 {
-    display: flex;
-    flex-wrap: wrap;
-    height: max-content;
-}
-
-.calendar2 > div {
-    width: calc(100% / 7);
-    height: 3em;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:5px;
-    aspect-ratio: 5;
-    --accent: transparent;
-    --bg: transparent;
-}
-.calendar2 > div.today {
-    --accent: var(--red);
-    /* --color: var(--light); */
-}
 .selected{
     --bg: var(--main-color);
+    --accent: var(--main-color);
     --color: var(--light-perma);
 }
 

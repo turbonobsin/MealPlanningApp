@@ -1,11 +1,11 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import { ref , reactive, onMounted } from 'vue'
+import { ref , reactive, onMounted, computed } from 'vue'
 import { useProfilesStore } from '@/stores/profiles';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import router from '@/router';
 
-const props = defineProps({ recipeId: Number })
+const props = defineProps({ recipeId: String })
 
 const apiKey = "8091b135029642499cfa2a83e6513777";
 const title = ref("")
@@ -18,11 +18,15 @@ let instructions = ref([])
 
 const profileStore = useProfilesStore();
 
-const note = ref(profileStore.getNote(props.recipeId));
+const recipeId = computed(()=>{
+	return parseInt(props.recipeId);
+});
+
+const note = ref(profileStore.getNote(recipeId.value));
 
 async function getRecipeDetails() {
 
-	let url = new URL(`https://api.spoonacular.com/recipes/${props.recipeId}/information?includeNutrition=true`);
+	let url = new URL(`https://api.spoonacular.com/recipes/${recipeId.value}/information?includeNutrition=true`);
     url.searchParams.set("apiKey", apiKey);
 	
 	const options = {
@@ -55,19 +59,19 @@ onMounted(() => {
 })
 
 function addToFavorites() {
-	if(profileStore.isFavorited(props.recipeId)){
-		profileStore.removeRecipeFromFavoritesAnywhere(props.recipeId,true);
+	if(profileStore.isFavorited(recipeId.value)){
+		profileStore.removeRecipeFromFavoritesAnywhere(recipeId.value,true);
 	}
 	else{
-		profileStore.addItemToFavorites(props.recipeId);
+		profileStore.addItemToFavorites(recipeId.value);
 		console.log("Added to Favorites Successfully!")
 	}
 }
 
 function addToCalendar() {
-	let recipe = profileStore.getRecipeData(props.recipeId);
+	let recipe = profileStore.getRecipeData(recipeId.value);
 	if(!recipe){
-		console.warn("failed to open add to calendar menu, no recipe data was found for this recipe id",props.recipeId);
+		console.warn("failed to open add to calendar menu, no recipe data was found for this recipe id",recipeId.value);
 		return;
 	}
 
