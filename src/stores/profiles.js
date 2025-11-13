@@ -383,6 +383,13 @@ export const useProfilesStore = defineStore("profiles", () => {
 
         // update list of all profiles
         localStorage.setItem("profiles", JSON.stringify(profiles.map(v => v.name)));
+
+        // 
+
+        if(profiles.length == 0){
+            console.log("deleted the only profile...");
+            createDefaultProfile();
+        }
     }
 
     /**

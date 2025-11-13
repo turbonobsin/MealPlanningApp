@@ -50,7 +50,7 @@ async function getRecipeDetails() {
 		ingredients = data.extendedIngredients;
 		instructions = data.analyzedInstructions;
 
-		profileStore.currentProfile.recentSearches.push(data);
+		profileStore.currentProfile.recentSearches.unshift(data);
 		profileStore.saveProfile();
 	} else {
 		console.log("request failed")

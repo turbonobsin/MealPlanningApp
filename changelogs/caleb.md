@@ -88,3 +88,12 @@
 
 # 11/12/25
 - fixed action buttons on cards in favorites view to be aligned to the right side
+
+# 11/13/25
+- fixed some things
+- changed recent recipes to be added only when you go to the details page
+- changed recent recipes to be the full recipes
+- hopefully fixed edit profile color button to not change in aspect ratio ever
+- hopefully fixed edit profile color to not tint other colors in safari
+- changed favorites page to be sorted by folders first
+- fixed deleting only profile would cause the app to be glitched

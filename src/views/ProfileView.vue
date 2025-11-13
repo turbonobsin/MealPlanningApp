@@ -81,7 +81,8 @@ function toggleColorEdit(e){
     }
 
     else{
-        currentProfile.value.color = colorInput.value.value;
+        // currentProfile.value.color = colorInput.value.value;
+        currentProfile.value.color = colorBeforeSave.value;
         profile_store.saveProfile();
     }
 }
@@ -108,6 +109,8 @@ function removeExclusion(i){
     profile_store.saveProfile();
 }
 
+const colorBeforeSave = ref(currentProfile.value.color);
+
 </script>
 
 <template>
@@ -117,11 +120,11 @@ function removeExclusion(i){
     </div>
     <main class="scroll-main">
         <div class="circle-container" style="position:relative">
-            <div class="profile-color center circle">
-                <input ref="color_input" :disabled="!edit_color" type="color" id="profile_color" class="circle" :value="convertHexTo6(currentProfile.color)"></input>
+            <div class="profile-color center circle" :style="{backgroundColor:colorBeforeSave}">
+                <input ref="color_input" :disabled="!edit_color" type="color" id="profile_color" class="circle" :value="convertHexTo6(colorBeforeSave)" @input="e=>{colorBeforeSave = e.target.value}"></input>
             </div>
             <div :class="{'material-symbols-outlined': true, 'color-edit': true, 'circle': true, 'center': true, 'enabled': edit_color}" @click="toggleColorEdit">{{ (edit_color) ? 'check' : 'edit'}}</div>
-            <div v-show="edit_color" class="material-symbols-outlined color-edit cancel circle center" @click="edit_color=false">close</div>
+            <div v-show="edit_color" class="material-symbols-outlined color-edit cancel circle center" @click="edit_color=false; colorBeforeSave = currentProfile.color">close</div>
         </div>
 
         <div class="h-center">
@@ -183,14 +186,13 @@ function removeExclusion(i){
     background-color: var(--dark);
     color: var(--light);
     font-size: 1.2em;
-    padding: .3em;
     right:-.5em;
     bottom:-.3em;
     position:absolute;
     border: 2px solid var(--dark);
-    flex-shrink: 0;
-    flex-grow: 0;
     aspect-ratio: 1;
+    width:1.6em;
+    height:1.6em;
 }
 
 .cancel{
@@ -214,8 +216,9 @@ function removeExclusion(i){
     border-radius: 50%;
     width: 5em;
     height: 5em;
-    scale: 2;
+    /* scale: 2; */
     position: relative;
+    opacity:0;
 }
 
 .list-item{
