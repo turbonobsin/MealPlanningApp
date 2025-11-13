@@ -24,6 +24,19 @@ const recipeId = computed(()=>{
 const note = ref(profileStore.getNote(recipeId.value));
 
 async function getRecipeDetails() {
+	let data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
+	// console.log(data);
+	if (data){
+		title.value = data.title;
+		image.value = data.image;
+		cookTime.value = data.readyInMinutes;
+		calories = data.nutrition.nutrients[0].amount;
+		servings = data.servings;
+		ingredients = data.extendedIngredients;
+		instructions = data.analyzedInstructions;
+		console.log("Loaded stored recipe");
+		return;
+	}
 
 	let url = new URL(`https://api.spoonacular.com/recipes/${recipeId.value}/information?includeNutrition=true`);
     url.searchParams.set("apiKey", apiKey.value);
@@ -39,7 +52,7 @@ async function getRecipeDetails() {
 
 	if (response.status === 200) {
 
-		let data = await response.json()
+		data = await response.json()
 		console.log(data)
 		title.value = data.title;
 		image.value = data.image;
