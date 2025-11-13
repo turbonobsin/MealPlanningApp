@@ -240,7 +240,7 @@ export class Profile {
 
     /**
      * The list of the most recent search results
-     * @type {SearchResult[]}
+     * @type {Recipe[]}
      */
     recentSearches = [];
 }

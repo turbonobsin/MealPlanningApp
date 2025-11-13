@@ -90,10 +90,10 @@ function toggleColorEdit(e){
 function addExclusion(){
     let s = excludeInput.value.value;
     if (s){
-        if (s.includes(',')){
-            s = s.replaceAll(',', '');
-        }
-        let exclusions = s.split(" ");
+        // if (s.includes(',')){
+        //     s = s.replaceAll(',', '');
+        // }
+        let exclusions = s.replaceAll(", ",",").split(",");
         exclusions.forEach(item => {
             if (item){
                 currentProfile.value.exclusions.push(item);

@@ -5,18 +5,20 @@ import { Recipe, useProfilesStore } from '@/stores/profiles';
 import { useCalendarStore } from '@/stores/calendar';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import Modal from '@/components/Modal.vue';
+import { useStateStore } from '@/stores/states';
+
+const profilesStore = useProfilesStore();
+const stateStore = useStateStore();
+
 
 const apiKey = "8091b135029642499cfa2a83e6513777";
-const items = ref([])
+const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
 const excludedFoods = ref("");
 const intolerances = ref([]);
 let recipeSearchLength = ref("");
-const showResults = ref(false);
 
-const profilesStore = useProfilesStore();
-const calendarStore = useCalendarStore();
 //let meal_type = ref("")
 
 let checkboxState;
@@ -80,13 +82,17 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		let data = await response.json()
 		console.log(data)
 		items.value = data.results;
-		showResults.value = true;
+		stateStore.resultsList = items.value;
+		stateStore.showSearchResults = true;
 		recipeSearchLength = data.results.length;
 		console.log(recipeSearchLength)
-
+		
 		// profilesStore.saveSearchResults(data.results);
 	} else {
 		console.log("request failed")
+		// items.value = profilesStore.currentProfile.recentSearches;
+		// stateStore.resultsList = items.value;
+		// stateStore.showSearchResults = true;
 	}
 
 }
@@ -138,10 +144,10 @@ function displayName(s) {
 		<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
 		
 		<div class="scroll">
-			<div v-if="showResults">
+			<div v-if="stateStore.showSearchResults">
 				<div class="h-center spread" style="padding: 0px 15px; margin-top: -5px">
 					<h3>Found results:</h3>
-					<span class="material-symbols-outlined" style="font-weight: 700" @click="showResults = false">close</span>
+					<span class="material-symbols-outlined" style="font-weight: 700" @click="stateStore.showSearchResults = false">close</span>
 				</div>
 				<div v-if="items.length === 0" class="no-results">
 					No recipes found.
@@ -152,7 +158,7 @@ function displayName(s) {
 						<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
 							<div class="vertical spread gap5">
 								<span class="recipe-name">{{ displayName(item.title) }}</span>
-								<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span>
+								<!-- <span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span> -->
 								<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
 							</div>
 							<div class="vertical spread">
@@ -164,14 +170,14 @@ function displayName(s) {
 				</div>
 			</div>
 	
-			<div v-show="!showResults" class="vertical result-list">
-				<h3 class="space-after">Recently searched:</h3>
+			<div v-show="!stateStore.showSearchResults" class="vertical result-list">
+				<h3 class="space-after">Recently opened:</h3>
 				<div v-for="item in profilesStore.currentProfile.recentSearches" :key="item.id" class="recipe-result-card">
 					<img class="recipe-image" :src="item.image" alt="Recipe Image" />
 					<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
 						<div class="vertical spread gap5">
 							<span class="recipe-name">{{ displayName(item.title) }}</span>
-							<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>N/A  |  N/A Cal.</span>
+							<span class="small color-text h-center space-after gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes}} min  |  {{item.nutrition.nutrients[0].amount}} Cal.</span>
 							<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
 						</div>
 						<div class="vertical spread">
