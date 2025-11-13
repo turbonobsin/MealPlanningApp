@@ -24,8 +24,10 @@ function moveSelector(){
 #menu_bar{
     position: fixed;
     gap: 15px;
-    justify-self: center;
+    /* justify-self: center; */
     bottom: 20px;
+    left: 10vw;
+    right: 10vw;
     padding: .3em;
     border: 3px solid var(--medium);
     border-radius: 20px;

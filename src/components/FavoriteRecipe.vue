@@ -1,14 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { Recipe, useProfilesStore } from '@/stores/profiles';
 import { ref } from 'vue';
 import AddRecipeToCalMenu from './calendar/AddRecipeToCalMenu.vue';
 import { useRouter } from 'vue-router';
 
 
-const props = defineProps({
-    recipe: Recipe
-});
-
+const props = defineProps<{
+    recipe:Recipe
+}>();
 // console.log(props.recipe);
 
 const profile_store = useProfilesStore();
