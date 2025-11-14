@@ -96,6 +96,12 @@ button:active {
     color: var(--light);
 }
 
+button:disabled{
+    opacity:0.5;
+    filter:grayscale(0.5);
+    pointer-events:none;
+}
+
 .small {
     font-size: small;
 }
@@ -164,6 +170,7 @@ button:active {
     padding: 15px;
     z-index: 2;
     animation: pop .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-height:max-content;
 }
 
 .pop-window h3 {

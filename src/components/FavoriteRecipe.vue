@@ -59,7 +59,7 @@ let displayName = (function () {
             <div class="material-symbols-outlined" @click="addToCalendar($event, props.recipe)">add</div>
             <slot></slot>
         </div>
-        <AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
+        <AddRecipeToCalMenu mode="add" v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()" :custom-meal-type="undefined"></AddRecipeToCalMenu>
     </div>
     <div v-else>
         Not Available

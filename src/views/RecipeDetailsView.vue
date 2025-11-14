@@ -1,9 +1,10 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import { ref , reactive, onMounted, computed } from 'vue'
-import { useProfilesStore } from '@/stores/profiles';
+import { ref , reactive, onMounted, computed, onUnmounted } from 'vue'
+import { Recipe, useProfilesStore } from '@/stores/profiles';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import router, { apiKey } from '@/router';
+import { useStateStore } from '@/stores/states';
 
 const props = defineProps({ recipeId: String })
 
@@ -16,10 +17,13 @@ let ingredients = ref([])
 let instructions = ref([])
 
 const profileStore = useProfilesStore();
+const stateStore = useStateStore();
 
 const recipeId = computed(()=>{
 	return parseInt(props.recipeId);
 });
+
+const recipe = ref();
 
 const note = ref(profileStore.getNote(recipeId.value));
 
@@ -35,6 +39,7 @@ async function getRecipeDetails() {
 		ingredients = data.extendedIngredients;
 		instructions = data.analyzedInstructions;
 		console.log("Loaded stored recipe");
+		recipe.value = data;
 		return;
 	}
 
@@ -53,6 +58,7 @@ async function getRecipeDetails() {
 	if (response.status === 200) {
 
 		data = await response.json()
+		recipe.value = data;
 		console.log(data)
 		title.value = data.title;
 		image.value = data.image;
@@ -71,9 +77,13 @@ async function getRecipeDetails() {
 	}
 }
 
-onMounted(() => {
-	getRecipeDetails();
-})
+onMounted(async () => {
+	await getRecipeDetails();
+	stateStore.currentRecipe = recipe.value;
+});
+onUnmounted(()=>{
+	stateStore.currentRecipe = undefined;
+});
 
 function addToFavorites() {
 	if(profileStore.isFavorited(recipeId.value)){
@@ -95,12 +105,16 @@ function addToCalendar() {
 	console.log("Added to Calendar")
 
 	// calendarStore.addRecipe(recipe.id,prompt("Enter mealType: 'breakfast', 'lunch', 'dinner'",'lunch'),new Date());
-	addToCalendarMenuOpen.value = true;
-	addToCalendarRecipe.value = recipe;
+	stateStore.addToCalendarMenuOpen = true;
+	stateStore.addToCalendarData = {
+		recipe,
+		mealType:"breakfast",
+		date:new Date(),
+	};
 }
 
-const addToCalendarMenuOpen = ref(false);
-const addToCalendarRecipe = ref();
+// const addToCalendarMenuOpen = ref(false);
+// const addToCalendarRecipe = ref();
 
 </script>
 
@@ -108,7 +122,8 @@ const addToCalendarRecipe = ref();
     <h1>{{title}}</h1>
 
 	<main class="scroll-main">
-		<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
+		<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && !stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="new Date()"></AddRecipeToCalMenu>
+		<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="stateStore.addToCalendarData.date" :custom-meal-type="stateStore.addToCalendarData.mealType" :custom-time="stateStore.addToCalendarData.date"></AddRecipeToCalMenu>
 
 		<div class="recipe-actions">
 			<button @click="router.back" class="icon-btn" style="margin-right:auto">

@@ -4,7 +4,7 @@ import CalDate from '@/components/calendar/CalDate.vue';
 import CalendarSlideUpData from '@/components/calendar/CalendarSlideUpData.vue';
 import CalMonthItem from '@/components/calendar/CalMonthItem.vue';
 import { useCalendarStore } from '@/stores/calendar';
-import { useProfilesStore } from '@/stores/profiles';
+import { MealType, Recipe, useProfilesStore } from '@/stores/profiles';
 import { getMonthLength, weekday, weekdayAbbr } from '@/util';
 import { computed, provide, ref, toRaw, Transition } from 'vue';
 
@@ -85,7 +85,13 @@ provide("clickDate",clickDate);
 const selectedDate = ref<Date>();
 
 const addToCalendarMenuOpen = ref(false);
+const addToCalendarRecipe = ref<Recipe>();
+const addToCalendarDate = ref<Date>();
+const addToCalendarMealType = ref<MealType>();
 provide("addToCalendarMenuOpen",addToCalendarMenuOpen);
+provide("addToCalendarRecipe",addToCalendarRecipe);
+provide("addToCalendarDate",addToCalendarDate);
+provide("addToCalendarMealType",addToCalendarMealType);
 
 </script>
 
@@ -155,8 +161,7 @@ provide("addToCalendarMenuOpen",addToCalendarMenuOpen);
             </div>
         </Transition>
 
-        <AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="profileStore.getDummyRecipe(50)" :date="new Date()"></AddRecipeToCalMenu>
-        
+        <AddRecipeToCalMenu mode="edit" @add-recipe="(date)=>selectedDate = date" v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="addToCalendarDate"></AddRecipeToCalMenu>
     </main>
 </template>
 

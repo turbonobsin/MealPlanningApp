@@ -30,9 +30,9 @@ let data = computed(()=>{
     <div class="slide-up-details">
         <slot :data="calData"></slot>
         <div class="three-col alt-layout">
-            <CalMealItem :date heading="Breakfast" :data="calData" :meal="calData?.breakfast"></CalMealItem>
-            <CalMealItem :date heading="Lunch" :data="calData" :meal="calData?.lunch"></CalMealItem>
-            <CalMealItem :date heading="Dinner" :data="calData" :meal="calData?.dinner"></CalMealItem>
+            <CalMealItem :date heading="Breakfast" :data="calData" :meal="calData?.breakfast" meal-type="breakfast"></CalMealItem>
+            <CalMealItem :date heading="Lunch" :data="calData" :meal="calData?.lunch" meal-type="lunch"></CalMealItem>
+            <CalMealItem :date heading="Dinner" :data="calData" :meal="calData?.dinner" meal-type="dinner"></CalMealItem>
             <!-- <div class="meal-item">
                 <div class="meal-column">
                     <h3>Lunch</h3>
@@ -65,7 +65,8 @@ let data = computed(()=>{
 .three-col{
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
-    gap:0.25em;
+    /* gap:0.25em; */
+    gap:1em;
 }
 .three-col.alt-layout{
     grid-template-columns:unset;

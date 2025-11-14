@@ -151,7 +151,7 @@ function displayName(s) {
 			<button class="material-symbols-outlined search-button dark-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
 		</div>
 
-		<AddRecipeToCalMenu v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
+		<AddRecipeToCalMenu mode="add" v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
 		
 		<div class="scroll">
 			<div v-if="stateStore.showSearchResults">

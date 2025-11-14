@@ -3,14 +3,18 @@ import { CalendarDate, DateMeal, MealType, useProfilesStore } from '@/stores/pro
 import { computed, provide, ref } from 'vue';
 import CalRecipeOptionsMenu from './CalRecipeOptionsMenu.vue';
 import AddRecipeToCalMenu from './AddRecipeToCalMenu.vue';
+import { useStateStore } from '@/stores/states';
+import router from '@/router';
 
 const profileStore = useProfilesStore();
+const stateStore = useStateStore();
 
 const props = defineProps<{
     data?:CalendarDate;
     meal?:DateMeal;
     heading:string;
     date:Date;
+    mealType:MealType;
 }>();
 
 const recipe = computed(()=>{
@@ -25,11 +29,22 @@ const recipe = computed(()=>{
 
 const optionsOpen = ref(false);
 
+function selectRecipe(){
+    stateStore.selectingRecipe = {
+        date:props.date,
+        meal:props.mealType,
+        path:router.currentRoute.value.path
+    };
+    router.push({
+        path:"/favorites"
+    });
+}
+
 </script>
 
 <template>
     <div class="meal-item">
-        <CalRecipeOptionsMenu v-if="optionsOpen" v-model="optionsOpen" :recipe :date :time="new Date(meal.time)" :meal-type="meal.mealType"></CalRecipeOptionsMenu>
+        <CalRecipeOptionsMenu @close="optionsOpen = false" v-if="optionsOpen && meal" v-model="optionsOpen" :recipe :date :time="new Date(meal?.time)" :meal-type="meal?.mealType"></CalRecipeOptionsMenu>
         <div class="meal-column">
             <div class="flx-sb flx-ac">
                 <h3>{{ heading }}</h3>
@@ -42,14 +57,16 @@ const optionsOpen = ref(false);
                     <!-- <div class="material-symbols-outlined remove-recipe" @click="calendarStore.removeRecipe(selectedDate,meal.mealType)">close</div> -->
                 </div>
             </div>
-            <div v-else>
-                Nothing planned yet.
+            <div v-else class="">
+                <div>Nothing planned yet.</div>
             </div>
             <!-- <slot name="meal" :meal="meal" :data="data" :recipe="profileStore.getRecipeData(calData?.breakfast.recipeId)"></slot> -->
         </div>
         <!-- <div></div> -->
         <!-- <slot name="img" :recipe="profileStore.getRecipeData(calData?.breakfast.recipeId)"></slot> -->
-        <img v-if="recipe" :src="recipe.image"></img>
+        <!-- <img v-if="recipe" :src="recipe.image"></img> -->
+        <div v-if="recipe" class="img" :style="{backgroundImage:`url(${recipe.image})`}"></div>
+        <button v-else class="blank-button material-symbols-outlined add-button" @click="selectRecipe">add</button>
     </div>
     <!-- <div v-else>
         <div class="meal-column">
@@ -64,6 +81,12 @@ const optionsOpen = ref(false);
 </template>
 
 <style scoped>
+
+.add-button{
+    width:100%;
+    max-width:unset;
+    box-sizing:border-box;
+}
 
 .configure-meal{
 
@@ -96,9 +119,10 @@ const optionsOpen = ref(false);
     flex-grow:1;
 }
 
-.meal-item img{
+.meal-item .img{
     border-radius:5px;
-    margin-top:auto;
+    background-size:cover;
+    /* margin-top:auto; */
 }
 
 .meal-item{
@@ -106,6 +130,9 @@ const optionsOpen = ref(false);
     grid-template-columns:1fr 0.8fr;
     gap:0.5em;
     min-height:100px;
+}
+.meal-item:has(.none){
+    grid-template-columns:1fr;
 }
 
 .flx-ac{

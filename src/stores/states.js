@@ -1,11 +1,47 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { Recipe } from "./profiles";
+
+/**
+ * @typedef {{
+ *      date:Date;
+ *      meal:MealType;
+ *      path:string
+ * }} SelectRecipe
+ */
+
+/**
+ * @typedef {{
+ *      recipe:Recipe;
+ *      mealType:MealType;
+ *      date:Date;
+ * }} AddToCalendarData
+ */
 
 export const useStateStore = defineStore("state", () => {
     const showSearchResults = ref(false);
     const resultsList = ref([]);
 
-    return {showSearchResults, resultsList};
+    // selecting a recipe
+    /**@type {import("vue").Ref<SelectRecipe>} */
+    const selectingRecipe = ref();
+
+    /**@type {import("vue").Ref<Recipe>} */
+    const currentRecipe = ref();
+
+    // add to calendar
+    const addToCalendarMenuOpen = ref(false);
+    /**@type {import("vue").Ref<AddToCalendarData>} */
+    const addToCalendarData = ref();
+
+    return {
+        showSearchResults,
+        resultsList,
+        selectingRecipe,
+        currentRecipe,
+        addToCalendarMenuOpen,
+        addToCalendarData,
+    };
 });
 
 export const diets = [
