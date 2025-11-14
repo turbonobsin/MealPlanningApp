@@ -25,7 +25,7 @@ function switchTheme(){
     if (counter >= 0){
         counter++;
     }
-    if (counter == 15){
+    if (counter == 10){
         showDevTools.value = true;
         counter = -1;
     }

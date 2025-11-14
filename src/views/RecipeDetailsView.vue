@@ -3,7 +3,7 @@ import { RouterLink, useRouter } from 'vue-router';
 import { ref , reactive, onMounted, computed, onUnmounted } from 'vue'
 import { Recipe, useProfilesStore } from '@/stores/profiles';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
-import router, { apiKey } from '@/router';
+import { apiKey } from '@/router';
 import { useStateStore } from '@/stores/states';
 
 const props = defineProps({ recipeId: String })
