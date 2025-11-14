@@ -60,3 +60,14 @@
 -   Utilize updated Recent Recipes array to preview details on recipe cards in lists
 -   Design and implement icons to symbolize recipe diets
 -   Fill in extra available data in search results
+-   Begin redesigning recipe details page
+-   Implement applying "checked" property to recipe ingredients and instructions
+-   Implement function to check and uncheck ingredients
+-   Create secret Developer Tools window for manual data manipulation
+
+*   To do: 
+    -   Include diets icons in details page
+    -   Develop instructions section's style and function
+    -   Fix recipe title size/ capacity
+    -   Redesign search filters window
+    -   Redefine dark mode colors
