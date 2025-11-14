@@ -66,9 +66,9 @@
 -   Create secret Developer Tools window for manual data manipulation
 
 *   To do: 
-    -   Include diets icons in details page
-    -   Develop instructions section's style and function
-    -   Fix recipe title size/ capacity
+    <!-- -   Include diets icons in details page -->
+    <!-- -   Develop instructions section's style and function -->
+    <!-- -   Fix recipe title size/ capacity -->
     -   Redesign search filters window
     -   Redefine dark mode colors
 
@@ -79,3 +79,4 @@
 -   Implement expand/contract header image + specs
 -   Relocate recipe title to accomodate longer titles
 -   Include diet labels and symbols in recipe details page
+-   Adapted diet icons for dark mode

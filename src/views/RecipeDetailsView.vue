@@ -328,7 +328,7 @@ function resizeHeader(){
 
 .recipe-specs {
 	padding: 5px;
-	background-color: white;
+	/* background-color: white; */
 	/* height: 100%; */
 	width: 25%;
 }
@@ -392,6 +392,7 @@ function resizeHeader(){
 .step {
 	display: flex;
 	background-color: white;
+	color: var(--dark-perma);
 	border-radius: 10px;
 	padding: 10px;
 	gap: 10px;
