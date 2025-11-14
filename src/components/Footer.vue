@@ -41,8 +41,9 @@ function moveSelector(){
     bottom: 0px;
     right: 0px;
     left: 0px;
-    height: 17vh;
+    height: 15vh;
     background: linear-gradient(transparent 0%, var(--light) 40%);
+    user-select: none;
 }
 
 /* .selector{

@@ -115,7 +115,7 @@ const colorBeforeSave = ref(currentProfile.value.color);
 
 <template>
     <div class="h-center">
-        <div class="material-symbols-outlined xxxlarge back" @click="router.back()">chevron_left</div>
+        <div class="material-symbols-outlined back-button" @click="router.back()">chevron_left</div>
         <h1 class="title">Profile Page</h1>
     </div>
     <main class="scroll-main">
@@ -175,11 +175,6 @@ const colorBeforeSave = ref(currentProfile.value.color);
     align-self: center;
     position:relative;
     outline: 4px solid var(--dark);
-}
-
-.back{
-    position: absolute;
-    left: .6em;
 }
 
 .color-edit{

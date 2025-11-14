@@ -1,21 +1,35 @@
 <script setup>
-import Create_Profile from '@/components/Create_Profile.vue';
+import Create_Profile from '@/components/settings/Create_Profile.vue';
 import { provide, ref } from 'vue';
 import { useProfilesStore } from '@/stores/profiles';
-import Switch_Profile from '@/components/Switch_Profile.vue';
-import Delete_Profile from '@/components/Delete_Profile.vue';
+import Switch_Profile from '@/components/settings/Switch_Profile.vue';
+import Delete_Profile from '@/components/settings/Delete_Profile.vue';
+import Dev_Tools from '@/components/settings/Dev_Tools.vue';
 
 const show_create_window = ref(false);
 const show_switch_window = ref(false);
 const show_delete_window = ref(false);
+const show_dev_window = ref(false);
 const profile_store = useProfilesStore();
 const current_theme = ref((localStorage.getItem('theme')));
 
 provide('show_create_window', show_create_window);
 provide('show_switch_window', show_switch_window);
 provide('show_delete_window', show_delete_window);
+provide('show_dev_window', show_dev_window);
+
+let counter = 0;
+const showDevTools = ref(false);
 
 function switchTheme(){
+    if (counter >= 0){
+        counter++;
+    }
+    if (counter == 15){
+        showDevTools.value = true;
+        counter = -1;
+    }
+    
     if (localStorage.getItem('theme') === 'light_mode'){
         document.body.classList.add('dark_mode');
         localStorage.setItem('theme', 'dark_mode');
@@ -46,11 +60,14 @@ function switchTheme(){
             <span class="setting" @click="switchTheme">Change Theme</span>
             <div class="material-symbols-outlined red-text">delete_forever</div>
             <span class="setting red-text" @click="show_delete_window=true">Delete Profile</span>
+            <div v-if="showDevTools" class="material-symbols-outlined">build</div>
+            <span v-if="showDevTools" class="setting" @click="show_dev_window=true">Developer Tools</span>
         </div>
     </main>
     <Create_Profile v-if="show_create_window"></Create_Profile>
     <Switch_Profile v-if="show_switch_window"></Switch_Profile>
     <Delete_Profile v-if="show_delete_window"></Delete_Profile>
+    <Dev_Tools v-if="show_dev_window"></Dev_Tools>
 </template>
 
 <style scoped>

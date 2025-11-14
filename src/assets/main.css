@@ -118,8 +118,13 @@ button:disabled{
     font-size: large;
 }
 
+.xlarge{
+    font-size: x-large;
+    font-weight: 500;
+}
+
 .xxxlarge {
-    font-size: xxx-large;
+    font-size: 2rem;
 }
 
 .title {
@@ -188,7 +193,7 @@ button:disabled{
 .scroll-main{
     border-radius: 10px;
     overflow: scroll;
-    padding: 10px 5px 0px 5px;
+    padding: 10px 5px;
     margin: 0px -5px;
     height: calc(100vh - 150px);
     /* max-height: 65vh; */
@@ -198,6 +203,12 @@ button:disabled{
 .circle {
     aspect-ratio: 1;
     border-radius: 50%;
+}
+
+.back-button {
+    font-size: 3rem;
+    position: absolute;
+    left: .6em;
 }
 
 @keyframes pop {

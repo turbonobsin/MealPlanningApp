@@ -3,6 +3,16 @@
   justify-content: space-between;
 }
 
+.spaced-even{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.spaced-around{
+  display: flex;
+  justify-content: space-around;
+}
+
 .full-width{
   width: 100%;
 }
@@ -11,12 +21,24 @@
   margin-top: 15px;
 }
 
+.half-space-before{
+  margin-top: 7px;
+}
+
 .space-after{
   margin-bottom: 15px;
 }
 
 .gap-after{
   margin-bottom: 30px;
+}
+
+.gap-before{
+  margin-top: 30px;
+}
+
+.gap20{
+  gap: 20px;
 }
 
 .gap10{
@@ -29,6 +51,12 @@
 
 .h-center{
   display: flex;
+  align-items: center;
+}
+
+.v-center{
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 

@@ -59,4 +59,4 @@
 -   Adjusted excluding ingredients function
 -   Utilize updated Recent Recipes array to preview details on recipe cards in lists
 -   Design and implement icons to symbolize recipe diets
--   
+-   Fill in extra available data in search results
