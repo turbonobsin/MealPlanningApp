@@ -71,3 +71,8 @@
     -   Fix recipe title size/ capacity
     -   Redesign search filters window
     -   Redefine dark mode colors
+
+# 11/14/2025
+-   Completed checking ingredients function with check/uncheck all
+*   Checked items retain in session / reset on reload
+-   

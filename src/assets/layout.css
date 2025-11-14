@@ -76,7 +76,7 @@
 }
 
 .center{
-  margin: auto;
+  /* margin: auto; */
   display: flex;
   justify-content: center;
   justify-items: center;

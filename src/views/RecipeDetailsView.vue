@@ -9,7 +9,7 @@ import { useStateStore } from '@/stores/states';
 const props = defineProps({ recipeId: String })
 
 const title = ref("")
-const image = ref("")
+const image = ref("/Placeholder_Image.png")
 const cookTime = ref("")
 let calories = ref([])
 let servings = ref("")
@@ -120,6 +120,38 @@ function addToCalendar() {
 // const addToCalendarRecipe = ref();
 
 const openInstructions = ref(false);
+const ingredientsChecked = ref(false);
+const instructionsChecked = ref(false);
+
+function check(item){
+	item.checked = !item.checked;
+	if (item.aisle){
+		if (!item.checked) ingredientsChecked.value = false;
+	}
+}
+
+function checkAll(items){
+	if (items[0].aisle){
+		if (ingredientsChecked.value){
+			items.forEach(v => v.checked = false);
+			ingredientsChecked.value = false;
+		}
+		else {
+			items.forEach(v => v.checked = true);
+			ingredientsChecked.value = true;
+		}
+	}
+	else{
+		if (instructionsChecked.value){
+			items.forEach(v => v.checked = false);
+			instructionsChecked.value = false;
+		}
+		else{
+			items.forEach(v => v.checked = true);
+			instructionsChecked.value = true;
+		}
+	}
+}
 
 </script>
 
@@ -129,7 +161,7 @@ const openInstructions = ref(false);
         <h1 class="title">{{ title }}</h1>
     </div>
 
-	<main class="vertical" style="padding-bottom: 150px">
+	<main class="vertical" style="max-height: 80vh; overflow: hidden">
 		<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && !stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="new Date()"></AddRecipeToCalMenu>
 		<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="stateStore.addToCalendarData.date" :custom-meal-type="stateStore.addToCalendarData.mealType" :custom-time="stateStore.addToCalendarData.date"></AddRecipeToCalMenu>
 
@@ -178,20 +210,23 @@ const openInstructions = ref(false);
 		
 
 
-		<div class="two-grid">
+		<div class="two-grid space-after">
 			<button :class="{'color-button': !openInstructions, 'blank-button': openInstructions}" @click="openInstructions = !openInstructions">Ingredients</button>
 			<button :class="{'color-button': openInstructions, 'blank-button': !openInstructions}" @click="openInstructions = !openInstructions">Instructions</button>
 		</div>
 
 		<div class="scroll">
 			<div v-show="!openInstructions" class="vertical gap10">
+				<div class="h-center gap10">
+					<button :class="{'check-button': true, 'color-button': ingredientsChecked}" @click="checkAll(ingredients)"></button>
+					<span class="small">Check/Uncheck all</span>
+				</div>
 				<!-- <p class="bold">Ingredients:</p> -->
-				<div class="h-center spread gap20" v-for="ingredient in ingredients" @click="ingredient.checked = !ingredient.checked">
+				<div class="h-center gap10" v-for="ingredient in ingredients" @click="check(ingredient)">
+					<button :class="{'material-symbols-outlined': true, 'check-button': true, 'color-button': ingredient.checked, 'center': true}">check</button>
 					<span :class="{'checked': ingredient.checked}">{{ ingredient.original }}</span>
-					<button :class="{'small-button': true, 'blank-button': true, 'color-button': ingredient.checked}"></button>
 				</div>
 			</div>
-			<!-- {{ ingredient.original }} -->
 	
 			<!--Instructions-->
 			<div v-show="openInstructions">
@@ -202,6 +237,7 @@ const openInstructions = ref(false);
 					</p>
 				</div>
 			</div>
+
 			<div class="gap-before">
 				<p>Notes:</p>
 				<textarea v-model="note" class="full-width text-input" style="box-sizing:border-box;min-height:4em"></textarea>
@@ -212,15 +248,14 @@ const openInstructions = ref(false);
 			</div>
 		</div>
 
-
 	</main>
 </template>
 
 <style scoped>
 
 .scroll{
-	max-height: 45vh;
-	padding: 20px 10px 200px 10px;
+	/* max-height: 45vh; */
+	padding: 20px 10px 7vh 10px;
 	margin: 0px;
 }
 
@@ -274,12 +309,22 @@ const openInstructions = ref(false);
 	align-items: center;
 }
 
+.check-button{
+	border: 2px solid var(--medium);
+	/* padding: 2px; */
+	height: 2px;
+	width: 2px;
+	font-size: medium;
+	/* color: var(--medium); */
+}
+
 .checked{
 	text-decoration: line-through;
 }
 
 .color-button{
 	border: 2px solid var(--main-color);
+	animation: pop .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .across {
