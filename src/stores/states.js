@@ -46,35 +46,35 @@ export const useStateStore = defineStore("state", () => {
 
 export const diets = [
 	{
-		title: "gluten free",
+		title: "Gluten Free",
 		src: "/gluten_free.svg"
 	},
 	{
-		title: "ovo vegetarian",
+		title: "Ovo Vegetarian",
 		src: "/ovo_vegetarian.svg"
 	},
 	{
-		title: "lacto vegetarian",
+		title: "Lacto Vegetarian",
 		src: "/lacto_vegetarian.svg"
 	},
 	{
-		title: "vegan",
+		title: "Vegan",
 		src: "/vegan.svg"
 	},
 	{
-		title: "pescatarian",
+		title: "Pescatarian",
 		src: "/pescatarian.svg"
 	},
 	{
-		title: "ketogenic",
+		title: "Ketogenic",
 		src: "/ketogenic.svg"
 	},
 	{
-		title: "dairy free",
+		title: "Dairy Free",
 		src: "/dairy_free.svg"
 	},
 	{
-		title: "empty_diets",
+		title: "",
 		src: "/empty_diets.svg"
 	}
 ]

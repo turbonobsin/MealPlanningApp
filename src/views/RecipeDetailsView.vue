@@ -1,10 +1,10 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router';
-import { ref , reactive, onMounted, computed, onUnmounted } from 'vue'
+import { ref , reactive, onMounted, computed, onUnmounted, useTemplateRef } from 'vue'
 import { Recipe, useProfilesStore } from '@/stores/profiles';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import { apiKey } from '@/router';
-import { useStateStore } from '@/stores/states';
+import { filterDiets, useStateStore } from '@/stores/states';
 
 const props = defineProps({ recipeId: String })
 
@@ -125,8 +125,9 @@ const instructionsChecked = ref(false);
 
 function check(item){
 	item.checked = !item.checked;
-	if (item.aisle){
-		if (!item.checked) ingredientsChecked.value = false;
+	if (!item.checked){
+		if (item.aisle) ingredientsChecked.value = false;
+		else instructionsChecked.value = false;
 	}
 }
 
@@ -153,13 +154,37 @@ function checkAll(items){
 	}
 }
 
+const headerDown = ref(true);
+const headerBlock = useTemplateRef('header');
+function resizeHeader(){
+	if (headerBlock.value){
+		if (headerDown.value){
+			headerBlock.value.classList.add('header-up');
+			headerDown.value = false;
+			console.log('pulled up')
+		}
+		else{
+			headerBlock.value.classList.remove('header-up');
+			headerDown.value = true;
+			console.log('pulled down');
+		}
+	}
+}
+
 </script>
 
 <template>
 	<div class="h-center">
         <div class="material-symbols-outlined back-button" @click="router.back()">chevron_left</div>
-        <h1 class="title">{{ title }}</h1>
+        <h1 class="title">Recipe Details</h1>
     </div>
+	<h3 class="medium" style="margin: 15px;">{{ title }}</h3>
+	<div class="h-center gap10 flex-wrap" style="padding: 0px 0px 10px 20px">
+		<div v-for="icon in filterDiets(recipe?.diets)" class="h-center gap10">
+			<img class="diet-icon" :src="icon.src"></img>
+			<span class="small">{{ icon.title }}</span>
+		</div>
+	</div>
 
 	<main class="vertical" style="max-height: 80vh; overflow: hidden">
 		<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && !stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="new Date()"></AddRecipeToCalMenu>
@@ -174,13 +199,14 @@ function checkAll(items){
 			</button>
 		</div> -->
 		
-		<div class="header-container space-after">
+		<div ref="header" class="header-container spread space-after">
 			<!--Image + Actions (Favorite/ Add to Calendar)-->
 			<div class="recipe-image-block">
 				<img class="recipe-image" :src="image" alt="Recipe Image"></img>
 				<div class="recipe-actions h-center">
 					<div :class="['material-symbols-outlined', 'recipe-action',{fill:profileStore.isFavorited(recipeId)}]" @click="addToFavorites()">bookmark</div>
 					<div class="material-symbols-outlined recipe-action" @click="addToCalendar()">add</div>
+					<div class="material-symbols-outlined recipe-action" @click="resizeHeader()">{{(headerDown) ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</div>
 				</div>
 			</div>
 			
@@ -192,16 +218,16 @@ function checkAll(items){
 					<span class="small">Cook Time</span>
 				</div>
 
-				<div style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
+				<div v-show="headerDown" style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
 
-				<div class="spec">
+				<div v-show="headerDown" class="spec">
 					<span class="medium">{{ servings }}</span>
 					<span class="small">Servings</span>
 				</div>
 
-				<div style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
+				<div v-show="headerDown" style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
 				
-				<div class="spec">
+				<div v-show="headerDown" class="spec">
 					<span class="medium">{{ calories }}</span>
 					<span class="small">Calories</span>
 				</div>
@@ -217,8 +243,8 @@ function checkAll(items){
 
 		<div class="scroll">
 			<div v-show="!openInstructions" class="vertical gap10">
-				<div class="h-center gap10">
-					<button :class="{'check-button': true, 'color-button': ingredientsChecked}" @click="checkAll(ingredients)"></button>
+				<div class="h-center gap10" @click="checkAll(ingredients)">
+					<button :class="{'check-button': true, 'color-button': ingredientsChecked}"></button>
 					<span class="small">Check/Uncheck all</span>
 				</div>
 				<!-- <p class="bold">Ingredients:</p> -->
@@ -227,14 +253,19 @@ function checkAll(items){
 					<span :class="{'checked': ingredient.checked}">{{ ingredient.original }}</span>
 				</div>
 			</div>
-	
+			
 			<!--Instructions-->
 			<div v-show="openInstructions">
 				<!-- <p class="bold">Instructions:</p> -->
-				<div v-for="instruction in instructions" :key="instruction.name">
-					<p v-for="step in instruction.steps" :key="step.number">
-						{{ step.number }}. {{ step.step }}
-					</p>
+				<div v-for="instruction in instructions" :key="instruction.name" class="vertical gap10 medium">
+					<div class="h-center gap10" @click="checkAll(instruction.steps)">
+						<button :class="{'check-button': true, 'color-button': instructionsChecked}"></button>
+						<span class="small">Mark/unmark all</span>
+					</div>
+					<span v-for="step in instruction.steps" :key="step.number" :class="{'step': true, 'checked-step': step.checked}" @click="check(step)">
+						<div class="step-number">{{ step.number }}.</div>
+						<span style="display: block">{{  step.step }}</span>
+					</span>
 				</div>
 			</div>
 
@@ -255,27 +286,57 @@ function checkAll(items){
 
 .scroll{
 	/* max-height: 45vh; */
-	padding: 20px 10px 7vh 10px;
-	margin: 0px;
+	padding: 10px 10px 12vh 10px;
+	margin: 0px -10px;
 }
 
 .header-container{
 	display: flex;
+	flex-wrap: wrap;
 	border: 2px solid var(--dark);
 	border-radius: 15px;
-	overflow: hidden;
 	min-height: 200px;
+	overflow: hidden;
+	transition: min-height .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.header-up{
+	min-height: 60px;
+}
+
+.header-up .recipe-image-block{
+	height: 60px;
+}
+
+.header-up .recipe-actions{
+	bottom: 50%;
+	transform: translateY(50%);
 }
 
 .recipe-image-block{
 	position: relative;
-	display: block;
-	height: 200px;
+	/* height: 200px; */
+	height: 100%;
+	width: 70%;
 }
 
 .recipe-image{
-	height: 100%;
+	height: 200px;
+	width: 100%;
 	object-fit: cover;
+}
+
+.recipe-specs {
+	padding: 5px;
+	background-color: white;
+	/* height: 100%; */
+	width: 25%;
+}
+
+.spec{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .recipe-actions{
@@ -294,20 +355,9 @@ function checkAll(items){
 	border-radius: 50%;
 	height: 40px;
 	width: 40px;
+	box-shadow: 0px 3px 5px 0px var(--dark-perma);
 }
 
-.recipe-specs {
-	padding: 5px;
-	background-color: white;
-	width: 100px;
-	/* height: 200px; */
-}
-
-.spec{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
 
 .check-button{
 	border: 2px solid var(--medium);
@@ -321,6 +371,7 @@ function checkAll(items){
 .checked{
 	text-decoration: line-through;
 }
+
 
 .color-button{
 	border: 2px solid var(--main-color);
@@ -336,6 +387,26 @@ function checkAll(items){
 
 .bold {
 	font-weight: bold;
+}
+
+.step {
+	display: flex;
+	background-color: white;
+	border-radius: 10px;
+	padding: 10px;
+	gap: 10px;
+	box-shadow: 0px 1px 3px 0px var(--medium);
+}
+
+.checked-step{
+	text-decoration: line-through;
+	background-color: var(--light-color);
+	opacity: .7;
+	box-shadow: none;
+}
+
+.step-number{
+	display: block;
 }
 
 </style>

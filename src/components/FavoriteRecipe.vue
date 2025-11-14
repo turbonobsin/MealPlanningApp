@@ -82,8 +82,4 @@ let displayName = (function () {
     margin: -10px 0px -10px -10px;
 }
 
-.diet-icon {
-	height: 20px;
-}
-
 </style>

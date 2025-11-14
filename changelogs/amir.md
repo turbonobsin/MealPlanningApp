@@ -75,4 +75,7 @@
 # 11/14/2025
 -   Completed checking ingredients function with check/uncheck all
 *   Checked items retain in session / reset on reload
--   
+-   Complete instruction steps styling and function
+-   Implement expand/contract header image + specs
+-   Relocate recipe title to accomodate longer titles
+-   Include diet labels and symbols in recipe details page
