@@ -80,3 +80,8 @@
 -   Relocate recipe title to accomodate longer titles
 -   Include diet labels and symbols in recipe details page
 -   Adapted diet icons for dark mode
+
+# 11/16/2025
+-   Began redesigning the filter search window
+
+*   Notes on function of applying exclusions + intolerances (employ profile config design?)

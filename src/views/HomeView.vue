@@ -146,7 +146,7 @@ function displayName(s) {
 	<h1 class="page-title">Hello, User!</h1>
 	<main>
 		<div class="search-bar h-center space-after spread">
-			<input class="text-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" @keypress.enter="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)"/>
+			<input class="text-input search-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" @keypress.enter="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)"/>
 			<button :class="{'material-symbols-outlined': true, 'search-button': true, 'color-button': filtersApplied}" @click="modal.open()">filter_list</button>
 			<button class="material-symbols-outlined search-button dark-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
 		</div>
@@ -225,59 +225,64 @@ function displayName(s) {
 
 		<Modal ref="modal">
 			<template #main>
-				<div>
-				<label>Maximum Cook Time:   </label><br>
-				<input type="number" placeholder="minutes" id="maxTime" v-model="maxTime"><br><br>
+				<div class="filter-window">
+					<h4>Maximum Cook Time:</h4>
+					<input class="text-input" type="number" id="maxTime" v-model="maxTime">
+					<span>minutes</span><br>
 
-				<label>Excluded Foods:   </label><br>
-				<input type="text" id="excludedFoods" v-model="excludedFoods"><br><br>
+					<h4>Excluded Ingredients:</h4>
+					<input class="text-input" type="text" id="excludedFoods" v-model="excludedFoods">
+					<button class="color-button">Add to list</button>
 
-				<!--Meal Type-->
-				<p>Meal Type:</p>
-				<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
-				<label for="main_course">Main Course</label><br>
-				<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
-				<label for="side_dish">Side Dish</label><br>
-				<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
-				<label for="dessert">Dessert</label><br>
-				<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
-				<label for="appetizer">Appetizer</label><br>
-				<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
-				<label for="breakfast">Breakfast</label><br>
-				<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
-				<label for="beverage">Beverage</label><br><br>
+					<!--Meal Type-->
+					<h4>Meal Type:</h4>
+					<div class="meal-type gap-after">
+						<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
+						<label for="main_course">Main Course</label><br>
+						<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
+						<label for="side_dish">Side Dish</label><br>
+						<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
+						<label for="dessert">Dessert</label><br>
+						<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
+						<label for="appetizer">Appetizer</label><br>
+						<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
+						<label for="breakfast">Breakfast</label><br>
+						<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
+						<label for="beverage">Beverage</label>
+					</div>
 
-				<!--Intolerances-->
-				<label>Intolerances: </label><br>
-				<input type="checkbox" v-model="intolerances" value="Dairy">
-				<label for="intolerance1">Dairy</label><br>
-				<input type="checkbox" v-model="intolerances" value="Egg">
-				<label for="intolerance2">Egg</label><br>
-				<input type="checkbox" v-model="intolerances" value="Gluten">
-				<label for="intolerance3">Gluten</label><br>
-				<input type="checkbox" v-model="intolerances" value="Grain">
-				<label for="intolerance4">Grain</label><br>
-				<input type="checkbox" v-model="intolerances" value="Peanut">
-				<label for="intolerance5">Peanut</label><br>
-				<input type="checkbox" v-model="intolerances" value="Seafood">
-				<label for="intolerance6">Seafood</label><br>
-				<input type="checkbox" v-model="intolerances" value="Sesame">
-				<label for="intolerance7">Sesame</label><br>
-				<input type="checkbox" v-model="intolerances" value="Shellfish">
-				<label for="intolerance8">Shellfish</label><br>
-				<input type="checkbox" v-model="intolerances" value="Soy">
-				<label for="intolerance9">Soy</label><br>
-				<input type="checkbox" v-model="intolerances" value="Sulfite">
-				<label for="intolerance10">Sulfite</label><br>
-				<input type="checkbox" v-model="intolerances" value="TreeNut">
-				<label for="intolerance11">Tree Nut</label><br>
-				<input type="checkbox" v-model="intolerances" value="Wheat">
-				<label for="intolerance12">Wheat</label><br>
-			</div>
+					<!--Intolerances-->
+					<label>Intolerances: </label><br>
+					<input type="checkbox" v-model="intolerances" value="Dairy">
+					<label for="intolerance1">Dairy</label><br>
+					<input type="checkbox" v-model="intolerances" value="Egg">
+					<label for="intolerance2">Egg</label><br>
+					<input type="checkbox" v-model="intolerances" value="Gluten">
+					<label for="intolerance3">Gluten</label><br>
+					<input type="checkbox" v-model="intolerances" value="Grain">
+					<label for="intolerance4">Grain</label><br>
+					<input type="checkbox" v-model="intolerances" value="Peanut">
+					<label for="intolerance5">Peanut</label><br>
+					<input type="checkbox" v-model="intolerances" value="Seafood">
+					<label for="intolerance6">Seafood</label><br>
+					<input type="checkbox" v-model="intolerances" value="Sesame">
+					<label for="intolerance7">Sesame</label><br>
+					<input type="checkbox" v-model="intolerances" value="Shellfish">
+					<label for="intolerance8">Shellfish</label><br>
+					<input type="checkbox" v-model="intolerances" value="Soy">
+					<label for="intolerance9">Soy</label><br>
+					<input type="checkbox" v-model="intolerances" value="Sulfite">
+					<label for="intolerance10">Sulfite</label><br>
+					<input type="checkbox" v-model="intolerances" value="TreeNut">
+					<label for="intolerance11">Tree Nut</label><br>
+					<input type="checkbox" v-model="intolerances" value="Wheat">
+					<label for="intolerance12">Wheat</label><br>
+				</div>
 			</template>
+
 			<template #footer>
-				<button class="medium-button" @click.stop="save">Apply</button>
-				<button class="medium-button" @click.stop="cancel">Cancel</button>
+				<button class="color-button" @click.stop="save">Apply</button>
+				<button class="blank-button" @click.stop="cancel">Cancel</button>
 			</template>
 		</Modal>
 	</main>
@@ -302,7 +307,7 @@ function displayName(s) {
 	background-color: var(--light);
 }
 
-.text-input{
+.search-input{
 	display: inline-block;
 	width: 80%;
 }
@@ -325,26 +330,6 @@ function displayName(s) {
 	border-bottom: 2px solid var(--medium);
 	animation: fade-in 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-.diet-icon {
-	height: 20px;
-}
-
-/* .filter-button {
-	/* border: none; */
-	/* background: var(--dark); */
-	/* color: var(--light); */
-	/* border-radius: 8px; */
-	/* padding: 0.4rem 0.6rem; */
-	/* aspect-ratio: 1;
-	cursor: pointer;
-	transition: background 0.2s ease;
-} */
-
-/* 
-.filter-btn:hover {
-	background: var(--dark);
-} */
 
 .recipe-result-card {
 	display: flex;
@@ -387,6 +372,36 @@ function displayName(s) {
 
 .icon-btn:hover {
 	background: var(--medium);
+}
+
+.filter-window label{
+	/* font-weight: 600; */
+	margin-right: 15px;
+}
+
+.filter-window input[type="radio"]{
+	margin-right: 10px;
+	/* transform: translateY(1px); */
+}
+
+.filter-window input[type="checkbox"]{
+	margin-right: 10px;
+	/* transform: translateY(1px); */
+}
+
+.filter-window h4 {
+	margin: 5px 10px 15px 0px;
+	display: inline-block;
+}
+
+.meal-type{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#maxTime{
+	width: 30px;
+	margin-right: 5px;
 }
 
 /* Link */

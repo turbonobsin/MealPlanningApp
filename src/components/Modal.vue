@@ -18,20 +18,19 @@ function close() {
 </script>
 
 <template>
-    <div v-show="showModal" class="modal-backdrop">
-        <div class="modal">
+    <div v-show="showModal">
+        <div class="backdrop"></div>
+        <div class="pop-window">
+            <h3>Filter Search</h3>
             <main>
                 <slot name="main"></slot>
             </main>
+
             <footer>
                 <slot name="footer"></slot>
             </footer>
-
         </div>
-
     </div>
-
-
 </template>
 
 <style>

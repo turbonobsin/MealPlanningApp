@@ -37,6 +37,14 @@
   margin-top: 30px;
 }
 
+.space-right{
+  margin-right: 15px;
+}
+
+.space-left{
+  margin-left: 15px;
+}
+
 .gap20{
   gap: 20px;
 }
