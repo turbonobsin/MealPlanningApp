@@ -33,7 +33,7 @@ function gotoRecipeDetails(item){
   });
 }
 
-const title = props.recipe?.title;
+const title = props.recipe?.title ?? "(No recipe)";
 
 let displayName = (function () {
     if (title.length > 50){
