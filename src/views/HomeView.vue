@@ -16,6 +16,7 @@ const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
 const excludedFoods = ref("");
+const selectedOption = ref("");
 const intolerances = ref([]);
 let recipeSearchLength = ref("");
 
@@ -63,9 +64,9 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 	if (intolerances != undefined && intolerances.length > 0) {
     	url.searchParams.set("intolerances", intolerances.join(","));
 	}
-	//if (meal_type != undefined && meal_type != "") {
-		//url.searchParams.set("type", meal_type);
-	//}
+	if (selectedOption.value != undefined && selectedOption.value != "") {
+		url.searchParams.set("type", selectedOption.value);
+	}
 
 
 	const options = {
@@ -81,6 +82,8 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 
 		let data = await response.json()
 		// console.log(data)
+		items.value = []; // first clear the search results
+
 		data.results.forEach(item => {
 			let temp = profilesStore.currentProfile.recentSearches.find(v => v.id === item.id);
 			if (temp){
@@ -237,17 +240,17 @@ function displayName(s) {
 					<!--Meal Type-->
 					<h4>Meal Type:</h4>
 					<div class="meal-type gap-after">
-						<input type="radio" id="main_course" name="meal_type" value="main_course"></input>
+						<input type="radio" id="main_course" name="meal_type" value="main course" v-model="selectedOption">
 						<label for="main_course">Main Course</label><br>
-						<input type="radio" id="side_dish" name="meal_type" value="side_dish"></input>
+						<input type="radio" id="side_dish" name="meal_type" value="side dish" v-model="selectedOption">
 						<label for="side_dish">Side Dish</label><br>
-						<input type="radio" id="dessert" name="meal_type" value="dessert"></input>
+						<input type="radio" id="dessert" name="meal_type" value="dessert" v-model="selectedOption">
 						<label for="dessert">Dessert</label><br>
-						<input type="radio" id="appetizer" name="meal_type" value="appetizer"></input>
+						<input type="radio" id="appetizer" name="meal_type" value="appetizer" v-model="selectedOption">
 						<label for="appetizer">Appetizer</label><br>
-						<input type="radio" id="breakfast" name="meal_type" value="breakfast"></input>
+						<input type="radio" id="breakfast" name="meal_type" value="breakfast" v-model="selectedOption">
 						<label for="breakfast">Breakfast</label><br>
-						<input type="radio" id="beverage" name="meal_type" value="beverage"></input>
+						<input type="radio" id="beverage" name="meal_type" value="beverage" v-model="selectedOption">
 						<label for="beverage">Beverage</label>
 					</div>
 
