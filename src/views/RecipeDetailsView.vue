@@ -29,7 +29,8 @@ const recipe = ref();
 const note = ref(profileStore.getNote(recipeId.value));
 
 async function getRecipeDetails() {
-	let data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
+	let data = profileStore.getRecipeData(props.recipeId);
+	if(!data) data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
 	console.log(data);
 	if (data){
 		title.value = data.title;

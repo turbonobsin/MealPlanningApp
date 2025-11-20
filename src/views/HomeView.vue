@@ -87,7 +87,8 @@ async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
 		items.value = []; // first clear the search results
 
 		data.results.forEach(item => {
-			let temp = profilesStore.currentProfile.recentSearches.find(v => v.id === item.id);
+			let temp = profilesStore.getRecipeData(item.id);
+			if(!temp) temp = profilesStore.currentProfile.recentSearches.find(v => v.id === item.id);
 			if (temp){
 				items.value.push(temp);
 			}
