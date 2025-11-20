@@ -22,7 +22,7 @@ function close() {
         <div class="backdrop"></div>
         <div class="pop-window">
             <h3>Filter Search</h3>
-            <main>
+            <main class="space-before">
                 <slot name="main"></slot>
             </main>
 

@@ -216,22 +216,6 @@ const colorBeforeSave = ref(currentProfile.value.color);
     opacity:0;
 }
 
-.list-item{
-    display: inline-flex;
-    padding: 5px 10px;
-    border-radius: 5px;
-    border: 2px solid var(--medium);
-    flex-grow:1;
-    max-width: 50%;
-}
-
-.selected{
-    background-color: var(--main-color);
-    border-color: var(--main-color) !important;
-    color: var(--light-perma);
-    animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
 .h-center{
     gap: 10px;
     align-self: center;

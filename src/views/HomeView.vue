@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import { ref } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import { Recipe, useProfilesStore } from '@/stores/profiles';
 import { useCalendarStore } from '@/stores/calendar';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
@@ -17,16 +17,19 @@ const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
 
-let excludedFoods = [...profilesStore.currentProfile.exclusions];
-let intolerances = [...profilesStore.currentProfile.allergies];
+let excludedFoods = ref([...profilesStore.currentProfile.exclusions]);
+let intolerances = ref([...profilesStore.currentProfile.allergies]);
+const intolerancesList = ["Dairy", "Egg", "Gluten", "Grain", "Peanut", "Seafood", "Sesame", "Shellfish", "Soy", "Sulfite", "Tree Nut", "Wheat"];
+const mealTypes = ["Appetizer", "Beverage", "Breakfast", "Dessert", "Main Course", "Side Dish"];
+const excludeInput = useTemplateRef('exclude-input');
+
+const typeChecked = ref(false);
+const intoleranceChecked = ref(false);
+const excludeChecked = ref(false);
 
 const selectedOption = ref("");
 let recipeSearchLength = ref("");
 
-//let meal_type = ref("")
-
-let checkboxState;
-let checkboxValue;
 
 //Modal
 const modal = ref(null)
@@ -42,32 +45,64 @@ function save(e) {
 	modal.value.close(e)
 }
 
-function addIntolerances(checkbox) {
-	if (checkbox.checked) {
-		checkboxState = true;
-		checkboxValue = checkbox.value;
-		intolerances.push("," + checkboxValue);
-		console.log(checkboxValue + "added");
-		console.log(intolerances)
+function toggleIntolerance(item) {
+	// if (checkbox.checked) {
+	// 	checkboxState = true;
+	// 	checkboxValue = checkbox.value;
+	// 	intolerances.push("," + checkboxValue);
+	// 	console.log(checkboxValue + "added");
+	// 	console.log(intolerances)
+	// }
+
+	for (let i =0; i < intolerances.value.length; i++){
+		if (intolerances.value[i] === item){
+			intolerances.value.splice(i, 1);
+			console.log(intolerances.value)
+			return;
+		}
 	}
+	intolerances.value.push(item);
+}
+
+function useDefaults(){
+	intoleranceChecked.value = true;
+	excludeChecked.value = true;
+	intolerances.value = [...profilesStore.currentProfile.allergies];
+	excludedFoods.value = [...profilesStore.currentProfile.exclusions];
+}
+
+function addExclusion(){
+    let s = excludeInput.value.value;
+    if (s){
+        // if (s.includes(',')){
+        //     s = s.replaceAll(',', '');
+        // }
+        let exclusions = s.replaceAll(", ",",").split(",");
+        exclusions.forEach(item => {
+            if (item){
+                excludedFoods.value.push(item);
+            }
+        });
+        excludeInput.value.value = '';
+    }
 }
 
 
-async function RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances) {
+async function RecipeSearch() {
 
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 	url.searchParams.set("apiKey", apiKey.value);
-	url.searchParams.set("query", searchTerm);
-	if (maxTime != undefined && maxTime != "") {
-		url.searchParams.set("maxReadyTime", maxTime);
+	url.searchParams.set("query", searchTerm.value);
+	if (maxTime.value != undefined && maxTime.value > 0) {
+		url.searchParams.set("maxReadyTime", maxTime.value);
 	}
-	if (excludedFoods != undefined && excludedFoods != "") {
-		url.searchParams.set("excludeIngredients", excludedFoods);
+	if (excludeChecked.value && excludedFoods.value != undefined && excludedFoods.value.length > 0) {
+		url.searchParams.set("excludeIngredients", excludedFoods.value.join(","));
 	}
-	if (intolerances != undefined && intolerances.length > 0) {
-    	url.searchParams.set("intolerances", intolerances.join(","));
+	if (intoleranceChecked.value && intolerances.value != undefined && intolerances.value.length > 0) {
+    	url.searchParams.set("intolerances", intolerances.value.join(","));
 	}
-	if (selectedOption.value != undefined && selectedOption.value != "") {
+	if (typeChecked.value && selectedOption.value != undefined && selectedOption.value != "") {
 		url.searchParams.set("type", selectedOption.value);
 	}
 
@@ -155,9 +190,9 @@ const str = ref("Test: &quot;");
 	<h1 class="page-title">Hello, User!</h1>
 	<main>
 		<div class="search-bar h-center space-after spread">
-			<input class="text-input search-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" @keypress.enter="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)"/>
+			<input class="text-input search-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" @keypress.enter="RecipeSearch"/>
 			<button :class="{'material-symbols-outlined': true, 'search-button': true, 'color-button': filtersApplied}" @click="modal.open()">filter_list</button>
-			<button class="material-symbols-outlined search-button dark-button" @click="RecipeSearch(searchTerm, maxTime, excludedFoods, intolerances)">search</button>
+			<button class="material-symbols-outlined search-button dark-button" @click="RecipeSearch">search</button>
 		</div>
 
 		<AddRecipeToCalMenu mode="add" v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
@@ -211,24 +246,6 @@ const str = ref("Test: &quot;");
 						</div>
 					</div>
 				</div>
-	
-				<!-- <div class="recipe-info">
-					<div class="recipe-header">
-						<h3 class="recipe-name">{{ item.title }}</h3>
-					</div>
-				</div>
-				<div class="recipe-actions">
-					<button @click="addToFavorites(item)" class="icon-btn">
-						<span :class="['material-symbols-outlined',{fill:profilesStore.isFavorited(item.id)}]">bookmark</span>
-					</button>
-					<button @click="addToCalendar(item)" class="icon-btn">
-						<span class="material-symbols-outlined">add</span>
-					</button>
-				</div> -->
-	
-				<!-- <RouterLink :to="`/details/${item.id}`" class="see-full">
-					See full recipe &gt;
-				</RouterLink> -->
 			</div>
 		</div>
 
@@ -240,8 +257,17 @@ const str = ref("Test: &quot;");
 					<span>minutes</span><br>
 
 					<!--Meal Type-->
-					<h4>Meal Type:</h4>
-					<div class="meal-type space-after">
+					<input type="checkbox" :checked="typeChecked" @click="typeChecked = !typeChecked"></input>
+					<h4>Meal Type:</h4><br>
+
+					<div v-show="typeChecked" class="flex-wrap space-after">
+						<div v-for="item in mealTypes" @click="selectedOption = (selectedOption === item) ? '' : item"
+						:class="{'list-item': true, 'small': true, 'selected': selectedOption === item}">
+							{{ item }}
+						</div>
+					</div>
+
+					<!-- <div class="meal-type space-after">
 						<input type="radio" id="main_course" name="meal_type" value="main course" v-model="selectedOption">
 						<label for="main_course">Main Course</label><br>
 						<input type="radio" id="side_dish" name="meal_type" value="side dish" v-model="selectedOption">
@@ -254,17 +280,46 @@ const str = ref("Test: &quot;");
 						<label for="breakfast">Breakfast</label><br>
 						<input type="radio" id="beverage" name="meal_type" value="beverage" v-model="selectedOption">
 						<label for="beverage">Beverage</label>
-					</div>
-
-					<h4>Excluded Ingredients:</h4>
-					<div class="space-after flex-wrap h-center">
-						<input class="text-input" type="text" id="excludedFoods" v-model="excludedFoods">
-						<button class="color-button">Add to list</button>
-					</div>
+					</div> -->
 
 					<!--Intolerances-->
-					<label>Intolerances: </label><br>
-					<input type="checkbox" v-model="intolerances" value="Dairy">
+					<input type="checkbox" :checked="intoleranceChecked" @click="intoleranceChecked = !intoleranceChecked"></input>
+					<h4>Intolerances: </h4><br>
+					<div v-show="intoleranceChecked" class="flex-wrap space-after">
+						<div v-for="item in intolerancesList" @click="toggleIntolerance(item)"
+						:class="{'list-item': true, 'small': true, 'selected': intolerances.find(v => v === item)}">
+							{{ item }}
+						</div>
+					</div>
+
+					<!-- Excluded Ingredients -->
+					<input type="checkbox" :checked="excludeChecked" @click="excludeChecked = !excludeChecked"></input>
+					<h4>Excluded Ingredients:</h4>
+
+					<div v-show="excludeChecked">
+						<div class="text-input-button space-after">
+							<input ref="exclude-input" class="text-input" placeholder="Ex. Celery, Apple, Beef..." @keypress.enter="addExclusion"></input>
+							<button class="dark-button small" @click="addExclusion">Exclude</button>
+						</div>
+						<div class="flex-wrap">
+							<div class="small list-item h-center spread medium-button" v-for="(item, i) in excludedFoods">
+								<span>{{ item }}</span>
+								<span class="material-symbols-outlined small" @click="excludedFoods.splice(i, 1)">close</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- <div class="space-after flex-wrap h-center">
+						<input class="text-input" type="text" id="excludedFoods">
+						<button class="color-button">Add to list</button>
+					</div> -->
+
+					<!-- Profile Defaults -->
+					<div class="flex space-before" style="justify-content: end;">
+						<button class="blank-button" @click="useDefaults">Use Profile Defaults</button>
+					</div>
+
+					<!-- <input type="checkbox" v-model="intolerances" value="Dairy">
 					<label for="intolerance1">Dairy</label><br>
 					<input type="checkbox" v-model="intolerances" value="Egg">
 					<label for="intolerance2">Egg</label><br>
@@ -287,7 +342,7 @@ const str = ref("Test: &quot;");
 					<input type="checkbox" v-model="intolerances" value="TreeNut">
 					<label for="intolerance11">Tree Nut</label><br>
 					<input type="checkbox" v-model="intolerances" value="Wheat">
-					<label for="intolerance12">Wheat</label><br>
+					<label for="intolerance12">Wheat</label><br> -->
 				</div>
 			</template>
 
@@ -411,14 +466,23 @@ const str = ref("Test: &quot;");
 	flex-grow: 1;
 }
 
-.meal-type{
-	display: flex;
-	flex-wrap: wrap;
+#maxTime{
+	width: 25px;
+	margin-right: 7px;
 }
 
-#maxTime{
-	width: 30px;
-	margin-right: 5px;
+input[type="checkbox"]{
+	appearance: none;
+	border: 2px solid var(--medium);
+	border-radius: 3px;
+	height: 15px;
+	width: 15px;
+	transform: translateY(5px);
+}
+
+input[type="checkbox"]:checked{
+	background-color: var(--main-color);
+	border-color: var(--main-color);
 }
 
 /* Link */
