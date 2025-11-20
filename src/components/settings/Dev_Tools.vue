@@ -11,6 +11,10 @@ function clearRecentSearches(){
     console.log("Cleared recentSearches");
 }
 
+function clearStorage(){
+    localStorage.clear();
+}
+
 </script>
 
 
@@ -19,6 +23,7 @@ function clearRecentSearches(){
     <div class="pop-window vertical gap10">
         <h3>Developer Tools</h3>
         <button class="red-button" @click="clearRecentSearches">Clear recentSearches</button>
+        <button class="red-button" @click="clearStorage">Clear localStorage</button>
         <button class="blank-button" @click="show_dev_window = false">Close</button>
     </div>
 </template>

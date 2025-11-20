@@ -84,8 +84,9 @@ function createProfile(){
     }
 
     .text-input{
-        flex-shrink: 1;
-        max-width: 80%;
+        /* flex-shrink: 1; */
+        width: 100%;
+        flex-grow: 1;
     }
 
 </style>

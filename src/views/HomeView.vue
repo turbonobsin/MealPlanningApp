@@ -15,9 +15,11 @@ const stateStore = useStateStore();
 const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
-const excludedFoods = ref("");
+
+let excludedFoods = [...profilesStore.currentProfile.exclusions];
+let intolerances = [...profilesStore.currentProfile.allergies];
+
 const selectedOption = ref("");
-const intolerances = ref([]);
 let recipeSearchLength = ref("");
 
 //let meal_type = ref("")
@@ -171,8 +173,8 @@ function displayName(s) {
 						<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
 							<div class="vertical spread gap5">
 								<span class="recipe-name">{{ displayName(item.title) }}</span>
-								<span class="small color-text h-center gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes ?? '-'}} min  |  {{item.nutrition?.nutrients[0].amount ?? '-'}} Cal.</span>
-								<div class="h-center gap10">
+								<span v-if="item.readyInMinutes" class="small color-text h-center gap5"><span class="material-symbols-outlined medium">nest_clock_farsight_analog</span>{{item.readyInMinutes ?? '-'}} min  |  {{item.nutrition?.nutrients[0].amount ?? '-'}} Cal.</span>
+								<div v-if="item.diets" class="h-center gap10">
 									<img v-for="icon in filterDiets(item.diets)" class="diet-icon" :src="icon.src"></img>
 								</div>								
 								<RouterLink :to="`/details/${item.id}`" class="see-full">See full recipe &gt;</RouterLink>
@@ -233,13 +235,9 @@ function displayName(s) {
 					<input class="text-input" type="number" id="maxTime" v-model="maxTime">
 					<span>minutes</span><br>
 
-					<h4>Excluded Ingredients:</h4>
-					<input class="text-input" type="text" id="excludedFoods" v-model="excludedFoods">
-					<button class="color-button">Add to list</button>
-
 					<!--Meal Type-->
 					<h4>Meal Type:</h4>
-					<div class="meal-type gap-after">
+					<div class="meal-type space-after">
 						<input type="radio" id="main_course" name="meal_type" value="main course" v-model="selectedOption">
 						<label for="main_course">Main Course</label><br>
 						<input type="radio" id="side_dish" name="meal_type" value="side dish" v-model="selectedOption">
@@ -252,6 +250,12 @@ function displayName(s) {
 						<label for="breakfast">Breakfast</label><br>
 						<input type="radio" id="beverage" name="meal_type" value="beverage" v-model="selectedOption">
 						<label for="beverage">Beverage</label>
+					</div>
+
+					<h4>Excluded Ingredients:</h4>
+					<div class="space-after flex-wrap h-center">
+						<input class="text-input" type="text" id="excludedFoods" v-model="excludedFoods">
+						<button class="color-button">Add to list</button>
 					</div>
 
 					<!--Intolerances-->
@@ -284,8 +288,10 @@ function displayName(s) {
 			</template>
 
 			<template #footer>
-				<button class="color-button" @click.stop="save">Apply</button>
-				<button class="blank-button" @click.stop="cancel">Cancel</button>
+				<div class="two-grid space-before">
+					<button class="color-button" @click.stop="save">Apply</button>
+					<button class="blank-button" @click.stop="cancel">Cancel</button>
+				</div>
 			</template>
 		</Modal>
 	</main>
@@ -395,6 +401,10 @@ function displayName(s) {
 .filter-window h4 {
 	margin: 5px 10px 15px 0px;
 	display: inline-block;
+}
+
+.flex-wrap .text-input {
+	flex-grow: 1;
 }
 
 .meal-type{
