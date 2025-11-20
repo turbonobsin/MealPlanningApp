@@ -8,6 +8,7 @@ import Modal from '@/components/Modal.vue';
 import { useStateStore } from '@/stores/states';
 import { filterDiets } from '@/stores/states';
 import router, { apiKey } from '@/router';
+import EscapeSymbols from '@/components/EscapeSymbols.vue';
 
 const profilesStore = useProfilesStore();
 const stateStore = useStateStore();
@@ -144,11 +145,13 @@ function displayName(s) {
     }
     else return s
 }
+const str = ref("Test: &quot;");
 
 </script>
 
 
 <template>
+	<EscapeSymbols :s="str"></EscapeSymbols>
 	<h1 class="page-title">Hello, User!</h1>
 	<main>
 		<div class="search-bar h-center space-after spread">

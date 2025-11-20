@@ -5,6 +5,7 @@ import { Recipe, useProfilesStore } from '@/stores/profiles';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import { apiKey } from '@/router';
 import { filterDiets, useStateStore } from '@/stores/states';
+import EscapeSymbols from '@/components/EscapeSymbols.vue';
 
 const props = defineProps({ recipeId: String })
 
@@ -266,7 +267,7 @@ function resizeHeader(){
 					</div>
 					<span v-for="step in instruction.steps" :key="step.number" :class="{'step': true, 'checked-step': step.checked}" @click="check(step)">
 						<div class="step-number">{{ step.number }}.</div>
-						<span style="display: block">{{  step.step }}</span>
+						<EscapeSymbols style="display:block" :s="step.step"></EscapeSymbols>
 					</span>
 				</div>
 			</div>
