@@ -40,9 +40,9 @@ function cancel() {
 }
 
 function save(e) {
-	RecipeSearch(searchTerm.value, maxTime.value, excludedFoods.value, intolerances.value)
+	// RecipeSearch();
 	filtersApplied.value = true;
-	modal.value.close(e)
+	modal.value.close(e);
 }
 
 function toggleIntolerance(item) {
@@ -69,6 +69,16 @@ function useDefaults(){
 	excludeChecked.value = true;
 	intolerances.value = [...profilesStore.currentProfile.allergies];
 	excludedFoods.value = [...profilesStore.currentProfile.exclusions];
+}
+
+function clearFilters(){
+	typeChecked.value = true;
+	intoleranceChecked.value = true;
+	excludeChecked.value = true;
+	intolerances.value = [];
+	excludedFoods.value = [];
+	selectedOption.value = '';
+	maxTime.value = undefined;
 }
 
 function addExclusion(){
@@ -148,6 +158,7 @@ async function RecipeSearch() {
 	}
 
 }
+
 function addToFavorites(recipe) {
 	if(profilesStore.isFavorited(recipe.id)){
 		profilesStore.removeRecipeFromFavoritesAnywhere(recipe.id,true);
@@ -315,7 +326,8 @@ const str = ref("Test: &quot;");
 					</div> -->
 
 					<!-- Profile Defaults -->
-					<div class="flex space-before" style="justify-content: end;">
+					<div class="flex-wrap space-before">
+						<button class="blank-button" style="flex-grow: 1" @click="clearFilters">Clear All</button>
 						<button class="blank-button" @click="useDefaults">Use Profile Defaults</button>
 					</div>
 
