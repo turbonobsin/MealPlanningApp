@@ -11,7 +11,7 @@ const props = defineProps({ recipeId: String })
 const title = ref("")
 const image = ref("/Placeholder_Image.png")
 const cookTime = ref("")
-let calories = ref([])
+let calories = ref(0)
 let servings = ref("")
 let ingredients = ref([])
 let instructions = ref([])
@@ -35,10 +35,10 @@ async function getRecipeDetails() {
 		title.value = data.title;
 		image.value = data.image;
 		cookTime.value = data.readyInMinutes;
-		calories = data.nutrition.nutrients[0].amount;
-		servings = data.servings;
-		ingredients = data.extendedIngredients;
-		instructions = data.analyzedInstructions;
+		calories.value = data.nutrition.nutrients[0].amount;
+		servings.value = data.servings;
+		ingredients.value = data.extendedIngredients;
+		instructions.value = data.analyzedInstructions;
 		console.log("Loaded stored recipe");
 		recipe.value = data;
 		return;
@@ -64,10 +64,10 @@ async function getRecipeDetails() {
 		title.value = data.title;
 		image.value = data.image;
 		cookTime.value = data.readyInMinutes;
-		calories = data.nutrition?.nutrients[0].amount;
-		servings = data.servings;
-		ingredients = data.extendedIngredients;
-		instructions = data.analyzedInstructions;
+		calories.value = data.nutrition?.nutrients[0].amount;
+		servings.value = data.servings;
+		ingredients.value = data.extendedIngredients;
+		instructions.value = data.analyzedInstructions;
 
 		if(!profileStore.currentProfile.recentSearches.some(v=>v.id == data.id)){
 			data.extendedIngredients.forEach(v => v.checked = false);
