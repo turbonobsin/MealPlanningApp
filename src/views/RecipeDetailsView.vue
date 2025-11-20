@@ -68,8 +68,9 @@ async function getRecipeDetails() {
 		servings.value = data.servings;
 		ingredients.value = data.extendedIngredients;
 		instructions.value = data.analyzedInstructions;
-
+		
 		if(!profileStore.currentProfile.recentSearches.some(v=>v.id == data.id)){
+			profileStore.saveRecipeData(data);
 			data.extendedIngredients.forEach(v => v.checked = false);
 			data.analyzedInstructions[0].steps.forEach(v => v.checked = false);
 			profileStore.currentProfile.recentSearches.unshift(data);
