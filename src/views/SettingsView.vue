@@ -47,7 +47,7 @@ function switchTheme(){
 <template>
     <h1 class="space_after">Settings</h1>
     <main>
-        <div class="circle" :style="{'background-color': profile_store.currentProfile.color}"></div>
+        <div class="circle" :style="{'background-color': profile_store.currentProfile.color}">{{ profile_store.currentProfile.name[0] }}</div>
         <h2 class="text-center gap-after">{{profile_store.currentProfile.name}}</h2>
         <div class="menu-list">
             <div class="material-symbols-outlined">account_circle</div>
@@ -56,7 +56,7 @@ function switchTheme(){
             <span class="setting" @click="show_switch_window=true">Switch Profile</span>
             <div class="material-symbols-outlined">add_circle</div>
             <span class="setting" @click="show_create_window=true">Create New Profile</span>
-            <div class="material-symbols-outlined">{{ current_theme }}</div>
+            <div class="material-symbols-outlined">{{ (current_theme === 'dark_mode') ? 'dark_mode' : 'light_mode' }}</div>
             <span class="setting" @click="switchTheme">Change Theme</span>
             <div class="material-symbols-outlined red-text">delete_forever</div>
             <span class="setting red-text" @click="show_delete_window=true">Delete Profile</span>
@@ -83,6 +83,11 @@ function switchTheme(){
     height: 100px;
     align-self: center;
     border: 4px solid var(--dark);
+    display: flex;;
+    align-items: center;
+    justify-content: center;
+    color: var(--light-perma);
+    font-size: 2rem;
 }
 
 h2{

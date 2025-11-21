@@ -36,11 +36,12 @@ const modal = ref(null)
 let filtersApplied = ref(false);
 
 function cancel() {
-  modal.value.close()
+	filtersApplied.value = false;
+  	modal.value.close()
 }
 
 function save(e) {
-	// RecipeSearch();
+	RecipeSearch();
 	filtersApplied.value = true;
 	modal.value.close(e);
 }
@@ -72,9 +73,9 @@ function useDefaults(){
 }
 
 function clearFilters(){
-	typeChecked.value = true;
-	intoleranceChecked.value = true;
-	excludeChecked.value = true;
+	typeChecked.value = false;
+	intoleranceChecked.value = false;
+	excludeChecked.value = false;
 	intolerances.value = [];
 	excludedFoods.value = [];
 	selectedOption.value = '';
@@ -195,7 +196,7 @@ function displayName(s) {
 
 
 <template>
-	<h1 class="page-title">Hello, User!</h1>
+	<h1 class="page-title">Hello, {{ profilesStore.currentProfile.name }}!</h1>
 	<main>
 		<div class="search-bar h-center space-after spread">
 			<input class="text-input search-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" @keypress.enter="RecipeSearch"/>
@@ -215,7 +216,7 @@ function displayName(s) {
 					No recipes found.
 				</div>
 				<div class="vertical result-list">
-					<div v-for="item in items" :key="item.id" class="recipe-result-card">
+					<div v-for="item in stateStore.resultsList" :key="item.id" class="recipe-result-card">
 						<img class="recipe-image" :src="item.image" alt="Recipe Image" />
 						<div class="spread full-width gap10" style="padding: 10px 10px 10px 0px">
 							<div class="vertical spread gap5">
@@ -324,8 +325,8 @@ function displayName(s) {
 
 					<!-- Profile Defaults -->
 					<div class="flex-wrap space-before">
+						<button class="blank-button" style="padding: 0 20px" @click="useDefaults">Use Profile Defaults</button>
 						<button class="blank-button" style="flex-grow: 1" @click="clearFilters">Clear All</button>
-						<button class="blank-button" @click="useDefaults">Use Profile Defaults</button>
 					</div>
 
 					<!-- <input type="checkbox" v-model="intolerances" value="Dairy">
@@ -376,7 +377,7 @@ function displayName(s) {
 }
 
 .search-bar {
-	padding: 5px;
+	padding: 5px 7px;
 	gap: 10px;
 	border-radius: 12px;
 	border: 2px solid var(--medium);
@@ -390,7 +391,12 @@ function displayName(s) {
 }
 
 .search-button{
-	padding: 7px;
+	padding: 0px;
+	line-height: .5rem;
+	min-height: 40px;
+	min-width: 40px;
+	/* aspect-ratio: 1; */
+	flex-shrink: 0;
 }
 
 .scroll{

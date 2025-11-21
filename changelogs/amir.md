@@ -84,4 +84,12 @@
 # 11/16/2025
 -   Began redesigning the filter search window
 
-*   Notes on function of applying exclusions + intolerances (employ profile config design?)
+# 11/20/2025
+-   Completed filter search window
+-   Implement enabling/disabling filter categories
+-   Implement setting default filters from user profile + clearing filters
+-   Create and finish moving recipe between folders function
+-   Create + style moving recipe window
+-   Display first letter over profile icon
+-   Adjusted dark mode colors
+-   Secret theme?

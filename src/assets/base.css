@@ -7,6 +7,7 @@
 
     --light-color: #B4CE9D;
     --main-color: #6A8B52;
+    --near-color: #bcd3a9;
     --light: #FAF8F4;
     --dark: #5C4B3B;
     --medium: #B89C83;
@@ -15,9 +16,23 @@
     --dark-perma: #5C4B3B;
 }
 
+.light_mode{
+    --light-color: #B4CE9D;
+    --light: #FAF8F4;
+    --dark: #5C4B3B;
+    --near-color: #bcd3a9;
+}
+
 .dark_mode {
-    --light: #34312f;
+    --light: #363736;
     --dark: #FAF8F4;
+    --near-color: #42473d;
+}
+
+.amir_mode {
+    --main-color: #5f8ec4;
+    --light-color: #a5c2dd;
+    --near-color: #b3ccdf;
 }
 
 @font-face {
@@ -27,10 +42,13 @@
 
 body {
     color: var(--dark);
-    background-color: var(--light);
+    /* background-color: var(--light); */
+    background: linear-gradient(var(--light) 50%, var(--near-color) 100%);
+    background-size: cover;
     font-family: var(--ff-primary) !important;
     /* margin:0px; */
     /* max-height: 90vh; */
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -40,11 +58,11 @@ body::before {
     mask-size: 110%;
     mask-position: center;
     mask-repeat: no-repeat;
-    background-color: var(--medium);
-    opacity: .3;
+    background-color: var(--near-color);
+    /* opacity: .7; */
     background-size: contain;
     position: fixed;
-    top: -5em;
+    top: -7em;
     right: 0;
     left: 0;
     margin: auto;

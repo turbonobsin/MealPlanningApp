@@ -23,9 +23,7 @@ if (!localStorage.theme){
     localStorage.setItem('theme', 'light_mode');
 }
 else{
-    if (localStorage.getItem('theme') === 'dark_mode'){
-        document.body.classList.add('dark_mode');
-    }
+    document.body.classList.add(localStorage.getItem('theme'));
 }
 
 app.mount('#app')

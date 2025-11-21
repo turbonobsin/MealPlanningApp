@@ -93,16 +93,19 @@ button:active {
 .medium-button{
     background-color: var(--medium);
     color: var(--light-perma);
+    border: 2px solid var(--medium);
 }
 
 .dark-button{
     background-color: var(--dark-perma);
     color: var(--light-perma);
+    border: 2px solid var(--dark-perma);
 }
 
 .red-button {
     background-color: var(--red);
     color: var(--light);
+    border: 2px solid var(--red);
 }
 
 button:disabled{

@@ -29,7 +29,7 @@ function moveSelector(){
     left: 15vw;
     right: 15vw;
     padding: .3em;
-    border: 3px solid var(--medium);
+    border: 3px solid var(--main-color);
     border-radius: 20px;
     background-color: var(--light);
     /* margin-top:auto; */
@@ -42,7 +42,7 @@ function moveSelector(){
     right: 0px;
     left: 0px;
     height: 15vh;
-    background: linear-gradient(transparent 0%, var(--light) 40%);
+    background: linear-gradient(transparent 0%, var(--near-color) 60%);
     user-select: none;
 }
 

@@ -31,9 +31,9 @@ const note = ref(profileStore.getNote(recipeId.value));
 
 async function getRecipeDetails() {
 	let data = profileStore.getRecipeData(props.recipeId);
-	if(!data) data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
+	if(!data.nutrition) data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
 	console.log(data);
-	if (data){
+	if (data && data.nutrition){
 		title.value = data.title;
 		image.value = data.image;
 		cookTime.value = data.readyInMinutes;
@@ -261,7 +261,7 @@ function resizeHeader(){
 			<div v-show="openInstructions">
 				<!-- <p class="bold">Instructions:</p> -->
 				<div v-for="instruction in instructions" :key="instruction.name" class="vertical gap10 medium">
-					<div class="h-center gap10" @click="checkAll(instruction.steps)">
+					<div class="h-center gap10 space-before" @click="checkAll(instruction.steps)">
 						<button :class="{'check-button': true, 'color-button': instructionsChecked}"></button>
 						<span class="small">Mark/unmark all</span>
 					</div>
@@ -299,6 +299,7 @@ function resizeHeader(){
 	border: 2px solid var(--dark);
 	border-radius: 15px;
 	min-height: 200px;
+	max-height: 200px;
 	overflow: hidden;
 	transition: min-height .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -394,8 +395,8 @@ function resizeHeader(){
 
 .step {
 	display: flex;
-	background-color: white;
-	color: var(--dark-perma);
+	background-color: var(--light);
+	color: var(--dark);
 	border-radius: 10px;
 	padding: 10px;
 	gap: 10px;

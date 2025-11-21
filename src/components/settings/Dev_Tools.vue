@@ -15,6 +15,11 @@ function clearStorage(){
     localStorage.clear();
 }
 
+function setCustomTheme(s){
+    localStorage.setItem('theme', `${s}_mode`);
+    document.body.className = `${s}_mode`;
+}
+
 </script>
 
 
@@ -22,6 +27,7 @@ function clearStorage(){
     <div class="backdrop"></div>
     <div class="pop-window vertical gap10">
         <h3>Developer Tools</h3>
+        <button class="color-button" @click="setCustomTheme('amir')">Set Theme: Amir</button>
         <button class="red-button" @click="clearRecentSearches">Clear recentSearches</button>
         <button class="red-button" @click="clearStorage">Clear localStorage</button>
         <button class="blank-button" @click="show_dev_window = false">Close</button>

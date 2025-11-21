@@ -253,7 +253,7 @@ const finalList = computed(()=>{
           </div>
           <div class="flex gap10">
             <button class="color-button" @click="endMove(item)">Move</button>
-            <button class="blank-button" @click.stop="openMoveFolder(item)">open</button>
+            <button class="blank-button" @click.stop="openMoveFolder(item)">Open</button>
           </div>
         </div>
 
@@ -301,6 +301,7 @@ const finalList = computed(()=>{
   border: 2px solid;
   flex-grow: 1;
   overflow: hidden;
+  background-color: var(--light);
 }
 
 .favorite-folder{
