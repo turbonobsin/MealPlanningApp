@@ -55,7 +55,7 @@ let displayName = (function () {
                 <img v-for="icon in filterDiets(props.recipe.diets)" class="diet-icon" :src="icon.src"></img>
             </div>
         </div>
-        <div class="spread vertical" style="margin-left:auto">
+        <div class="spread vertical gap10" style="margin-left:auto">
             <div class="material-symbols-outlined" @click="addToCalendar($event, props.recipe)">add</div>
             <slot></slot>
         </div>

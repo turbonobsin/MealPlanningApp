@@ -84,6 +84,35 @@ const sortedItems = computed(()=>{
   });
 });
 
+const openMoveWindow = ref(false);
+const movingItem = ref({});
+const movingItemIndex = ref(-1);
+const moveFolderHistory = ref([]);
+const moveOpenFolder = ref(profileStore.currentProfile.favorites);
+
+function startMove(item, i){
+    openMoveWindow.value = true;
+    movingItem.value = item;
+    movingItemIndex.value = i;
+}
+
+function openMoveFolder(folder){
+  moveFolderHistory.value.push(moveOpenFolder.value);
+  moveOpenFolder.value = folder;
+}
+
+function endMove(folder){
+    currentFolder.value.items.splice(movingItemIndex.value, 1);
+    folder.items.push(movingItem.value);
+    profileStore.saveProfile();
+    openMoveWindow.value = false;
+}
+
+function backMoveFolder(){
+  moveOpenFolder.value = moveFolderHistory.value.pop();
+}
+
+
 </script>
 
 <template>
@@ -110,26 +139,66 @@ const sortedItems = computed(()=>{
 
       </div>
 
-      <div class="favorite-item" v-for="item in sortedItems" :key="item.id || item">
+      <div class="favorite-item" v-for="(item, i) in sortedItems" :key="item.id || item">
         
+        <!-- Recipe Card -->
+
         <div v-if="typeof item === 'number'" class="favorite-card card" draggable="true"
           @dragstart="(e) => dragStartEvent(e, item)">
           <FavoriteRecipe :recipe="getRecipe(item)" draggable="true">
+            <div class="material-symbols-outlined" @click="startMove(item, i)">drive_file_move</div>
             <div class="material-symbols-outlined" @click="deleteItem(item)">delete</div>
           </FavoriteRecipe>
         </div>
 
+        <!-- Folder Card -->
+
         <div v-else class="favorite-folder card h-center spread" @click="openFolder(item)" draggable="true" @dragstart="(e) => dragStartEvent(e, item)" @dragover.prevent @drop="dropRecipeIntoFolder(item)">
           <div class="h-center gap10">
-            <div class="delete-btn material-symbols-outlined large" @click.stop="deleteItem(item)">delete</div>
+            <div class="material-symbols-outlined large">folder</div>
             <span>{{ item.name }}</span>
           </div>
-          <div class="material-symbols-outlined large">folder</div>
+          <div class="delete-btn material-symbols-outlined" @click.stop="deleteItem(item)">delete</div>
+          <!-- <div class="flex gap10">
+            <div class="material-symbols-outlined large" @click.stop="renameFolder(item)">edit</div>
+            <div class="material-symbols-outlined large" @click.stop="deleteItem(item)">more_horiz</div>
+          </div> -->
         </div>
 
       </div>
     </section>
   </main>
+
+  <!-- Move Window -->
+
+  <div v-show="openMoveWindow" class="backdrop"></div>
+  <div v-show="openMoveWindow" class="pop-window">
+    <h3 class="gap-after">Move to folder</h3>
+    <div class="h-center gap10">
+      <span v-if="moveFolderHistory.length > 0" class="material-symbols-outlined" @click="backMoveFolder">keyboard_arrow_left</span>
+      <h4>{{ moveOpenFolder.name }}</h4>
+    </div>
+    <div class="scroll">
+      <div class="vertical gap10">
+
+        <div class="favorite-folder card spread" v-if="moveOpenFolder.items" v-for="item in moveOpenFolder.items.filter(v => v.name)">
+          <div class="h-center gap10">
+            <div class="material-symbols-outlined large">folder</div>
+            <span>{{ item.name }}</span>
+          </div>
+          <div class="flex gap10">
+            <button class="color-button" @click="endMove(item)">Move</button>
+            <button class="blank-button" @click.stop="openMoveFolder(item)">open</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="two-grid gap-before">
+      <button class="blank-button" @click="openMoveWindow = false">Cancel</button>
+      <button class="color-button" @click="endMove(moveOpenFolder)">Move here</button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -171,6 +240,9 @@ const sortedItems = computed(()=>{
   flex-grow: 1;
 }
 
+.scroll{
+  max-height: 400px;
+}
 
 .folder-input {
   padding: 0.5rem;
