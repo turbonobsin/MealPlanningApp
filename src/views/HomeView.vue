@@ -116,7 +116,6 @@ async function RecipeSearch() {
 		url.searchParams.set("type", selectedOption.value);
 	}
 
-
 	const options = {
 		method: "GET",
 		headers: {

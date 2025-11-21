@@ -112,6 +112,58 @@ function backMoveFolder(){
   moveOpenFolder.value = moveFolderHistory.value.pop();
 }
 
+// searching
+const searchTerm = ref("");
+const searchResults = ref([]);
+const isSearching = ref(false);
+function strMatch(s1="",s2=""){
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+  return s1.includes(s2) || s2.includes(s1);
+}
+function search(){
+  if(searchTerm.value.length == 0){
+    cancelSearch();
+    return;
+  }
+
+  isSearching.value = true;
+  searchResults.value = [];
+
+  // 
+
+  function loop(folder){
+    if(!folder) return;
+    for(const item of folder.items){
+      console.log("ITEM",item,typeof item);
+      if(typeof item != "number"){
+        loop(item);
+        continue;
+      }
+
+      let details = profileStore.getRecipeData(item);
+      console.log(details);
+      if(!details){
+        console.warn("skipped recipe when searching because there was no data found in the cache, id:",item);
+        continue;
+      }
+      if(strMatch(details.title,searchTerm.value)){
+        searchResults.value.push(item);
+      }
+    }
+  }
+  loop(currentFolder.value);
+}
+function cancelSearch(){
+  isSearching.value = false;
+  searchResults.value = [];
+  searchTerm.value = "";
+}
+
+const finalList = computed(()=>{
+  if(isSearching.value) return searchResults.value;
+  return sortedItems.value;
+});
 
 </script>
 
@@ -120,11 +172,15 @@ function backMoveFolder(){
     <div v-if="folderHistory.length" class="material-symbols-outlined xxxlarge back" @click="goBack">chevron_left</div>
     <h1 class="title">{{ currentFolder.name }}</h1>
   </div>
+  <div class="search-bar h-center space-after spread">
+    <input class="text-input search-input" type="text" :placeholder="folderHistory.length == 0 ? 'Search your favorites...' : 'Search within this folder...'" v-model="searchTerm" @keypress.enter="search"/>
+    <button class="material-symbols-outlined search-button dark-button" @click="search">search</button>
+  </div>
 
   <main class="scroll-main">
     <section class="flex-wrap" style="gap: 15px; padding-bottom: 100px">
 
-      <div class="add-folder-card card">
+      <div class="add-folder-card card" v-if="!isSearching">
 
         <div class="h-center gap10" v-if="!showFolderInput" @click="createNewFolder">
           <span class="material-symbols-outlined large">add</span>
@@ -139,7 +195,16 @@ function backMoveFolder(){
 
       </div>
 
-      <div class="favorite-item" v-for="(item, i) in sortedItems" :key="item.id || item">
+      <div v-if="isSearching" class="full-width">
+        <div class="h-center spread" style="padding: 0px 15px; margin-top: -5px">
+          <h3>Found results:</h3>
+          <span class="material-symbols-outlined" style="font-weight: 700" @click="cancelSearch">close</span>
+        </div>
+        <div v-if="finalList.length === 0" class="no-results">
+          No recipes found.
+        </div>
+      </div>
+      <div class="favorite-item" v-for="(item, i) in finalList" :key="item.id || item">
         
         <!-- Recipe Card -->
 
@@ -203,6 +268,28 @@ function backMoveFolder(){
 
 <style scoped>
 
+/* search */
+
+.search-bar {
+	padding: 5px;
+	gap: 10px;
+	border-radius: 12px;
+	border: 2px solid var(--medium);
+	box-shadow: 0 3px 0px 0px var(--medium);
+	background-color: var(--light);
+}
+
+.search-input{
+	display: inline-block;
+	width: 80%;
+}
+
+.search-button{
+	padding: 7px;
+}
+
+/*  */
+
 .back{
     position: absolute;
     left: .6em;
@@ -224,11 +311,25 @@ function backMoveFolder(){
   gap: 10px;
 }
 
+/* Fun pressing down animation on add-folder-card */
+.favorite-folder:active{
+  box-shadow: 0px 0px 0px 0px var(--medium);
+  margin-top:5px;
+  margin-bottom:-5px;
+}
+
 .add-folder-card {
   background-color: var(--light);
   border-color: var(--main-color);
   box-shadow: 0px 5px 0px 0px var(--main-color);
   width: 100%;
+}
+
+/* Fun pressing down animation on add-folder-card */
+.add-folder-card:active{
+  box-shadow: 0px 0px 0px 0px var(--main-color);
+  margin-top:5px;
+  margin-bottom:-5px;
 }
 
 .favorite-card{
