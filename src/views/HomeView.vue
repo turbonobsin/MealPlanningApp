@@ -191,13 +191,11 @@ function displayName(s) {
     }
     else return s
 }
-const str = ref("Test: &quot;");
 
 </script>
 
 
 <template>
-	<EscapeSymbols :s="str"></EscapeSymbols>
 	<h1 class="page-title">Hello, User!</h1>
 	<main>
 		<div class="search-bar h-center space-after spread">
