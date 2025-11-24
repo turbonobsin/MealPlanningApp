@@ -104,8 +104,13 @@ function addExclusion(){
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 async function RecipeSearch(checks=0) {
 
+=======
+async function RecipeSearch() {
+	offset2.value = 0;
+>>>>>>> Stashed changes
 =======
 async function RecipeSearch() {
 	offset2.value = 0;
