@@ -3,7 +3,7 @@ import { RouterLink, useRouter } from 'vue-router';
 import { ref , reactive, onMounted, computed, onUnmounted, useTemplateRef } from 'vue'
 import { Recipe, useProfilesStore } from '@/stores/profiles';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
-import { apiKey } from '@/router';
+import { apiKey, switchAPIKey } from '@/router';
 import { filterDiets, useStateStore } from '@/stores/states';
 import EscapeSymbols from '@/components/EscapeSymbols.vue';
 
@@ -29,7 +29,7 @@ const recipe = ref();
 
 const note = ref(profileStore.getNote(recipeId.value));
 
-async function getRecipeDetails() {
+async function getRecipeDetails(checks=0) {
 	let data = profileStore.getRecipeData(props.recipeId);
 	if(!data?.nutrition) data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
 	console.log(data);
@@ -78,7 +78,18 @@ async function getRecipeDetails() {
 			profileStore.currentProfile.recentSearches.unshift(data);
 			profileStore.saveProfile();
 		}
-	} else {
+	}
+	else if(response.status == 402){ // payment required
+		if(checks >= 1){
+			alert("No more requests available at this time");
+			return;
+		}
+		// switch and retry...
+		switchAPIKey();
+		getRecipeDetails(checks+1);
+		return;
+	}
+	else{
 		console.log("request failed")
 	}
 }

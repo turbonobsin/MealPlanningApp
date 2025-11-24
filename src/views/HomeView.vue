@@ -7,7 +7,7 @@ import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import Modal from '@/components/Modal.vue';
 import { useStateStore } from '@/stores/states';
 import { filterDiets } from '@/stores/states';
-import router, { apiKey } from '@/router';
+import router, { apiKey, switchAPIKey } from '@/router';
 import EscapeSymbols from '@/components/EscapeSymbols.vue';
 
 const profilesStore = useProfilesStore();
@@ -99,7 +99,7 @@ function addExclusion(){
 }
 
 
-async function RecipeSearch() {
+async function RecipeSearch(checks=0) {
 
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 	url.searchParams.set("apiKey", apiKey.value);
@@ -150,7 +150,18 @@ async function RecipeSearch() {
 		console.log(recipeSearchLength)
 		
 		// profilesStore.saveSearchResults(data.results);
-	} else {
+	}
+	else if(response.status == 402){ // payment required
+		if(checks >= 1){
+			alert("No more requests available at this time");
+			return;
+		}
+		// switch and retry...
+		switchAPIKey();
+		RecipeSearch(checks+1);
+		return;
+	}
+	else{
 		console.log("request failed")
 		// items.value = profilesStore.currentProfile.recentSearches;
 		// stateStore.resultsList = items.value;

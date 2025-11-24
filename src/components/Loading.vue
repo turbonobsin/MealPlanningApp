@@ -9,7 +9,7 @@ const props = defineProps<{
 <template>
     <Transition name="loading">
         <div class="cont" v-if="loading">
-
+            <div class="material-symbols-outlined">egg</div>
         </div>
     </Transition>
 </template>
@@ -27,7 +27,9 @@ const props = defineProps<{
 }
 
 .cont{
-
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 </style>

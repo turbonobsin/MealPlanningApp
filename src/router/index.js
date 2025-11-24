@@ -75,3 +75,12 @@ export let apiKey = computed(()=>{
 	}
 	return key;
 });
+
+export const amirKey = "72909a71317946c88a692ee6c6ed461a";
+export const jessicaKey = "8091b135029642499cfa2a83e6513777";
+
+export function switchAPIKey(){
+	let key = localStorage.getItem("customAPIKey");
+	console.log("SWITCHED API KEY TO: "+(key == amirKey ? "Jessica's" : "Amir's"));
+	localStorage.setItem("customAPIKey",key == amirKey ? jessicaKey : amirKey);
+}
