@@ -31,9 +31,9 @@ const note = ref(profileStore.getNote(recipeId.value));
 
 async function getRecipeDetails() {
 	let data = profileStore.getRecipeData(props.recipeId);
-	if(!data.nutrition) data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
+	if(!data?.nutrition) data = profileStore.currentProfile.recentSearches.find(v => v.id === Number(props.recipeId));
 	console.log(data);
-	if (data && data.nutrition){
+	if (data && data?.nutrition){
 		title.value = data.title;
 		image.value = data.image;
 		cookTime.value = data.readyInMinutes;

@@ -100,3 +100,8 @@
 - fixed duplicated recent search results when viewing the same one
 - added debug global function "clearRecentSearches"
 - added Amir's apiKey but if you add ?api=jessica then it uses Jessica's apiKey
+
+(need to fill this in at some point)
+
+# 11/24/25
+- fixed recipe details page wouldn't load new recipes anymore

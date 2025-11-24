@@ -679,6 +679,8 @@ export const useProfilesStore = defineStore("profiles", () => {
      * @returns {Recipe}
      */
     function getRecipeData(recipeId) {
+        if(typeof recipeId == "string") recipeId = parseInt(recipeId);
+        console.log(":: getting recipe data from cache...",recipeId,typeof recipeId);
         if(recipeId == undefined) return undefined;
 
         let profile = currentProfile.value;
