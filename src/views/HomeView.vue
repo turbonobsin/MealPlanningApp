@@ -103,28 +103,28 @@ function addExclusion(){
 }
 
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-async function RecipeSearch(checks=0) {
+// <<<<<<< Updated upstream
+// <<<<<<< Updated upstream
+// <<<<<<< Updated upstream
+// <<<<<<< Updated upstream
+// async function RecipeSearch(checks=0) {
 
-=======
+// =======
+// async function RecipeSearch() {
+// 	offset2.value = 0;
+// >>>>>>> Stashed changes
+// =======
+// async function RecipeSearch() {
+// 	offset2.value = 0;
+// >>>>>>> Stashed changes
+// =======
+// async function RecipeSearch() {
+// 	offset2.value = 0;
+// >>>>>>> Stashed changes
+// =======
 async function RecipeSearch() {
 	offset2.value = 0;
->>>>>>> Stashed changes
-=======
-async function RecipeSearch() {
-	offset2.value = 0;
->>>>>>> Stashed changes
-=======
-async function RecipeSearch() {
-	offset2.value = 0;
->>>>>>> Stashed changes
-=======
-async function RecipeSearch() {
-	offset2.value = 0;
->>>>>>> Stashed changes
+// >>>>>>> Stashed changes
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 	url.searchParams.set("apiKey", apiKey.value);
 	url.searchParams.set("query", searchTerm.value);
