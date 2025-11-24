@@ -129,7 +129,7 @@ async function RecipeSearch() {
 	if (response.status === 200) {
 
 		let data = await response.json()
-		// console.log(data)
+		console.log(data)
 		items.value = []; // first clear the search results
 
 		data.results.forEach(item => {
