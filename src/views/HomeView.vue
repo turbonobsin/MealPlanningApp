@@ -10,13 +10,15 @@ import { filterDiets } from '@/stores/states';
 import router, { apiKey, switchAPIKey } from '@/router';
 import EscapeSymbols from '@/components/EscapeSymbols.vue';
 
+const scrollContainer = useTemplateRef("scroll-container");
 const profilesStore = useProfilesStore();
 const stateStore = useStateStore();
 
 const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
-let offset2 = 0;
+let offset2 = ref(0);
+let totalResults = ref("")
 
 
 let excludedFoods = ref([...profilesStore.currentProfile.exclusions]);
@@ -101,8 +103,13 @@ function addExclusion(){
 }
 
 
+<<<<<<< Updated upstream
 async function RecipeSearch(checks=0) {
 
+=======
+async function RecipeSearch() {
+	offset2.value = 0;
+>>>>>>> Stashed changes
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 	url.searchParams.set("apiKey", apiKey.value);
 	url.searchParams.set("query", searchTerm.value);
@@ -133,6 +140,7 @@ async function RecipeSearch(checks=0) {
 
 		let data = await response.json()
 		console.log(data.totalResults)
+		totalResults.value = data.totalResults;
 		items.value = []; // first clear the search results
 
 		data.results.forEach(item => {
@@ -163,12 +171,12 @@ async function RecipeSearch(checks=0) {
 }
 
 async function loadNext() {
-	offset2 += 10;
+	offset2.value += 10;
 
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 	url.searchParams.set("apiKey", apiKey.value);
 	url.searchParams.set("query", searchTerm.value);
-	url.searchParams.set("offset", offset2);
+	url.searchParams.set("offset", offset2.value);
 	if (maxTime.value != undefined && maxTime.value > 0) {
 		url.searchParams.set("maxReadyTime", maxTime.value);
 	}
@@ -195,7 +203,7 @@ async function loadNext() {
 
 		let data = await response.json()
 		console.log(data.totalResults)
-		items.value = []; // first clear the search results
+		totalResults.value = data.totalResults;
 
 		data.results.forEach(item => {
 			let temp = profilesStore.getRecipeData(item.id);
@@ -268,6 +276,17 @@ function displayName(s) {
     else return s
 }
 
+//&& (offset2 < totalResults)
+onMounted(() => {
+	scrollContainer.value.addEventListener('scroll', function() {
+		const element = scrollContainer.value;
+    if ((element.scrollTop + element.clientHeight >= element.scrollHeight - 10) && (offset2.value < totalResults.value)){
+        console.log('Scrolled to the bottom');
+        loadNext();
+    }
+    });
+});
+
 </script>
 
 
@@ -282,7 +301,7 @@ function displayName(s) {
 
 		<AddRecipeToCalMenu mode="add" v-if="addToCalendarMenuOpen" v-model="addToCalendarMenuOpen" :recipe="addToCalendarRecipe" :date="new Date()"></AddRecipeToCalMenu>
 		
-		<div class="scroll">
+		<div class="scroll" ref="scroll-container">
 			<div v-if="stateStore.showSearchResults">
 				<div class="h-center spread" style="padding: 0px 15px; margin-top: -5px">
 					<h3>Found results:</h3>
