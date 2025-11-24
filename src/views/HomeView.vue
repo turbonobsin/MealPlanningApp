@@ -16,6 +16,8 @@ const stateStore = useStateStore();
 const items = ref(stateStore.resultsList);
 const searchTerm = ref("");
 const maxTime = ref("");
+let offset2 = 0;
+
 
 let excludedFoods = ref([...profilesStore.currentProfile.exclusions]);
 let intolerances = ref([...profilesStore.currentProfile.allergies]);
@@ -104,6 +106,7 @@ async function RecipeSearch() {
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 	url.searchParams.set("apiKey", apiKey.value);
 	url.searchParams.set("query", searchTerm.value);
+	url.searchParams.set("offset", 0);
 	if (maxTime.value != undefined && maxTime.value > 0) {
 		url.searchParams.set("maxReadyTime", maxTime.value);
 	}
@@ -129,7 +132,69 @@ async function RecipeSearch() {
 	if (response.status === 200) {
 
 		let data = await response.json()
-		console.log(data)
+		console.log(data.totalResults)
+		items.value = []; // first clear the search results
+
+		data.results.forEach(item => {
+			let temp = profilesStore.getRecipeData(item.id);
+			if(!temp) temp = profilesStore.currentProfile.recentSearches.find(v => v.id === item.id);
+			if (temp){
+				items.value.push(temp);
+			}
+			else{
+				items.value.push(item);
+			}
+		});
+		console.log(items.value);
+		// items.value = data.results;
+		stateStore.resultsList = items.value;
+		stateStore.showSearchResults = true;
+		recipeSearchLength = data.results.length;
+		console.log(recipeSearchLength)
+		
+		// profilesStore.saveSearchResults(data.results);
+	} else {
+		console.log("request failed")
+		// items.value = profilesStore.currentProfile.recentSearches;
+		// stateStore.resultsList = items.value;
+		// stateStore.showSearchResults = true;
+	}
+
+}
+
+async function loadNext() {
+	offset2 += 10;
+
+	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
+	url.searchParams.set("apiKey", apiKey.value);
+	url.searchParams.set("query", searchTerm.value);
+	url.searchParams.set("offset", offset2);
+	if (maxTime.value != undefined && maxTime.value > 0) {
+		url.searchParams.set("maxReadyTime", maxTime.value);
+	}
+	if (excludeChecked.value && excludedFoods.value != undefined && excludedFoods.value.length > 0) {
+		url.searchParams.set("excludeIngredients", excludedFoods.value.join(","));
+	}
+	if (intoleranceChecked.value && intolerances.value != undefined && intolerances.value.length > 0) {
+    	url.searchParams.set("intolerances", intolerances.value.join(","));
+	}
+	if (typeChecked.value && selectedOption.value != undefined && selectedOption.value != "") {
+		url.searchParams.set("type", selectedOption.value);
+	}
+
+	const options = {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+		},
+	}
+
+	let response = await fetch(url, options)
+
+	if (response.status === 200) {
+
+		let data = await response.json()
+		console.log(data.totalResults)
 		items.value = []; // first clear the search results
 
 		data.results.forEach(item => {
