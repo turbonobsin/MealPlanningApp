@@ -20,11 +20,11 @@ function confirmDelete() {
 </script>
 
 <template>
-    <div class="backdrop"></div>
+    <div class="backdrop" @click.stop="show_delete_window = false"></div>
     <div class="pop-window vertical">
         <h3>Confirm Delete</h3>
         <div class="h-center">
-            <div class="profile-icon" :style="{'background-color': profile_store.currentProfile.color}"></div>
+            <div class="profile-icon" :style="{'background-color': profile_store.currentProfile.color}">{{ profile_store.currentProfile.name[0] }}</div>
             <span>{{ profile_store.currentProfile.name }}</span>
         </div>
         <p>Are you sure you want to permanently delete this profile?</p>

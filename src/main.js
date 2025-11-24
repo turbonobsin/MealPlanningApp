@@ -6,6 +6,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import { useProfilesStore } from './stores/profiles'
+import { applyTheme } from './stores/states'
 
 const app = createApp(App)
 
@@ -20,10 +21,11 @@ document.addEventListener('keydown', e => {
 })
 
 if (!localStorage.theme){
-    localStorage.setItem('theme', 'light_mode');
+    localStorage.setItem('theme', 'default_theme');
+    localStorage.setItem('mode', 'light');
 }
 else{
-    document.body.classList.add(localStorage.getItem('theme'));
+    applyTheme();
 }
 
 app.mount('#app')

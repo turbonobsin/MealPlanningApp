@@ -366,6 +366,7 @@ onMounted(() => {
 					</div>
 				</div>
 			</div>
+
 		</div>
 
 		<Modal ref="modal">
@@ -537,11 +538,12 @@ onMounted(() => {
 }
 
 .recipe-image {
-	background: repeating-linear-gradient(45deg,
+	/* background: repeating-linear-gradient(45deg,
 			var(--medium),
 			var(--light) 10px,
 			var(--medium) 10px,
-			var(--light) 20px);
+			var(--light) 20px); */
+	background-image: url(./Placeholder_Image.png);
 	width: 30%;
 	object-fit: cover;
 }

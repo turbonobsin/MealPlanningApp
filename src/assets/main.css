@@ -7,7 +7,7 @@
     /* margin: 0; */
     padding: 1rem;
     font-weight: normal;
-
+    height: 100vh;
     /* display:grid; */
     /* grid-template-rows: auto 1fr auto; */
     /* height:100vh; */
@@ -20,7 +20,7 @@
 
 main {
     /* height: 85%; */
-    flex-shrink: none;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
 }
@@ -104,7 +104,7 @@ button:active {
 
 .red-button {
     background-color: var(--red);
-    color: var(--light);
+    color: var(--light-perma);
     border: 2px solid var(--red);
 }
 
@@ -157,6 +157,10 @@ button:disabled{
 }
 
 .profile-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light-perma);
     height: 40px;
     aspect-ratio: 1;
     border-radius: 50%;

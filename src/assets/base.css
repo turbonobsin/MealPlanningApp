@@ -6,8 +6,9 @@
     --ff-primary: Lexend_Deca, sans-serif;
 
     --light-color: #B4CE9D;
-    --main-color: #6A8B52;
+    --main-color: #7db356;
     --near-color: #bcd3a9;
+    --dark-near: #42473d;
     --light: #FAF8F4;
     --dark: #5C4B3B;
     --medium: #B89C83;
@@ -16,24 +17,34 @@
     --dark-perma: #5C4B3B;
 }
 
-.light_mode{
+.default_theme{
+    --main-color: #7db356;
     --light-color: #B4CE9D;
-    --light: #FAF8F4;
-    --dark: #5C4B3B;
     --near-color: #bcd3a9;
+    --dark-near: #455535;
+}
+
+.cold_theme {
+    --main-color: #63a2e9;
+    --light-color: #a5c2dd;
+    --near-color: #b3ccdf;
+    --dark-near: #334d68;
+}
+
+.hot_theme {
+    --main-color: #d98845;
+    --light-color: #efb777;
+    --near-color: #f6c993;
+    --dark-near: #7d4e35;
 }
 
 .dark_mode {
     --light: #363736;
     --dark: #FAF8F4;
-    --near-color: #42473d;
+    --near-color: var(--dark-near);
+    --red: #ff6272;
 }
 
-.amir_mode {
-    --main-color: #5f8ec4;
-    --light-color: #a5c2dd;
-    --near-color: #b3ccdf;
-}
 
 @font-face {
     font-family: Lexend_Deca;
@@ -46,6 +57,7 @@ body {
     background: linear-gradient(var(--light) 50%, var(--near-color) 100%);
     background-size: cover;
     font-family: var(--ff-primary) !important;
+    letter-spacing: .5px;
     /* margin:0px; */
     /* max-height: 90vh; */
     height: 100vh;

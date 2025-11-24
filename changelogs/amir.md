@@ -93,3 +93,9 @@
 -   Display first letter over profile icon
 -   Adjusted dark mode colors
 -   Secret theme?
+
+# 11/24/2025
+-   Redesign the settings page
+-   Remodel changing theme setting for more options --> including mode toggle + color choices
+-   Implement changing theme colors separately from light/dark mode
+-   Implement exit pop-window when clicked outside

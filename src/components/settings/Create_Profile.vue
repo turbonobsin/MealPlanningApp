@@ -32,10 +32,10 @@ function createProfile(){
 </script>
 
 <template>
-    <div class="backdrop"></div>
+    <div class="backdrop" @click.stop="show_create_window = false"></div>
     <div class="pop-window vertical">
         <h3>Create New Profile</h3>
-        <div class="h-center">
+        <div class="h-center spread">
             <div class="circle color-container center">
                 <input ref="color_input" type="color" class="color-input" value="#6A8B52"></input>
                 <div class="material-symbols-outlined edit-icon">edit</div>
@@ -55,38 +55,43 @@ function createProfile(){
 </template>
 
 <style scoped>
-    .red-text{
-        margin-top: 5px;
-        padding-left: 10px;
-    }
 
-    .color-container{
-        height: 4em;
-        flex-shrink: 0;
-        overflow: hidden;
-        position: relative;
-    }
+.red-text{
+    margin-top: 5px;
+    padding-left: 10px;
+}
 
-    .edit-icon{
-        position: absolute;
-        color: var(--light-perma);
-        pointer-events: none;
-    }
+.color-container{
+    height: 4em;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+}
 
-    .color-input{
-        height: 7em;
-        width: 7em;
-        position: absolute;
-    }
+.name-container{
+    width: 100%;
+}
 
-    .h-center{
-        gap: 10px;
-    }
+.edit-icon{
+    position: absolute;
+    color: var(--light-perma);
+    pointer-events: none;
+}
 
-    .text-input{
-        /* flex-shrink: 1; */
-        width: 100%;
-        flex-grow: 1;
-    }
+.color-input{
+    height: 7em;
+    width: 7em;
+    position: absolute;
+}
+
+.h-center{
+    gap: 10px;
+}
+
+.text-input{
+    /* flex-shrink: 1; */
+    width: 90%;
+    /* flex-grow: 1; */
+}
 
 </style>

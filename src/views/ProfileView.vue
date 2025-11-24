@@ -203,6 +203,7 @@ const colorBeforeSave = ref(currentProfile.value.color);
 .enabled{
     background-color: var(--main-color);
     border-color: var(--main-color);
+    color: var(--light-perma);
     animation: pop .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 

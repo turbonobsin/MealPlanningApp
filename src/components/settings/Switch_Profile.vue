@@ -18,13 +18,13 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="backdrop"></div>
+    <div class="backdrop" @click.stop="show_switch_window = false"></div>
     <div class="pop-window vertical">
         <h3>Select Profile</h3>
         <div ref="profiles_list" class="scroll vertical profiles-list">
             <div class="spread h-center" v-for="profile in profile_store.profiles" @click="profile_store.switchProfile(profile); show_switch_window = false">
                 <div class="h-center">
-                    <div class="profile-icon" :style="{'background-color': profile.color}"></div>
+                    <div class="profile-icon" :style="{'background-color': profile.color}">{{ profile.name[0] }}</div>
                     <span>{{ profile.name }}</span>
                 </div>
                 <span class="note">{{ (profile === profile_store.currentProfile) ? 'Selected' : '' }}</span>

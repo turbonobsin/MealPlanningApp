@@ -331,12 +331,12 @@ function resizeHeader(){
 .recipe-image-block{
 	position: relative;
 	/* height: 200px; */
-	height: 100%;
+	height: 200px;
 	width: 70%;
 }
 
 .recipe-image{
-	height: 200px;
+	height: 100%;
 	width: 100%;
 	object-fit: cover;
 }

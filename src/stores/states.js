@@ -97,3 +97,11 @@ export function filterDiets(arr){
 
 	return res;
 }
+
+export function applyTheme(){
+	document.body.className = '';
+	document.body.classList.add(localStorage.getItem('theme'));
+	if (localStorage.getItem('mode') === 'dark'){
+		document.body.classList.add('dark_mode');
+	}
+}
