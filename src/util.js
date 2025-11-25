@@ -1,3 +1,11 @@
+export function wait(delay){
+    return new Promise(resolve=>{
+        setTimeout(()=>{
+            resolve();
+        },delay);
+    });
+}
+
 export class SearchResultItem {
     id = 0;
     title = "";

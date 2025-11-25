@@ -105,3 +105,7 @@
 
 # 11/24/25
 - fixed recipe details page wouldn't load new recipes anymore
+
+# 11/25/25
+- fixed auto api switching after merge conflict
+- added loading animation to home page and recipe details page

@@ -2,13 +2,12 @@
 import { RouterLink } from 'vue-router';
 import { onMounted, ref, useTemplateRef } from 'vue'
 import { Recipe, useProfilesStore } from '@/stores/profiles';
-import { useCalendarStore } from '@/stores/calendar';
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import Modal from '@/components/Modal.vue';
 import { useStateStore } from '@/stores/states';
 import { filterDiets } from '@/stores/states';
-import router, { apiKey, switchAPIKey } from '@/router';
-import EscapeSymbols from '@/components/EscapeSymbols.vue';
+import { apiKey, switchAPIKey } from '@/router';
+import Loading from '@/components/Loading.vue';
 
 const scrollContainer = useTemplateRef("scroll-container");
 const profilesStore = useProfilesStore();
@@ -122,9 +121,28 @@ function addExclusion(){
 // 	offset2.value = 0;
 // >>>>>>> Stashed changes
 // =======
-async function RecipeSearch() {
+
+let debugAnimation = false;
+
+async function RecipeSearch(checks=0) {
+
+	if(debugAnimation){
+		if(loading.value) return; // can't search while it's loading
+
+		loading.value = true;
+		
+		await new Promise(resolve=>{
+			setTimeout(()=>{
+				resolve();
+			},1000);
+		});
+
+		loading.value = false;
+		
+		return;
+	}
+	
 	offset2.value = 0;
-// >>>>>>> Stashed changes
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 	url.searchParams.set("apiKey", apiKey.value);
 	url.searchParams.set("query", searchTerm.value);
@@ -149,7 +167,9 @@ async function RecipeSearch() {
 		},
 	}
 
+	loading.value = true;
 	let response = await fetch(url, options)
+	loading.value = false;
 
 	if (response.status === 200) {
 
@@ -176,7 +196,18 @@ async function RecipeSearch() {
 		console.log(recipeSearchLength)
 		
 		// profilesStore.saveSearchResults(data.results);
-	} else {
+	}
+	else if(response.status == 402){ // payment required
+		if(checks >= 1){
+			alert("No more requests available at this time");
+			return;
+		}
+		// switch and retry...
+		switchAPIKey();
+		RecipeSearch(checks+1);
+		return;
+	}
+	else{
 		console.log("request failed")
 		// items.value = profilesStore.currentProfile.recentSearches;
 		// stateStore.resultsList = items.value;
@@ -185,7 +216,7 @@ async function RecipeSearch() {
 
 }
 
-async function loadNext() {
+async function loadNext(checks=0) {
 	offset2.value += 10;
 
 	let url = new URL("https://api.spoonacular.com/recipes/complexSearch");
@@ -212,7 +243,9 @@ async function loadNext() {
 		},
 	}
 
+	loading.value = true;
 	let response = await fetch(url, options)
+	loading.value = false;
 
 	if (response.status === 200) {
 
@@ -246,7 +279,7 @@ async function loadNext() {
 		}
 		// switch and retry...
 		switchAPIKey();
-		RecipeSearch(checks+1);
+		loadNext(checks+1);
 		return;
 	}
 	else{
@@ -302,11 +335,14 @@ onMounted(() => {
     });
 });
 
+const loading = ref(false);
+
 </script>
 
 
 <template>
 	<h1 class="page-title">Hello, {{ profilesStore.currentProfile.name }}!</h1>
+	<Loading :loading></Loading>
 	<main>
 		<div class="search-bar h-center space-after spread">
 			<input class="text-input search-input" type="text" placeholder="Find your next recipe..." v-model="searchTerm" @keypress.enter="RecipeSearch"/>

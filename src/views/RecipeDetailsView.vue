@@ -6,6 +6,7 @@ import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import { apiKey, switchAPIKey } from '@/router';
 import { filterDiets, useStateStore } from '@/stores/states';
 import EscapeSymbols from '@/components/EscapeSymbols.vue';
+import Loading from '@/components/Loading.vue';
 
 const props = defineProps({ recipeId: String })
 
@@ -56,7 +57,9 @@ async function getRecipeDetails(checks=0) {
 		},
 	}
 
+	loading.value = true;
 	let response = await fetch(url, options)
+	loading.value = false;
 
 	if (response.status === 200) {
 
@@ -97,6 +100,7 @@ async function getRecipeDetails(checks=0) {
 onMounted(async () => {
 	await getRecipeDetails();
 	stateStore.currentRecipe = recipe.value;
+	loading.value = false;
 });
 onUnmounted(()=>{
 	stateStore.currentRecipe = undefined;
@@ -185,115 +189,120 @@ function resizeHeader(){
 	}
 }
 
+const loading = ref(false);
+
 </script>
 
 <template>
-	<div class="h-center">
-        <div class="material-symbols-outlined back-button" @click="router.back()">chevron_left</div>
-        <h1 class="title">Recipe Details</h1>
-    </div>
-	<h3 class="medium" style="margin: 15px;">{{ title }}</h3>
-	<div class="h-center gap10 flex-wrap" style="padding: 0px 0px 10px 20px">
-		<div v-for="icon in filterDiets(recipe?.diets)" class="h-center gap10">
-			<img class="diet-icon" :src="icon.src"></img>
-			<span class="small">{{ icon.title }}</span>
+	<Loading :loading></Loading>
+	<div v-if="!loading">
+		<div class="h-center">
+			<div class="material-symbols-outlined back-button" @click="router.back()">chevron_left</div>
+			<h1 class="title">Recipe Details</h1>
 		</div>
-	</div>
-
-	<main class="vertical" style="max-height: 80vh; overflow: hidden">
-		<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && !stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="new Date()"></AddRecipeToCalMenu>
-		<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="stateStore.addToCalendarData.date" :custom-meal-type="stateStore.addToCalendarData.mealType" :custom-time="stateStore.addToCalendarData.date"></AddRecipeToCalMenu>
-
-		<!-- <div class="recipe-actions">
-			<button @click="addToFavorites()" class="icon-btn">
-				<span :class="['material-symbols-outlined',{fill:profileStore.isFavorited(recipeId)}]">bookmark</span>
-			</button>
-			<button @click="addToCalendar()" class="icon-btn">
-				<span class="material-symbols-outlined">add</span>
-			</button>
-		</div> -->
-		
-		<div ref="header" class="header-container spread space-after">
-			<!--Image + Actions (Favorite/ Add to Calendar)-->
-			<div class="recipe-image-block">
-				<img class="recipe-image" :src="image" alt="Recipe Image"></img>
-				<div class="recipe-actions h-center">
-					<div :class="['material-symbols-outlined', 'recipe-action',{fill:profileStore.isFavorited(recipeId)}]" @click="addToFavorites()">bookmark</div>
-					<div class="material-symbols-outlined recipe-action" @click="addToCalendar()">add</div>
-					<div class="material-symbols-outlined recipe-action" @click="resizeHeader()">{{(headerDown) ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</div>
-				</div>
-			</div>
-			
-			
-			<!--Cook Time, servings, Calories-->
-			<div class="recipe-specs v-center spaced-even">
-				<div class="spec">
-					<span class="medium">{{ cookTime }}m</span>
-					<span class="small">Cook Time</span>
-				</div>
-
-				<div v-show="headerDown" style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
-
-				<div v-show="headerDown" class="spec">
-					<span class="medium">{{ servings }}</span>
-					<span class="small">Servings</span>
-				</div>
-
-				<div v-show="headerDown" style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
-				
-				<div v-show="headerDown" class="spec">
-					<span class="medium">{{ calories }}</span>
-					<span class="small">Calories</span>
-				</div>
+		<h3 class="medium" style="margin: 15px;">{{ title }}</h3>
+		<div class="h-center gap10 flex-wrap" style="padding: 0px 0px 10px 20px">
+			<div v-for="icon in filterDiets(recipe?.diets)" class="h-center gap10">
+				<img class="diet-icon" :src="icon.src"></img>
+				<span class="small">{{ icon.title }}</span>
 			</div>
 		</div>
-		
 
+		<main class="vertical" style="max-height: 80vh; overflow: hidden">
+			<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && !stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="new Date()"></AddRecipeToCalMenu>
+			<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="stateStore.addToCalendarData.date" :custom-meal-type="stateStore.addToCalendarData.mealType" :custom-time="stateStore.addToCalendarData.date"></AddRecipeToCalMenu>
 
-		<div class="two-grid space-after">
-			<button :class="{'color-button': !openInstructions, 'blank-button': openInstructions}" @click="openInstructions = !openInstructions">Ingredients</button>
-			<button :class="{'color-button': openInstructions, 'blank-button': !openInstructions}" @click="openInstructions = !openInstructions">Instructions</button>
-		</div>
-
-		<div class="scroll">
-			<div v-show="!openInstructions" class="vertical gap10">
-				<div class="h-center gap10" @click="checkAll(ingredients)">
-					<button :class="{'check-button': true, 'color-button': ingredientsChecked}"></button>
-					<span class="small">Check/Uncheck all</span>
-				</div>
-				<!-- <p class="bold">Ingredients:</p> -->
-				<div class="h-center gap10" v-for="ingredient in ingredients" @click="check(ingredient)">
-					<button :class="{'material-symbols-outlined': true, 'check-button': true, 'color-button': ingredient.checked, 'center': true}">check</button>
-					<span :class="{'checked': ingredient.checked}">{{ ingredient.original }}</span>
-				</div>
-			</div>
+			<!-- <div class="recipe-actions">
+				<button @click="addToFavorites()" class="icon-btn">
+					<span :class="['material-symbols-outlined',{fill:profileStore.isFavorited(recipeId)}]">bookmark</span>
+				</button>
+				<button @click="addToCalendar()" class="icon-btn">
+					<span class="material-symbols-outlined">add</span>
+				</button>
+			</div> -->
 			
-			<!--Instructions-->
-			<div v-show="openInstructions">
-				<!-- <p class="bold">Instructions:</p> -->
-				<div v-for="instruction in instructions" :key="instruction.name" class="vertical gap10 medium">
-					<div class="h-center gap10 space-before" @click="checkAll(instruction.steps)">
-						<button :class="{'check-button': true, 'color-button': instructionsChecked}"></button>
-						<span class="small">Mark/unmark all</span>
+			<div ref="header" class="header-container spread space-after">
+				<!--Image + Actions (Favorite/ Add to Calendar)-->
+				<div class="recipe-image-block">
+					<img class="recipe-image" :src="image" alt="Recipe Image"></img>
+					<div class="recipe-actions h-center">
+						<div :class="['material-symbols-outlined', 'recipe-action',{fill:profileStore.isFavorited(recipeId)}]" @click="addToFavorites()">bookmark</div>
+						<div class="material-symbols-outlined recipe-action" @click="addToCalendar()">add</div>
+						<div class="material-symbols-outlined recipe-action" @click="resizeHeader()">{{(headerDown) ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</div>
 					</div>
-					<span v-for="step in instruction.steps" :key="step.number" :class="{'step': true, 'checked-step': step.checked}" @click="check(step)">
-						<div class="step-number">{{ step.number }}.</div>
-						<EscapeSymbols style="display:block" :s="step.step"></EscapeSymbols>
-					</span>
+				</div>
+				
+				
+				<!--Cook Time, servings, Calories-->
+				<div class="recipe-specs v-center spaced-even">
+					<div class="spec">
+						<span class="medium">{{ cookTime }}m</span>
+						<span class="small">Cook Time</span>
+					</div>
+
+					<div v-show="headerDown" style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
+
+					<div v-show="headerDown" class="spec">
+						<span class="medium">{{ servings }}</span>
+						<span class="small">Servings</span>
+					</div>
+
+					<div v-show="headerDown" style="width: 100%; border-bottom: 2px solid var(--medium)"></div>
+					
+					<div v-show="headerDown" class="spec">
+						<span class="medium">{{ calories }}</span>
+						<span class="small">Calories</span>
+					</div>
+				</div>
+			</div>
+			
+
+
+			<div class="two-grid space-after">
+				<button :class="{'color-button': !openInstructions, 'blank-button': openInstructions}" @click="openInstructions = !openInstructions">Ingredients</button>
+				<button :class="{'color-button': openInstructions, 'blank-button': !openInstructions}" @click="openInstructions = !openInstructions">Instructions</button>
+			</div>
+
+			<div class="scroll">
+				<div v-show="!openInstructions" class="vertical gap10">
+					<div class="h-center gap10" @click="checkAll(ingredients)">
+						<button :class="{'check-button': true, 'color-button': ingredientsChecked}"></button>
+						<span class="small">Check/Uncheck all</span>
+					</div>
+					<!-- <p class="bold">Ingredients:</p> -->
+					<div class="h-center gap10" v-for="ingredient in ingredients" @click="check(ingredient)">
+						<button :class="{'material-symbols-outlined': true, 'check-button': true, 'color-button': ingredient.checked, 'center': true}">check</button>
+						<span :class="{'checked': ingredient.checked}">{{ ingredient.original }}</span>
+					</div>
+				</div>
+				
+				<!--Instructions-->
+				<div v-show="openInstructions">
+					<!-- <p class="bold">Instructions:</p> -->
+					<div v-for="instruction in instructions" :key="instruction.name" class="vertical gap10 medium">
+						<div class="h-center gap10 space-before" @click="checkAll(instruction.steps)">
+							<button :class="{'check-button': true, 'color-button': instructionsChecked}"></button>
+							<span class="small">Mark/unmark all</span>
+						</div>
+						<span v-for="step in instruction.steps" :key="step.number" :class="{'step': true, 'checked-step': step.checked}" @click="check(step)">
+							<div class="step-number">{{ step.number }}.</div>
+							<EscapeSymbols style="display:block" :s="step.step"></EscapeSymbols>
+						</span>
+					</div>
+				</div>
+
+				<div class="gap-before">
+					<p>Notes:</p>
+					<textarea v-model="note" class="full-width text-input" style="box-sizing:border-box;min-height:4em"></textarea>
+					<div v-if="note != profileStore.getNote(recipeId)" class="full-width two-grid half-space-before">
+						<button class="color-button" @click="profileStore.saveNote(recipeId,note)">Save</button>
+						<button class="blank-button" @click="note = profileStore.getNote(recipeId)">Cancel</button>
+					</div>
 				</div>
 			</div>
 
-			<div class="gap-before">
-				<p>Notes:</p>
-				<textarea v-model="note" class="full-width text-input" style="box-sizing:border-box;min-height:4em"></textarea>
-				<div v-if="note != profileStore.getNote(recipeId)" class="full-width two-grid half-space-before">
-					<button class="color-button" @click="profileStore.saveNote(recipeId,note)">Save</button>
-					<button class="blank-button" @click="note = profileStore.getNote(recipeId)">Cancel</button>
-				</div>
-			</div>
-		</div>
-
-	</main>
+		</main>
+	</div>
 </template>
 
 <style scoped>
