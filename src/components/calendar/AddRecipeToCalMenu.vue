@@ -57,7 +57,7 @@ function updateDateInput(ignoreDefault=false,customTime?:Date){
         if(customTime){
             let t = new Date(customTime);
             // hours = t.getHours();
-            // minutes = t.getMinutes();
+            minutes = t.getMinutes();
         }
         d.setHours(hours - d.getTimezoneOffset()/60);
         date.value.setHours(hours);
