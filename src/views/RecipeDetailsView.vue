@@ -210,6 +210,7 @@ const loading = ref(false);
 
 		<main class="vertical" style="max-height: 80vh; overflow: hidden">
 			<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && !stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="new Date()"></AddRecipeToCalMenu>
+			<!-- <AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="stateStore.addToCalendarData.date" :custom-meal-type="stateStore.addToCalendarData.mealType" :custom-time="stateStore.addToCalendarData.date"></AddRecipeToCalMenu> -->
 			<AddRecipeToCalMenu mode="add" v-if="stateStore.addToCalendarMenuOpen && stateStore.selectingRecipe" v-model="stateStore.addToCalendarMenuOpen" :recipe="stateStore.addToCalendarData.recipe" :date="stateStore.addToCalendarData.date" :custom-meal-type="stateStore.addToCalendarData.mealType" :custom-time="stateStore.addToCalendarData.date"></AddRecipeToCalMenu>
 
 			<!-- <div class="recipe-actions">

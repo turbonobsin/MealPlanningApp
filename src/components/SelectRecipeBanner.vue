@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import router from '@/router';
+import { useCalendarStore } from '@/stores/calendar';
 import { useStateStore } from '@/stores/states';
+import { mealHours } from '@/util';
 import { computed } from 'vue';
 
 const stateStore = useStateStore();
+const calendarStore = useCalendarStore();
 
 function cancel(){
     router.push({
@@ -14,13 +17,26 @@ function cancel(){
 
 function select(){
     let r = stateStore.selectingRecipe;
+
+    // tmp
+
+    // let d = new Date();
+    // let mealType = r.meal;
+    // let hours = mealHours[mealType];
+    // let minutes = 0;
+    // d.setHours(hours - d.getTimezoneOffset()/60);
+    // d.setMinutes(minutes);
+
+    // 
     
     stateStore.addToCalendarMenuOpen = true;
 	stateStore.addToCalendarData = {
 		recipe:stateStore.currentRecipe,
 		mealType:r.meal,
+        // date:d
 		date:r.date,
 	};
+    // calendarStore.addRecipe(stateStore.currentRecipe.id,r.meal,r.date);
 }
 
 </script>
