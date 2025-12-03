@@ -2,7 +2,6 @@
 import AddRecipeToCalMenu from '@/components/calendar/AddRecipeToCalMenu.vue';
 import CalDate from '@/components/calendar/CalDate.vue';
 import CalendarSlideUpData from '@/components/calendar/CalendarSlideUpData.vue';
-import CalMonthItem from '@/components/calendar/CalMonthItem.vue';
 import { useCalendarStore } from '@/stores/calendar';
 import { MealType, Recipe, useProfilesStore } from '@/stores/profiles';
 import { getMonthLength, weekday, weekdayAbbr } from '@/util';
@@ -12,35 +11,7 @@ const today = ref(new Date());
 
 const monthOffset = ref(0); // going forward or back by months
 
-const profileStore = useProfilesStore();
 const calendarStore = useCalendarStore();
-
-let itemCount = ref(3);
-// let itemCount = ref(10);
-
-const days = computed(() => {
-    let list: {
-        d: Date,
-        i: number,
-        day: number,
-        date: number,
-        today: boolean
-    }[] = [];
-    let td = today.value;
-
-    for (let i = -Math.floor(itemCount.value / 2); i < Math.ceil(itemCount.value / 2); i++) {
-        let d = new Date(td.getFullYear(), td.getMonth(), td.getDate() + i);
-        list.push({
-            d,
-            i,
-            day: d.getDay(),
-            date: d.getDate(),
-            today: i == 0
-        });
-    }
-
-    return list;
-});
 
 const previousDays = computed(() => {
     let firstDay = thisMonthDate.value;
@@ -114,30 +85,14 @@ provide("addToCalendarMealType",addToCalendarMealType);
                 <CalDate :date="new Date(today.getFullYear(),today.getMonth()+monthOffset-1,previousMonthLength - previousDays + i)" :selected-date="selectedDate"></CalDate>
             </div>
             <div v-for="i in getMonthLength(thisMonthDate)" :class="['cal2-date',{today:i == today.getDate() && monthOffset == 0}]">
-                <!-- <div class="date">{{ i }}</div> -->
-                <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth()+monthOffset,i)" :selected-date="selectedDate"></CalDate>
-                <!-- <div class="meals"> -->
-                    <!-- <div class="meal0 valid"></div> -->
-                    <!-- <div class="meal1 valid"></div> -->
-                    <!-- <div class="meal2 valid"></div> -->
-                <!-- </div> -->
+                <!-- <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth()+monthOffset,i)" :selected-date="selectedDate"></CalDate> -->
+                <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth(),i)" :selected-date="selectedDate"></CalDate>
             </div>
             <div v-for="i in afterDays" class="cal2-after-date">
-                <!-- {{ i }} -->
-                <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth()+monthOffset+1,i)" :selected-date="selectedDate"></CalDate>
+                <!-- <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth()+monthOffset+1,i)" :selected-date="selectedDate"></CalDate> -->
+                <CalDate :date="new Date(thisMonthDate.getFullYear(),thisMonthDate.getMonth()+1,i)" :selected-date="selectedDate"></CalDate>
             </div>
         </div>
-
-        <!-- <div class="calendar">
-            <div class="day-list" :style="{'--columns':`${itemCount}`}">
-                <div v-for="day in days" :class="['calendar-column', { today: day.today }]">
-                    <header class="header">
-                        <div>{{ weekdayAbbr[day.day] }}</div>
-                        <div>{{ day.date }}</div>
-                    </header>
-                </div>
-            </div>
-        </div> -->
         
         <div v-if="selectedDate != undefined" class="slide-up-bg" @click="selectedDate = undefined"></div>
         <Transition name="slide-up">
@@ -147,17 +102,7 @@ provide("addToCalendarMealType",addToCalendarMealType);
                     <div>{{ selectedDate?.toLocaleString([],{dateStyle:'long'}) }}</div>
                     <div class="material-symbols-outlined" @click="selectedDate = undefined">close</div>
                 </div>
-                <!-- <div>some</div> -->
-                <!-- <div>more</div> -->
-                <!-- <div>data</div> -->
-                <CalendarSlideUpData :date="selectedDate">
-                    <template v-slot="{data}">
-                        <!-- {{ data }} -->
-                    </template>
-                    <template #meal="{meal,recipe}">
-                        
-                    </template>
-                </CalendarSlideUpData>
+                <CalendarSlideUpData :date="selectedDate"></CalendarSlideUpData>
             </div>
         </Transition>
 
@@ -189,7 +134,6 @@ provide("addToCalendarMealType",addToCalendarMealType);
 
 .slide-up-enter-from,
 .slide-up-leave-to {
-    /* translate:0px calc(100% + var(--pad-bottom)); */
     scale:0.9;
     opacity:0;
 }
@@ -274,8 +218,6 @@ main {
 }
 
 .calendar {
-    /* margin: -2em; */
-    /* margin-top: 3em; */
     display: flex;
 }
 
@@ -293,7 +235,6 @@ main {
 }
 
 .calendar-column {
-    /* width: 40px; */
     flex-shrink: 0;
     text-align: center;
     position: relative;
@@ -305,7 +246,6 @@ main {
 }
 
 .calendar-column.today {
-    /* outline: solid 3px var(--red); */
     z-index: 1;
 
     & .header {
