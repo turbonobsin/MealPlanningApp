@@ -40,6 +40,12 @@ function selectRecipe(){
     });
 }
 
+function goToRecipe(id:number){
+    router.push({
+        path:`/details/${id}`
+    });
+}
+
 </script>
 
 <template>
@@ -52,7 +58,7 @@ function selectRecipe(){
             </div>
             <div v-if="recipe">
                 <h4>{{ new Date(meal.time).toLocaleString([],{timeStyle:'short'}) }}</h4>
-                <div class="flx-ac title" style="gap:5px" v-if="recipe">
+                <div class="flx-ac title" style="gap:5px" v-if="recipe" @click="goToRecipe(recipe.id)">
                     <div>{{ recipe.title }}</div>
                     <!-- <div class="material-symbols-outlined remove-recipe" @click="calendarStore.removeRecipe(selectedDate,meal.mealType)">close</div> -->
                 </div>
@@ -65,7 +71,7 @@ function selectRecipe(){
         <!-- <div></div> -->
         <!-- <slot name="img" :recipe="profileStore.getRecipeData(calData?.breakfast.recipeId)"></slot> -->
         <!-- <img v-if="recipe" :src="recipe.image"></img> -->
-        <div v-if="recipe" class="img" :style="{backgroundImage:`url(${recipe.image})`}"></div>
+        <div v-if="recipe" class="img" :style="{backgroundImage:`url(${recipe.image})`}" @click="goToRecipe(recipe.id)"></div>
         <button v-else class="blank-button material-symbols-outlined add-button" @click="selectRecipe">add</button>
     </div>
     <!-- <div v-else>
